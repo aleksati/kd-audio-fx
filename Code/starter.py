@@ -6,7 +6,7 @@ main script
 """
 
 # number of epochs
-EPOCHS = 1
+EPOCHS = 100
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size
@@ -16,8 +16,10 @@ LR = 3e-4
 # number of model's units
 UNITS = 8
 
-# data_dir: the directory in which datasets are stored
-data_dir = '../../Files/OD/'
+# the directory in which datasets are stored
+data_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\Datasets'
+# where to store the results ++
+model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\TrainedModels'
 # name of the mdoel to be used
 model = 'LSTM'
 
@@ -26,40 +28,39 @@ model = 'LSTM'
 teacher = False
 teaching = False
 # name of dataset to be used
-dataset = 'OD'
+dataset = 'CL1B_DK'
 dataset_train = dataset
-#[teacher, teaching]
+# [teacher, teaching]
 cases = [[True, False], [False, True], [False, False]]
 
 for case in cases:
-      UNITS = 8
-      teacher = case[0]
-      teaching = case[1]
+    teacher = case[0]
+    teaching = case[1]
 
-      if teacher:
-            # we are a teacher
-            UNITS = 64
-            name = '_teacher'
+    if teacher:
+        # we are a teacher
+        UNITS = 64
+        name = '_teacher'
 
-      elif not teacher and teaching:
-            # we are student but we are been taught
-            dataset_train = 'Teacher_' + dataset_train
-            name = '_student_taught'
-      else:
-            # we are student but self-taught
-            name = '_student_self_taught'
+    elif not teacher and teaching:
+        UNITS = 8
+        # we are student but we are been taught
+        dataset_train = 'Teacher_' + dataset_train
+        name = '_student_taught'
+    else:
+        # we are student but self-taught
+        name = '_student_self_taught'
 
-
-
-      train(data_dir=data_dir,
-            save_folder=model+dataset+str(UNITS) + name,
-            dataset_train=dataset_train,
-            dataset_test=dataset,
-            batch_size=BATCH_SIZE,
-            learning_rate=LR,
-            units=UNITS,
-            epochs=EPOCHS,
-            model=model,
-            parameter_numbers=PARAMETER_NUMBER,
-            teacher=teacher,
-            inference=False)
+    train(data_dir=data_dir,
+          save_folder=model+dataset+str(UNITS) + name,
+          model_save_dir=model_save_dir,
+          dataset_train=dataset_train,
+          dataset_test=dataset,
+          batch_size=BATCH_SIZE,
+          learning_rate=LR,
+          units=UNITS,
+          epochs=EPOCHS,
+          model=model,
+          parameter_numbers=PARAMETER_NUMBER,
+          teacher=teacher,
+          inference=False)
