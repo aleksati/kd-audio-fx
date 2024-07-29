@@ -12,9 +12,7 @@ import time
 import matplotlib.pyplot as plt
 
 
-
 def train(**kwargs):
-
     """
       :param data_dir: the directory in which dataset are stored [string]
       :param save_folder: the directory in which the models are saved [string]
@@ -63,14 +61,17 @@ def train(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    model = create_model_LSTM(input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size)
+    model = create_model_LSTM(
+        input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size)
 
     # define callbacks: where to store the weights
     callbacks = []
-    ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(model_save_dir, save_folder)
+    ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
+        model_save_dir, save_folder)
 
     # create the DataGenerator object to retrive the data in the test set
-    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle',
+                                    input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
     # if inference is True, it jump directly to the inference section without train the model
     if not inference:
@@ -85,12 +86,14 @@ def train(**kwargs):
             print("Initializing random weights.")
 
         # create the DataGenerator object to retrive the data in the training set
-        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle', input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
+                                         input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
         # the number of total training steps
         training_steps = train_gen.training_steps
         # define the Adam optimizer with initial learning rate, training steps
-        opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(learning_rate, training_steps), clipnorm=1)
+        opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
+            learning_rate, training_steps), clipnorm=1)
         # opt = tf.keras.optimizers.Adam(learning_rate=learning_rate, clipnorm=1)
 
         # compile the model with the optimizer and selected loss function
@@ -132,7 +135,8 @@ def train(**kwargs):
                     break
 
             avg_time_epoch = (time.time() - start)
-            sys.stdout.write(f" Average time/epoch {'{:.3f}'.format(avg_time_epoch / 60)} min")
+            sys.stdout.write(
+                f" Average time/epoch {'{:.3f}'.format(avg_time_epoch / 60)} min")
             sys.stdout.write("\n")
 
         # write and save results
@@ -142,12 +146,14 @@ def train(**kwargs):
         # plot the training and validation loss for all the training
         loss_training = np.array(loss_training)
         loss_val = np.array(loss_val)
-        plotTraining(loss_training, loss_val, model_save_dir, save_folder, str(epochs))
+        plotTraining(loss_training, loss_val, model_save_dir,
+                     save_folder, str(epochs))
 
         print("Training done")
 
     avg_time_epoch = (time.time() - global_start)
-    sys.stdout.write(f" Average time training{'{:.3f}'.format(avg_time_epoch / 60)} min")
+    sys.stdout.write(
+        f" Average time training{'{:.3f}'.format(avg_time_epoch / 60)} min")
     sys.stdout.write("\n")
     sys.stdout.flush()
 
@@ -166,11 +172,14 @@ def train(**kwargs):
     predictions = model.predict(test_gen, verbose=0).reshape(-1)
 
     # plot and render the output audio file, together with the input and target
-    predictWaves(predictions, test_gen.x,  test_gen.y, model_save_dir, save_folder, fs, '0')
+    predictWaves(predictions, test_gen.x,  test_gen.y,
+                 model_save_dir, save_folder, fs, '0')
 
     # compute the metrics: mse, mae, esr and rmse
-    mse = tf.get_static_value(tf.keras.metrics.mean_squared_error(test_gen.y, predictions))
-    mae = tf.get_static_value(tf.keras.metrics.mean_absolute_error(test_gen.y, predictions))
+    mse = tf.get_static_value(
+        tf.keras.metrics.mean_squared_error(test_gen.y, predictions))
+    mae = tf.get_static_value(
+        tf.keras.metrics.mean_absolute_error(test_gen.y, predictions))
     esr = tf.get_static_value(ESR(test_gen.y, predictions))
     rmse = tf.get_static_value(RMSE(test_gen.y, predictions))
 
@@ -183,8 +192,10 @@ def train(**kwargs):
     # if teacher we compute the new training set to give to the student
     if teacher:
         predictions = model.predict(train_gen, verbose=0).reshape(-1)
-        z = {'x': train_gen.x.reshape(1, -1), 'y': predictions.reshape(1, -1), 'z': train_gen.z}
-        file_data = open(os.path.normpath('/'.join([data_dir, 'Teacher_' + dataset_test + '_train.pickle'])), 'wb')
+        z = {'x': train_gen.x.reshape(
+            1, -1), 'y': predictions.reshape(1, -1), 'z': train_gen.z}
+        file_data = open(os.path.normpath(
+            '/'.join([data_dir, 'Teacher_' + dataset_test + '_train.pickle'])), 'wb')
         pickle.dump(z, file_data)
         file_data.close()
 

@@ -7,6 +7,7 @@ import librosa.display
 from scipy import fft
 from scipy.signal import butter, lfilter
 
+
 def loadFilePickle(data_dir, filename):
     """
     Initializes a data generator object
@@ -18,6 +19,7 @@ def loadFilePickle(data_dir, filename):
     Z = pickle.load(file_data)
     return Z
 
+
 def plotTime(x, fs):
     """
     Initializes a data generator object
@@ -27,6 +29,7 @@ def plotTime(x, fs):
     """
     fig, ax = plt.subplots(nrows=1, ncols=1)
     display.waveshow(x, sr=fs, ax=ax)
+
 
 def plotFreq(x, fs, N):
     """
@@ -46,6 +49,7 @@ def plotFreq(x, fs, N):
     ax.set_ylabel('Magnitude (dB)')
     ax.axis(xmin=20, xmax=22050)
 
+
 def plotSpectogram(x, fs, N):
     """
     Initializes a data generator object
@@ -57,10 +61,12 @@ def plotSpectogram(x, fs, N):
     D = librosa.stft(x, n_fft=N)
     S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
     fig, ax = plt.subplots()
-    librosa.display.specshow(S_db, sr=fs, y_axis='linear', x_axis='time', ax=ax[0])
+    librosa.display.specshow(
+        S_db, sr=fs, y_axis='linear', x_axis='time', ax=ax[0])
     ax.set_ylabel('Frequency [Hz]')
     ax.set_xlabel('Time [sec]')
     ax.label_outer()
+
 
 def butter_lowpass(cutoff, fs, order=2):
     """
@@ -86,6 +92,7 @@ def butter_highpass(cutoff, fs, order=2):
     normal_cutoff = cutoff / nyq
     b, a = butter(order, normal_cutoff, btype='high', analog=False)
     return b, a
+
 
 def filterAudio(x, fs, f_min, f_max):
     """

@@ -28,7 +28,7 @@ model = 'LSTM'
 teacher = False
 teaching = False
 # name of dataset to be used
-dataset = 'CL1B_DK'
+dataset = 'DrDrive_DK'
 dataset_train = dataset
 # [teacher, teaching]
 cases = [[True, False], [False, True], [False, False]]
@@ -49,6 +49,7 @@ for case in cases:
         name = '_student_taught'
     else:
         # we are student but self-taught
+        dataset_train = dataset
         name = '_student_self_taught'
 
     train(data_dir=data_dir,

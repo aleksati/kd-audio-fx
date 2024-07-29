@@ -31,19 +31,21 @@ class DataGeneratorPickles(Sequence):
     def prepareXYZ(self, data_dir, filename):
 
         # load all the audio files
-        file_data = open(os.path.normpath('/'.join([data_dir, filename])), 'rb')
+        file_data = open(os.path.normpath(
+            '/'.join([data_dir, filename])), 'rb')
         Z = pickle.load(file_data)
         x = np.array(Z['x'][:1, :], dtype=np.float32)
         y = np.array(Z['y'][:1, :], dtype=np.float32)
 
         # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
         if x.shape[0] == 1:
-           x = np.repeat(x, y.shape[0], axis=0)
+            x = np.repeat(x, y.shape[0], axis=0)
 
         # windowing the signals in order to avoid misalignments
-        x = x * np.array(tukey(x.shape[1], alpha=0.005), dtype=np.float32).reshape(1, -1)
-        y = y * np.array(tukey(x.shape[1], alpha=0.005), dtype=np.float32).reshape(1, -1)
-
+        x = x * np.array(tukey(x.shape[1], alpha=0.005),
+                         dtype=np.float32).reshape(1, -1)
+        y = y * np.array(tukey(x.shape[1], alpha=0.005),
+                         dtype=np.float32).reshape(1, -1)
 
         # reshape to one dimension
         rep = x.shape[1]
