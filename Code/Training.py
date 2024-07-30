@@ -144,8 +144,8 @@ def train(**kwargs):
                      save_folder, epochs)
 
         # plot the training and validation loss for all the training
-        loss_training = np.array(loss_training)
-        loss_val = np.array(loss_val)
+        loss_training = np.array(loss_training)[:i]
+        loss_val = np.array(loss_val)[:i]
         plotTraining(loss_training, loss_val, model_save_dir,
                      save_folder, str(epochs))
 
@@ -191,6 +191,10 @@ def train(**kwargs):
 
     # if teacher we compute the new training set to give to the student
     if teacher:
+        # create the DataGenerator object to retrive the data in the training set
+        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
+                                         input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+
         predictions = model.predict(train_gen, verbose=0).reshape(-1)
         z = {'x': train_gen.x.reshape(
             1, -1), 'y': predictions.reshape(1, -1), 'z': train_gen.z}

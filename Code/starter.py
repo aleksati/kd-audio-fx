@@ -6,7 +6,7 @@ main script
 """
 
 # number of epochs
-EPOCHS = 500
+EPOCHS = 60
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size
@@ -32,7 +32,7 @@ dataset = 'DrDrive_DK'
 dataset_train = dataset
 # [teacher, teaching]
 # cases = [[True, False], [False, True], [False, False]]
-cases = [[True, False]]
+cases = [[False, True],  [False, False]]
 
 for case in cases:
     teacher = case[0]
@@ -55,7 +55,7 @@ for case in cases:
 
     train(data_dir=data_dir,
           #   save_folder=model+dataset+str(UNITS) + name,
-          save_folder=model+dataset+"4-8-16-32-16-8-4-" + name,
+          save_folder=model+dataset+"8-16-32-64-32-16-8" + name,
           model_save_dir=model_save_dir,
           dataset_train=dataset_train,
           dataset_test=dataset,
