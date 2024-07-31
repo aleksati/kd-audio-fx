@@ -68,12 +68,13 @@ def plotResult(pred, inp, tar, model_save_dir, save_folder, fs, filename):
       """
 
     # the loop split the prediction in 5 second long extracts
-    l = len(inp) // (fs * 5)
+    seconds = 10
+    l = len(inp) // (fs * seconds)
 
-    for i in range(0, l - 1, 100):
-        y = tar[i * fs * 5: (i + 1) * fs * 5]
-        predictions = pred[i * fs * 5: (i + 1) * fs * 5]
-        inp_ = inp[i * fs * 5: (i + 1) * fs * 5]
+    for i in range(0, l - 1, 1):
+        y = tar[i * fs * seconds: (i + 1) * fs * seconds]
+        predictions = pred[i * fs * seconds: (i + 1) * fs * seconds]
+        inp_ = inp[i * fs * seconds: (i + 1) * fs * seconds]
         time = np.arange(len(inp_))/fs
         fig, ax = plt.subplots(nrows=1, ncols=1)
         ax.plot(time, inp_, label='input', alpha=0.3)

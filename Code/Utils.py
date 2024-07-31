@@ -94,15 +94,15 @@ def butter_highpass(cutoff, fs, order=2):
     return b, a
 
 
-def filterAudio(x, fs, f_min, f_max):
+def filterAudio(x, fs=48000, f_min=30, f_max=20000):
     """
     Initializes a data generator object
       :param data_dir: the directory in which data are stored
       :param output_size: output size
       :param batch_size: The size of each batch returned by __getitem__
     """
-    [b, a] = butter_highpass(f1, fs, order=2)
-    [b2, a2] = butter_lowpass(f2, fs, order=2)
+    [b, a] = butter_highpass(f_min, fs, order=2)
+    [b2, a2] = butter_lowpass(f_max, fs, order=2)
     x = lfilter(b, a, x)
     x = lfilter(b2, a2, x)
     return x

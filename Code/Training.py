@@ -2,11 +2,12 @@ import os
 import pickle
 import tensorflow as tf
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
+from Utils import filterAudio
 from Models import create_model_LSTM
 from DatasetsClass import DataGeneratorPickles
 import numpy as np
 import random
-from Metrics import ESR, RMSE
+from Metrics import ESR, RMSE, STFT_loss
 import sys
 import time
 import matplotlib.pyplot as plt
@@ -174,18 +175,20 @@ def train(**kwargs):
     # plot and render the output audio file, together with the input and target
     predictWaves(predictions, test_gen.x,  test_gen.y,
                  model_save_dir, save_folder, fs, '0')
+    predictions = np.array(filterAudio(predictions), dtype=np.float32)
+    y = np.array(filterAudio(test_gen.y), dtype=np.float32)
 
     # compute the metrics: mse, mae, esr and rmse
     mse = tf.get_static_value(
-        tf.keras.metrics.mean_squared_error(test_gen.y, predictions))
+        tf.keras.metrics.mean_squared_error(y, predictions))
     mae = tf.get_static_value(
-        tf.keras.metrics.mean_absolute_error(test_gen.y, predictions))
-    esr = tf.get_static_value(ESR(test_gen.y, predictions))
-    rmse = tf.get_static_value(RMSE(test_gen.y, predictions))
-
+        tf.keras.metrics.mean_absolute_error(y, predictions))
+    esr = tf.get_static_value(ESR(y, predictions))
+    rmse = tf.get_static_value(RMSE(y, predictions))
+    stft = tf.get_static_value(STFT_loss(y, predictions))
     # writhe and store the metrics values
-    results_ = {'mse': mse, 'mae': mae, 'esr': esr, 'rmse': rmse}
-    with open(os.path.normpath('/'.join([model_save_dir, save_folder, 'results.txt'])), 'w') as f:
+    results_ = {'mse': mse, 'mae': mae, 'esr': esr, 'rmse': rmse, 'stft': stft}
+    with open(os.path.normpath('/'.join([model_save_dir, save_folder, save_folder + '_results.txt'])), 'w') as f:
         for key, value in results_.items():
             print('\n', key, '  : ', value, file=f)
 

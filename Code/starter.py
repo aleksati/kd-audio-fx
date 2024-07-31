@@ -13,8 +13,6 @@ PARAMETER_NUMBER = 0
 BATCH_SIZE = 2400
 # initial learning rate
 LR = 3e-4
-# number of model's units
-UNITS = 8
 
 # the directory in which datasets are stored
 data_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\Datasets'
@@ -28,11 +26,11 @@ model = 'LSTM'
 teacher = False
 teaching = False
 # name of dataset to be used
-dataset = 'DrDrive_DK'
+dataset = 'CL1B_DK'  # DrDrive_DK
 dataset_train = dataset
 # [teacher, teaching]
-# cases = [[True, False], [False, True], [False, False]]
-cases = [[False, True],  [False, False]]
+cases = [[True, False], [False, True], [False, False]]
+# cases = [[False, True],  [False, False]]
 
 for case in cases:
     teacher = case[0]
@@ -50,6 +48,7 @@ for case in cases:
         name = '_student_taught'
     else:
         # we are student but self-taught
+        UNITS = 8
         dataset_train = dataset
         name = '_student_self_taught'
 
