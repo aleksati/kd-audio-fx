@@ -3,8 +3,8 @@ import pickle
 import tensorflow as tf
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 from Utils import filterAudio
-from Models import create_model_LSTM
-from DatasetsClass import DataGeneratorPickles
+from Models import create_model_LSTM_DK1
+from DatasetsClassDK1 import DataGeneratorPickles
 import numpy as np
 import random
 from Metrics import ESR, RMSE, STFT_loss
@@ -13,7 +13,7 @@ import time
 import matplotlib.pyplot as plt
 
 
-def train(**kwargs):
+def trainDK1(**kwargs):
     """
       :param data_dir: the directory in which dataset are stored [string]
       :param save_folder: the directory in which the models are saved [string]
@@ -62,7 +62,7 @@ def train(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    model = create_model_LSTM(
+    model = create_model_LSTM_DK1(
         input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size)
 
     # define callbacks: where to store the weights
@@ -194,6 +194,8 @@ def train(**kwargs):
 
     # if teacher we compute the new training set to give to the student
     if teacher:
+        print('Saving the new dataset...')
+
         # create the DataGenerator object to retrive the data in the training set
         train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
@@ -202,7 +204,7 @@ def train(**kwargs):
         z = {'x': train_gen.x.reshape(
             1, -1), 'y': predictions.reshape(1, -1), 'z': train_gen.z}
         file_data = open(os.path.normpath(
-            '/'.join([data_dir, 'Teacher_' + dataset_test + '_train.pickle'])), 'wb')
+            '/'.join([data_dir, 'Teacher_DK1_' + dataset_test + '_train.pickle'])), 'wb')
         pickle.dump(z, file_data)
         file_data.close()
 
