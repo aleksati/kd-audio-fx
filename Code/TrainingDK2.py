@@ -182,8 +182,8 @@ def trainDK2(**kwargs):
     # predict the test set
     if enable_second_output:
         predictions = model.predict(test_gen, verbose=0)[0].reshape(-1)
-        predictions_h = model.predict(test_gen, verbose=0)[1].reshape(-1)
-        yh = np.array(filterAudio(test_gen.yh), dtype=np.float32)
+        # predictions_h = model.predict(test_gen, verbose=0)[1].reshape(-1)
+        # yh = np.array(filterAudio(test_gen.yh), dtype=np.float32)
 
     else:
         predictions = model.predict(test_gen, verbose=0).reshape(-1)
@@ -203,22 +203,22 @@ def trainDK2(**kwargs):
     rmse = tf.get_static_value(RMSE(y, predictions))
     stft = tf.get_static_value(STFT_loss(y, predictions))
 
-    if enable_second_output:
-        print("")
-        # compute the metrics: mse, mae, esr and rmse
-        # mse_h = tf.get_static_value(tf.keras.metrics.mean_squared_error(yh, predictions_h))
-        # mae_h = tf.get_static_value(tf.keras.metrics.mean_absolute_error(yh, predictions_h))
-        # esr_h = tf.get_static_value(ESR(yh, predictions_h))
+   # if enable_second_output:
+    #    print("")
+    # compute the metrics: mse, mae, esr and rmse
+    # mse_h = tf.get_static_value(tf.keras.metrics.mean_squared_error(yh, predictions_h))
+    # mae_h = tf.get_static_value(tf.keras.metrics.mean_absolute_error(yh, predictions_h))
+    # esr_h = tf.get_static_value(ESR(yh, predictions_h))
 
-        # writhe and store the metrics values
-        # results_ = {'mse': mse, 'mae': mae, 'esr': esr, 'rmse': rmse,
-        # 'stft': stft, 'mse_h': mse_h, 'mae_h': mae_h, 'esr_h': esr_h}
+    # writhe and store the metrics values
+    # results_ = {'mse': mse, 'mae': mae, 'esr': esr, 'rmse': rmse,
+    # 'stft': stft, 'mse_h': mse_h, 'mae_h': mae_h, 'esr_h': esr_h}
 
-    else:
+    # else:
 
-        # writhe and store the metrics values
-        results_ = {'mse': mse, 'mae': mae,
-                    'esr': esr, 'rmse': rmse, 'stft': stft}
+    # writhe and store the metrics values
+    results_ = {'mse': mse, 'mae': mae,
+                'esr': esr, 'rmse': rmse, 'stft': stft}
 
     with open(os.path.normpath('/'.join([model_save_dir, save_folder, save_folder + '_results.txt'])), 'w') as f:
         for key, value in results_.items():

@@ -6,8 +6,10 @@ from TrainingDK2 import trainDK2
 main script
 
 """
+
 DK1 = False
 DK2 = not DK1
+
 if DK1:
     train = trainDK1
     DK = 'DK1_'
@@ -18,7 +20,7 @@ else:
     print('DK2 phase')
 
 # number of epochs
-EPOCHS = 60
+EPOCHS = 200
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size
@@ -33,16 +35,17 @@ model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\
 # name of the mdoel to be used
 model = 'LSTM'
 
-
 # flag to true when we train teacher
 teacher = False
 teaching = False
 # name of dataset to be used
-dataset = 'CL1B_DK'  # DrDrive_DK
+dataset = "DrDrive_DK"  # 'CL1B_DK'  #
 dataset_train = dataset
+
 # [teacher, teaching]
-cases = [[True, False], [False, True], [False, False]]
-# cases = [[False, True]]
+# cases = [[True, False], [False, True], [False, False]]
+# cases = [[True, False], [False, True]]
+cases = [[False, True]]
 
 for case in cases:
     teacher = case[0]
