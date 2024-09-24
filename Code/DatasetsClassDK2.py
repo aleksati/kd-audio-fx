@@ -146,11 +146,11 @@ class DataGeneratorPicklesStudent(Sequence):
         x = np.array(Z['x'][:1, :], dtype=np.float32)
         #y = np.array(Z['y'][:1, :], dtype=np.float32)
         yh = np.array(Z['yh'], dtype=np.float32)
-        weights = np.array(Z['w'], dtype=np.float32) # those are the weight of the output layer
+        weights = Z['w'] # those are the weight of the output layer
 
         # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
-        if x.shape[0] == 1:
-            x = np.repeat(x, yh.shape[0], axis=0)
+        #if x.shape[0] == 1:
+        #    x = np.repeat(x, yh.shape[0], axis=0)
 
         # windowing the signals in order to avoid misalignments
         x = x * np.array(tukey(x.shape[1], alpha=0.000005),
@@ -211,7 +211,7 @@ class DataGeneratorPicklesStudent(Sequence):
                 YH[c, :] = np.array(self.yh[t])
                 c = c + 1
 
-            return [Z, X], [Y, YH]
+            return [Z, X], YH
 
         else:
             # fill the batches
@@ -220,4 +220,4 @@ class DataGeneratorPicklesStudent(Sequence):
                 YH[c, :] = np.array(self.yh[t])
                 c = c + 1
 
-            return X, [Y, YH]
+            return X, YH

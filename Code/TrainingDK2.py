@@ -4,7 +4,7 @@ import tensorflow as tf
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 from Utils import filterAudio
 from Models import create_model_LSTM_DK2
-from DatasetsClassDK2 import DataGeneratorPickles
+from DatasetsClassDK2 import DataGeneratorPickles, DataGeneratorPicklesStudent
 import numpy as np
 import random
 from Metrics import ESR, RMSE, STFT_loss
@@ -47,6 +47,11 @@ def trainDK2(**kwargs):
     conditioning_size = kwargs.get('conditioning_size', 0)
     enable_second_output = kwargs.get('enable_second_output', False)
 
+    if not teacher:
+        data_generator = DataGeneratorPicklesStudent
+    else:
+        data_generator = DataGeneratorPickles
+
     # set all the seed in case reproducibility is desired
     np.random.seed(42)
     tf.random.set_seed(42)
@@ -71,7 +76,7 @@ def trainDK2(**kwargs):
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
         model_save_dir, save_folder)
 
-    # create the DataGenerator object to retrive the data in the test set
+    # create the DataGenerator object to retrieve the data in the test set
     test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle',
                                     input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
@@ -88,7 +93,7 @@ def trainDK2(**kwargs):
             print("Initializing random weights.")
 
         # create the DataGenerator object to retrieve the data in the training set
-        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
+        train_gen = data_generator(data_dir, dataset_train + '_train.pickle',
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
         # the number of total training steps
@@ -97,14 +102,6 @@ def trainDK2(**kwargs):
         opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
             learning_rate, training_steps), clipnorm=1)
 
-        # if enable_second_output:
-        #
-        #     lossesName = ['OutLayer', 'LastLSTM']
-        #     losses = {lossesName[0]: 'mse',
-        #               lossesName[1]: 'mse'}
-        #     lossWeights = {lossesName[0]: 0.,
-        #                    lossesName[1]: 1.}
-        #     model.compile(loss=losses, loss_weights=lossWeights, optimizer=opt)
 
         # compile the model with the optimizer and selected loss function
         model.compile(loss='mse', optimizer=opt)
@@ -126,38 +123,45 @@ def trainDK2(**kwargs):
             model.reset_states()
             print(model.optimizer.learning_rate)
 
-            results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=test_gen,
+            if enable_second_output:
+                results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=train_gen,
                                 callbacks=callbacks)
 
-            # store the training and validation loss
-            loss_training[i] = results.history['loss'][-1]
-            loss_val[i] = results.history['val_loss'][-1]
-            print(results.history['val_loss'][-1])
-
-            # if validation loss is smaller then the best loss, the early stopping counting is reset
-            if results.history['val_loss'][-1] < best_loss:
-                best_loss = results.history['val_loss'][-1]
-                count = 0
-            # if not count is increased by one and if equal to 20 the training is stopped
             else:
-                count = count + 1
-                if count == 20:
-                    break
+                results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=test_gen,
+                                callbacks=callbacks)
+
+                # store the training and validation loss
+                loss_training[i] = results.history['loss'][-1]
+                loss_val[i] = results.history['val_loss'][-1]
+                print(results.history['val_loss'][-1])
+
+                # if validation loss is smaller then the best loss, the early stopping counting is reset
+                if results.history['val_loss'][-1] < best_loss:
+                    best_loss = results.history['val_loss'][-1]
+                    count = 0
+                # if not count is increased by one and if equal to 20 the training is stopped
+                else:
+                    count = count + 1
+                    if count == 20:
+                        break
+
+                    # plot the training and validation loss for all the training
+                    loss_training = np.array(loss_training)[:i]
+                    loss_val = np.array(loss_val)[:i]
+                    plotTraining(loss_training, loss_val, model_save_dir,
+                                 save_folder, str(epochs))
+
+                    # write and save results
+                    writeResults(results, units, epochs, batch_size, learning_rate, model_save_dir,
+                                 save_folder, epochs)
+
 
             avg_time_epoch = (time.time() - start)
             sys.stdout.write(
                 f" Average time/epoch {'{:.3f}'.format(avg_time_epoch / 60)} min")
             sys.stdout.write("\n")
 
-        # write and save results
-        writeResults(results, units, epochs, batch_size, learning_rate, model_save_dir,
-                     save_folder, epochs)
-
-        # plot the training and validation loss for all the training
-        loss_training = np.array(loss_training)[:i]
-        loss_val = np.array(loss_val)[:i]
-        plotTraining(loss_training, loss_val, model_save_dir,
-                     save_folder, str(epochs))
 
         print("Training done")
 
@@ -171,10 +175,13 @@ def trainDK2(**kwargs):
     # only if student taught we need to load the output layer's weights from the teacher's network
     # we rebuild the model this time enabling the output layer
     if enable_second_output:
+        # create the DataGenerator object to retrieve the data in the training set
+        train_gen = data_generator(data_dir, dataset_train + '_train.pickle',
+                                         input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+
         model = create_model_LSTM_DK2(
             input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size,
             enable_second_output=False)
-        model.layers[-1].set_weights(train_gen.weights)
 
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)
@@ -184,6 +191,9 @@ def trainDK2(**kwargs):
     else:
         # if no weights are found,there is something wrong
         print("Something is wrong.")
+
+    model.layers[-1].set_weights(train_gen.weights)
+
 
     # reset the states before predicting
     model.reset_states()
@@ -205,18 +215,6 @@ def trainDK2(**kwargs):
     rmse = tf.get_static_value(RMSE(y, predictions))
     stft = tf.get_static_value(STFT_loss(y, predictions))
 
-   # if enable_second_output:
-    #    print("")
-    # compute the metrics: mse, mae, esr and rmse
-    # mse_h = tf.get_static_value(tf.keras.metrics.mean_squared_error(yh, predictions_h))
-    # mae_h = tf.get_static_value(tf.keras.metrics.mean_absolute_error(yh, predictions_h))
-    # esr_h = tf.get_static_value(ESR(yh, predictions_h))
-
-    # writhe and store the metrics values
-    # results_ = {'mse': mse, 'mae': mae, 'esr': esr, 'rmse': rmse,
-    # 'stft': stft, 'mse_h': mse_h, 'mae_h': mae_h, 'esr_h': esr_h}
-
-    # else:
 
     # writhe and store the metrics values
     results_ = {'mse': mse, 'mae': mae,
@@ -228,17 +226,26 @@ def trainDK2(**kwargs):
 
     # if teacher we compute the new training set to give to the student
     if teacher:
+        # we save also the weights of output layer
+        last_layer_weights = model.layers[-1].get_weights()
+
         print('Saving the new dataset...')
         model = create_model_LSTM_DK2(
             input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size, enable_second_output=True)
-        # create the DataGenerator object to retrive the data in the training set
+        # load the best weights of the model
+        best = tf.train.latest_checkpoint(ckpt_dir)
+        if best is not None:
+            print("Restored weights from {}".format(ckpt_dir))
+            model.load_weights(best).expect_partial()
+        else:
+            # if no weights are found,there is something wrong
+            print("Something is wrong.")
+
+        # create the DataGenerator object to retrieve the data in the training set
         train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
-        predictions = model.predict(train_gen, verbose=0)[1]
-
-        # we save also the weights of output layer
-        last_layer_weights = model.layers[-1].get_weights()
+        predictions = model.predict(train_gen, verbose=0)
 
 
         z = {'x': train_gen.x.reshape(1, -1),
