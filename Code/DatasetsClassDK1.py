@@ -42,9 +42,9 @@ class DataGeneratorPickles(Sequence):
             x = np.repeat(x, y.shape[0], axis=0)
 
         # windowing the signals in order to avoid misalignments
-        x = x * np.array(tukey(x.shape[1], alpha=0.005),
+        x = x * np.array(tukey(x.shape[1], alpha=0.000005),
                          dtype=np.float32).reshape(1, -1)
-        y = y * np.array(tukey(x.shape[1], alpha=0.005),
+        y = y * np.array(tukey(x.shape[1], alpha=0.000005),
                          dtype=np.float32).reshape(1, -1)
 
         # reshape to one dimension

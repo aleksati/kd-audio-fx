@@ -52,7 +52,7 @@ def trainDK2(**kwargs):
     tf.random.set_seed(42)
     random.seed(42)
 
-    # start the timer for all the trianing script
+    # start the timer for all the training script
     global_start = time.time()
 
     # check if GPUs are available and set the memory growing
@@ -87,7 +87,7 @@ def trainDK2(**kwargs):
             # if no weights are found,the weights are random generated
             print("Initializing random weights.")
 
-        # create the DataGenerator object to retrive the data in the training set
+        # create the DataGenerator object to retrieve the data in the training set
         train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
@@ -96,16 +96,15 @@ def trainDK2(**kwargs):
         # define the Adam optimizer with initial learning rate, training steps
         opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
             learning_rate, training_steps), clipnorm=1)
-        # opt = tf.keras.optimizers.Adam(learning_rate=learning_rate, clipnorm=1)
 
-        if enable_second_output:
-
-            lossesName = ['OutLayer', 'LastLSTM']
-            losses = {lossesName[0]: 'mse',
-                      lossesName[1]: 'mse'}
-            lossWeights = {lossesName[0]: 1.,
-                           lossesName[1]: 1.}
-            model.compile(loss=losses, loss_weights=lossWeights, optimizer=opt)
+        # if enable_second_output:
+        #
+        #     lossesName = ['OutLayer', 'LastLSTM']
+        #     losses = {lossesName[0]: 'mse',
+        #               lossesName[1]: 'mse'}
+        #     lossWeights = {lossesName[0]: 0.,
+        #                    lossesName[1]: 1.}
+        #     model.compile(loss=losses, loss_weights=lossWeights, optimizer=opt)
 
         # compile the model with the optimizer and selected loss function
         model.compile(loss='mse', optimizer=opt)
@@ -168,6 +167,15 @@ def trainDK2(**kwargs):
     sys.stdout.write("\n")
     sys.stdout.flush()
 
+
+    # only if student taught we need to load the output layer's weights from the teacher's network
+    # we rebuild the model this time enabling the output layer
+    if enable_second_output:
+        model = create_model_LSTM_DK2(
+            input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size,
+            enable_second_output=False)
+        model.layers[-1].set_weights(train_gen.weights)
+
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)
     if best is not None:
@@ -180,13 +188,7 @@ def trainDK2(**kwargs):
     # reset the states before predicting
     model.reset_states()
     # predict the test set
-    if enable_second_output:
-        predictions = model.predict(test_gen, verbose=0)[0].reshape(-1)
-        # predictions_h = model.predict(test_gen, verbose=0)[1].reshape(-1)
-        # yh = np.array(filterAudio(test_gen.yh), dtype=np.float32)
-
-    else:
-        predictions = model.predict(test_gen, verbose=0).reshape(-1)
+    predictions = model.predict(test_gen, verbose=0).reshape(-1)
 
     # plot and render the output audio file, together with the input and target
     predictWaves(predictions, test_gen.x,  test_gen.y,
@@ -234,9 +236,16 @@ def trainDK2(**kwargs):
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
         predictions = model.predict(train_gen, verbose=0)[1]
-        z = {'x': train_gen.x.reshape(
-            1, -1), 'y': train_gen.y.reshape(
-            1, -1), 'yh': predictions, 'z': train_gen.z}
+
+        # we save also the weights of output layer
+        last_layer_weights = model.layers[-1].get_weights()
+
+
+        z = {'x': train_gen.x.reshape(1, -1),
+            #'y': train_gen.y.reshape(1, -1),
+            'yh': predictions, 'z': train_gen.z,
+             'w': last_layer_weights}
+
         file_data = open(os.path.normpath(
             '/'.join([data_dir, 'DK2_Teacher_' + dataset_test + '_train.pickle'])), 'wb')
         pickle.dump(z, file_data)

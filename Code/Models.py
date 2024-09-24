@@ -119,18 +119,18 @@ def create_model_LSTM_DK2(units, input_dim=1, conditioning_size=0, enable_second
     outputs_ = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
 
     if conditioning_size != 0:
-        if enable_second_output:
+        if enable_second_output: # we want only the latent space of last layer
             model = tf.keras.models.Model(
-                [inputs, cond_inputs], [outputs_, outputs])
+                [inputs, cond_inputs], outputs)
 
         else:
 
             model = tf.keras.models.Model(
                 [inputs, cond_inputs], outputs_)
     else:
-        if enable_second_output:
+        if enable_second_output: # we want only the latent space of last layer
             model = tf.keras.models.Model(
-                inputs, [outputs_, outputs])
+                inputs, outputs)
 
         else:
             model = tf.keras.models.Model(
