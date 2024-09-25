@@ -48,7 +48,7 @@ dataset_train = dataset
 # [teacher, teaching]
 # cases = [[True, False], [False, True], [False, False]]
 cases = [[True, False], [False, True]]
-cases = [[False, True]]
+#cases = [[False, True]]
 
 for case in cases:
     teacher = case[0]
