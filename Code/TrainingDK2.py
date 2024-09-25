@@ -181,16 +181,16 @@ def trainDK2(**kwargs):
             input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size,
             enable_second_output=False)
 
-    # load the best weights of the model
-    best = tf.train.latest_checkpoint(ckpt_dir)
-    if best is not None:
-        print("Restored weights from {}".format(ckpt_dir))
-        model.load_weights(best).expect_partial()
-    else:
-        # if no weights are found,there is something wrong
-        print("Something is wrong.")
+        # load the best weights of the model
+        best = tf.train.latest_checkpoint(ckpt_dir)
+        if best is not None:
+            print("Restored weights from {}".format(ckpt_dir))
+            model.load_weights(best).expect_partial()
+        else:
+            # if no weights are found,there is something wrong
+            print("Something is wrong.")
 
-    model.layers[-1].set_weights(train_gen.weights)
+        model.layers[-1].set_weights(train_gen.weights)
 
 
     # reset the states before predicting
