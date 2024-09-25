@@ -113,6 +113,11 @@ def trainDK2(**kwargs):
         # counting for early stopping
         count = 0
 
+        if enable_second_output:
+            val_gen = train_gen
+        else:
+            val_gen = test_gen
+
         # training loop
         for i in range(0, epochs, 1):
             # start the timer for each epoch
@@ -123,37 +128,33 @@ def trainDK2(**kwargs):
             model.reset_states()
             print(model.optimizer.learning_rate)
 
-            if enable_second_output:
-                results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=train_gen,
+            results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=val_gen,
                                 callbacks=callbacks)
 
+
+            # store the training and validation loss
+            loss_training[i] = results.history['loss'][-1]
+            loss_val[i] = results.history['val_loss'][-1]
+            print(results.history['val_loss'][-1])
+
+            # if validation loss is smaller then the best loss, the early stopping counting is reset
+            if results.history['val_loss'][-1] < best_loss:
+                best_loss = results.history['val_loss'][-1]
+                count = 0
+            # if not count is increased by one and if equal to 20 the training is stopped
             else:
-                results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=test_gen,
-                                callbacks=callbacks)
+                count = count + 1
+                if count == 20:
+                    break
 
-                # store the training and validation loss
-                loss_training[i] = results.history['loss'][-1]
-                loss_val[i] = results.history['val_loss'][-1]
-                print(results.history['val_loss'][-1])
-
-                # if validation loss is smaller then the best loss, the early stopping counting is reset
-                if results.history['val_loss'][-1] < best_loss:
-                    best_loss = results.history['val_loss'][-1]
-                    count = 0
-                # if not count is increased by one and if equal to 20 the training is stopped
-                else:
-                    count = count + 1
-                    if count == 20:
-                        break
-
-                    # plot the training and validation loss for all the training
-                    loss_training = np.array(loss_training)[:i]
-                    loss_val = np.array(loss_val)[:i]
-                    plotTraining(loss_training, loss_val, model_save_dir,
+                # plot the training and validation loss for all the training
+                loss_training = np.array(loss_training)[:i]
+                loss_val = np.array(loss_val)[:i]
+                plotTraining(loss_training, loss_val, model_save_dir,
                                  save_folder, str(epochs))
 
-                    # write and save results
-                    writeResults(results, units, epochs, batch_size, learning_rate, model_save_dir,
+                # write and save results
+                writeResults(results, units, epochs, batch_size, learning_rate, model_save_dir,
                                  save_folder, epochs)
 
 
