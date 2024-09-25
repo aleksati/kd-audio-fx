@@ -119,7 +119,7 @@ def trainDK2(**kwargs):
             val_gen = test_gen
 
         # training loop
-        for i in range(0, epochs, 1):
+        for i in range(epochs):
             # start the timer for each epoch
             start = time.time()
             print('epochs:', i)
@@ -159,9 +159,6 @@ def trainDK2(**kwargs):
         # write and save results
         writeResults(results, units, epochs, batch_size, learning_rate, model_save_dir,
                                  save_folder, epochs)
-
-
-
 
 
         print("Training done")
