@@ -146,22 +146,22 @@ def trainDK2(**kwargs):
                 count = count + 1
                 if count == 20:
                     break
-
-                # plot the training and validation loss for all the training
-                loss_training = np.array(loss_training)[:i]
-                loss_val = np.array(loss_val)[:i]
-                plotTraining(loss_training, loss_val, model_save_dir,
-                                 save_folder, str(epochs))
-
-                # write and save results
-                writeResults(results, units, epochs, batch_size, learning_rate, model_save_dir,
-                                 save_folder, epochs)
-
-
             avg_time_epoch = (time.time() - start)
             sys.stdout.write(
                 f" Average time/epoch {'{:.3f}'.format(avg_time_epoch / 60)} min")
             sys.stdout.write("\n")
+        # plot the training and validation loss for all the training
+        loss_training = np.array(loss_training)[:i]
+        loss_val = np.array(loss_val)[:i]
+        plotTraining(loss_training, loss_val, model_save_dir,
+                                 save_folder, str(epochs))
+
+        # write and save results
+        writeResults(results, units, epochs, batch_size, learning_rate, model_save_dir,
+                                 save_folder, epochs)
+
+
+
 
 
         print("Training done")
