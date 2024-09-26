@@ -104,7 +104,11 @@ def trainDK2(**kwargs):
 
 
         # compile the model with the optimizer and selected loss function
-        model.compile(loss='mse', optimizer=opt)
+
+        if enable_second_output:
+            model.compile(loss='mae', optimizer=opt)
+        else:
+            model.compile(loss='mse', optimizer=opt)
 
         # defining the array taking the training and validation losses
         loss_training = np.empty(epochs)
