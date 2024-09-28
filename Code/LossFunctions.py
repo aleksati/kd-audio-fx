@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow.keras import backend as K
 
 
-class ESR(tf.keras.losses.Loss):
+class ESRloss(tf.keras.losses.Loss):
     def __init__(self, delta=1e-6, name="ESR", **kwargs):
         super().__init__(name=name, **kwargs)
         self.delta = 0.00001

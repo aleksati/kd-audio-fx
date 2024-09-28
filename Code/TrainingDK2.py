@@ -11,7 +11,7 @@ from Metrics import ESR, RMSE, STFT_loss
 import sys
 import time
 import matplotlib.pyplot as plt
-from LossFunctions import ESR, NormMAELoss, NormMSELoss
+from LossFunctions import ESRloss, NormMAELoss, NormMSELoss
 
 def trainDK2(**kwargs):
     """
@@ -107,7 +107,7 @@ def trainDK2(**kwargs):
 
         if enable_second_output:
             #model.compile(loss='mae', optimizer=opt) #already done
-            #model.compile(loss=ESR(), optimizer=opt)
+            #model.compile(loss=ESRloss(), optimizer=opt)
             #model.compile(loss=NormMSELoss(), optimizer=opt)
             model.compile(loss=NormMAELoss(), optimizer=opt)
         else:
