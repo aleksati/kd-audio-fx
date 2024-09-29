@@ -13,6 +13,7 @@ import time
 import matplotlib.pyplot as plt
 from LossFunctions import ESRloss, NormMAELoss, NormMSELoss
 
+
 def trainDK2(**kwargs):
     """
       :param data_dir: the directory in which dataset are stored [string]
@@ -94,7 +95,7 @@ def trainDK2(**kwargs):
 
         # create the DataGenerator object to retrieve the data in the training set
         train_gen = data_generator(data_dir, dataset_train + '_train.pickle',
-                                         input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+                                   input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
         # the number of total training steps
         training_steps = train_gen.training_steps
@@ -102,14 +103,14 @@ def trainDK2(**kwargs):
         opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
             learning_rate, training_steps), clipnorm=1)
 
-
         # compile the model with the optimizer and selected loss function
 
         if enable_second_output:
-            #model.compile(loss='mae', optimizer=opt) #already done
-            #model.compile(loss=ESRloss(), optimizer=opt)
-            #model.compile(loss=NormMSELoss(), optimizer=opt)
-            model.compile(loss=NormMAELoss(), optimizer=opt)
+            # model.compile(loss='mae', optimizer=opt) # done
+            # model.compile(loss=ESRloss(), optimizer=opt) # done
+            # model.compile(loss=NormMSELoss(), optimizer=opt) #done
+            # model.compile(loss=NormMAELoss(), optimizer=opt) #done
+            model.compile(loss='mse', optimizer=opt)
         else:
             model.compile(loss='mse', optimizer=opt)
 
@@ -138,7 +139,6 @@ def trainDK2(**kwargs):
             results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=val_gen,
                                 callbacks=callbacks)
 
-
             # store the training and validation loss
             loss_training[i] = results.history['loss'][-1]
             loss_val[i] = results.history['val_loss'][-1]
@@ -161,12 +161,11 @@ def trainDK2(**kwargs):
         loss_training = np.array(loss_training)[:i]
         loss_val = np.array(loss_val)[:i]
         plotTraining(loss_training, loss_val, model_save_dir,
-                                 save_folder, str(epochs))
+                     save_folder, str(epochs))
 
         # write and save results
         writeResults(results, units, epochs, batch_size, learning_rate, model_save_dir,
-                                 save_folder, epochs)
-
+                     save_folder, epochs)
 
         print("Training done")
 
@@ -176,13 +175,12 @@ def trainDK2(**kwargs):
     sys.stdout.write("\n")
     sys.stdout.flush()
 
-
     # only if student taught we need to load the output layer's weights from the teacher's network
     # we rebuild the model this time enabling the output layer
     if enable_second_output:
         # create the DataGenerator object to retrieve the data in the training set
         train_gen = data_generator(data_dir, dataset_train + '_train.pickle',
-                                         input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+                                   input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
         model = create_model_LSTM_DK2(
             input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size,
@@ -198,7 +196,6 @@ def trainDK2(**kwargs):
             print("Something is wrong.")
 
         model.layers[-1].set_weights(train_gen.weights)
-
 
     # reset the states before predicting
     model.reset_states()
@@ -219,7 +216,6 @@ def trainDK2(**kwargs):
     esr = tf.get_static_value(ESR(y, predictions))
     rmse = tf.get_static_value(RMSE(y, predictions))
     stft = tf.get_static_value(STFT_loss(y, predictions))
-
 
     # writhe and store the metrics values
     results_ = {'mse': mse, 'mae': mae,
@@ -252,10 +248,9 @@ def trainDK2(**kwargs):
 
         predictions = model.predict(train_gen, verbose=0)
 
-
         z = {'x': train_gen.x.reshape(1, -1),
-            #'y': train_gen.y.reshape(1, -1),
-            'yh': predictions, 'z': train_gen.z,
+             # 'y': train_gen.y.reshape(1, -1),
+             'yh': predictions, 'z': train_gen.z,
              'w': last_layer_weights}
 
         file_data = open(os.path.normpath(
