@@ -106,11 +106,9 @@ def trainDK2(**kwargs):
         # compile the model with the optimizer and selected loss function
 
         if enable_second_output:
-            # model.compile(loss='mae', optimizer=opt) # done
-            # model.compile(loss=ESRloss(), optimizer=opt) # done
-            # model.compile(loss=NormMSELoss(), optimizer=opt) #done
-            # model.compile(loss=NormMAELoss(), optimizer=opt) #done
-            model.compile(loss='mse', optimizer=opt)
+            #model.compile(loss='mae', optimizer=opt) #already done
+            model.compile(loss=tf.keras.losses.CategoricalCrossentropy(), optimizer=opt)
+            #model.compile(loss=tf.keras.losses.KLDivergence(), optimizer=opt)
         else:
             model.compile(loss='mse', optimizer=opt)
 
