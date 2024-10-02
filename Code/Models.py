@@ -62,8 +62,10 @@ def create_model_LSTM_DK1(units, input_dim=1, conditioning_size=0, b_size=2399):
             outputs)
 
     elif units == 8:
-        outputs = tf.keras.layers.LSTM(32*2, stateful=True, return_sequences=False, return_state=False, name='LSTM3')(
+        outputs = tf.keras.layers.LSTM(8*2, stateful=True, return_sequences=False, return_state=False, name='LSTM')(
             inputs)
+        outputs = tf.keras.layers.LSTM(32*2, stateful=True, return_sequences=False, return_state=False, name='LSTM3')(
+            outputs)
 
     if conditioning_size != 0:
         cond_inputs = tf.keras.layers.Input(batch_shape=(
