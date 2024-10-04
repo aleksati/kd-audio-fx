@@ -151,6 +151,7 @@ def trainDK1(**kwargs):
                      save_folder, str(epochs))
 
         print("Training done")
+        print("\n")
 
     avg_time_epoch = (time.time() - global_start)
     sys.stdout.write(

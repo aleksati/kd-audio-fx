@@ -18,7 +18,7 @@ DK = 'DK1_'
 print('DK1 phase')
 
 # number of epochs
-EPOCHS = 1#200
+EPOCHS = 200
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size
@@ -28,10 +28,10 @@ LR = 3e-4
 
 # the directory in which datasets are stored
 data_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\Datasets'
-data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
+#data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
 # where to store the results ++
 model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\TrainedModels\\DK2'
-model_save_dir = '../' # Riccardo's folder
+#model_save_dir = '../' # Riccardo's folder
 
 # name of the model to be used
 model = 'LSTM'
@@ -44,8 +44,11 @@ dataset_train = dataset
 if Teacher:
     # we are a teacher
     UNITS = 64
+    dataset_train = dataset
     name = '_teacher'
-    print("Preparing for training the Teacher")
+    print("######### Preparing for training the Teacher #########")
+    print("\n")
+
     train(data_dir=data_dir,
           #   save_folder=model+dataset+str(UNITS) + name,
           save_folder=DK + model+dataset+"8-16-32-64-32-16-8" + name,
@@ -68,7 +71,8 @@ if Student_taught:
     UNITS = 8
     dataset_train = DK + 'Teacher_' + dataset_train
     name = '_student_taught'
-    print("Preparing for training the Student using the teaching")
+    print("######### Preparing for training the Student using the teaching #########")
+    print("\n")
 
     train(data_dir=data_dir,
           #   save_folder=model+dataset+str(UNITS) + name,
@@ -91,7 +95,8 @@ if Student_self_taught:
     UNITS = 8
     dataset_train = dataset
     name = '_student_self_taught'
-    print("Preparing for training the Student by self-learining")
+    print("######### Preparing for training the Student by self-learning #########")
+    print("\n")
 
     train(data_dir=data_dir,
           #   save_folder=model+dataset+str(UNITS) + name,
