@@ -9,7 +9,7 @@ main script
 
 ####### Define what type of training
 Teacher = False
-Student_taught = True
+Student_taught = False
 Student_self_taught = True
 #######
 
@@ -81,21 +81,21 @@ if Student_taught:
     print("######### Preparing for training the Student using the teaching #########")
     print("\n")
 
-    # train(data_dir=data_dir,
-    #           #   save_folder=model+dataset+str(UNITS) + name,
-    #           save_folder=DK + model + dataset + "8-16-32-64-32-16-8" + name,
-    #           model_save_dir=model_save_dir,
-    #           dataset_train=dataset_train,
-    #           dataset_test=dataset,
-    #           batch_size=BATCH_SIZE,
-    #           learning_rate=LR,
-    #           units=UNITS,
-    #           epochs=EPOCHS,
-    #           model=model,
-    #           parameter_numbers=PARAMETER_NUMBER,
-    #           teacher=False,
-    #           enable_second_output=enable_second_output,
-    #           inference=INFERENCE)
+    train(data_dir=data_dir,
+              #   save_folder=model+dataset+str(UNITS) + name,
+              save_folder=DK + model + dataset + "8-16-32-64-32-16-8" + name,
+              model_save_dir=model_save_dir,
+              dataset_train=dataset_train,
+              dataset_test=dataset,
+              batch_size=BATCH_SIZE,
+              learning_rate=LR,
+              units=UNITS,
+              epochs=EPOCHS,
+              model=model,
+              parameter_numbers=PARAMETER_NUMBER,
+              teacher=False,
+              enable_second_output=enable_second_output,
+              inference=INFERENCE)
 
 
     print("#########  Preparing for fine tuning the Student #########")

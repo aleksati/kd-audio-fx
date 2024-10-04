@@ -187,8 +187,8 @@ def trainDK2_fineTuning(**kwargs):
         tf.keras.metrics.mean_absolute_error(y, predictions))
     esr = tf.get_static_value(ESR(y, predictions))
     rmse = tf.get_static_value(RMSE(y, predictions))
-
     stft = tf.get_static_value(STFT_loss(y, predictions))
+
     # write and store the metrics values
     results_ = {'mse': mse, 'mae': mae, 'esr': esr, 'rmse': rmse, 'stft': stft}
     with open(os.path.normpath('/'.join([model_save_dir, save_folder, save_folder + '_results.txt'])), 'w') as f:
