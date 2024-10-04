@@ -9,8 +9,8 @@ main script
 
 ####### Define what type of training
 Teacher = False
-Student_taught = False
-Student_self_taught = True
+Student_taught = True
+Student_self_taught = False
 #######
 
 
