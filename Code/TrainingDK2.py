@@ -3,7 +3,7 @@ import pickle
 import tensorflow as tf
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 from Utils import filterAudio
-from Models import create_model_LSTM_DK2
+from ModelsDK2 import create_model_LSTM_DK2
 from DatasetsClassDK2 import DataGeneratorPickles, DataGeneratorPicklesStudent
 import numpy as np
 import random
@@ -11,8 +11,6 @@ from Metrics import ESR, RMSE, STFT_loss
 import sys
 import time
 import matplotlib.pyplot as plt
-from LossFunctions import ESRloss, NormMAELoss, NormMSELoss
-
 
 def trainDK2(**kwargs):
     """
@@ -104,7 +102,6 @@ def trainDK2(**kwargs):
             learning_rate, training_steps), clipnorm=1)
 
         # compile the model with the optimizer and selected loss function
-
         if enable_second_output:
             model.compile(loss='mae', optimizer=opt)
         else:
@@ -164,6 +161,7 @@ def trainDK2(**kwargs):
                      save_folder, epochs)
 
         print("Training done")
+        print("\n")
 
     avg_time_epoch = (time.time() - global_start)
     sys.stdout.write(
@@ -227,6 +225,8 @@ def trainDK2(**kwargs):
         last_layer_weights = model.layers[-1].get_weights()
 
         print('Saving the new dataset...')
+        print("\n")
+
         model = create_model_LSTM_DK2(
             input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size, enable_second_output=True)
         # load the best weights of the model
