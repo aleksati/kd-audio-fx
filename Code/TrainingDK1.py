@@ -3,7 +3,7 @@ import pickle
 import tensorflow as tf
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 from Utils import filterAudio
-from Models import create_model_LSTM_DK1
+from ModelsDK1 import create_model_LSTM_DK1
 from DatasetsClassDK1 import DataGeneratorPickles
 import numpy as np
 import random
@@ -204,7 +204,7 @@ def trainDK1(**kwargs):
         z = {'x': train_gen.x.reshape(
             1, -1), 'y': predictions.reshape(1, -1), 'z': train_gen.z}
         file_data = open(os.path.normpath(
-            '/'.join([data_dir, 'Teacher_DK1_' + dataset_test + '_train.pickle'])), 'wb')
+            '/'.join([data_dir, 'DK1_Teacher_' + dataset_test + '_train.pickle'])), 'wb')
         pickle.dump(z, file_data)
         file_data.close()
 
