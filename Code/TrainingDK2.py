@@ -51,6 +51,9 @@ def trainDK2(**kwargs):
     else:
         data_generator = DataGeneratorPickles
 
+    if not teacher and not enable_second_output:
+        data_generator = DataGeneratorPickles
+
     # set all the seed in case reproducibility is desired
     np.random.seed(42)
     tf.random.set_seed(42)
