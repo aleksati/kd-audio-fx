@@ -27,6 +27,8 @@ BATCH_SIZE = 2400
 # initial learning rate
 LR = 3e-4
 
+INFERENCE = False
+
 # the directory in which datasets are stored
 data_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\Datasets'
 data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
@@ -64,7 +66,7 @@ if Teacher:
           parameter_numbers=PARAMETER_NUMBER,
           teacher=True,
           enable_second_output=enable_second_output,
-          inference=False)
+          inference=INFERENCE)
 
 
 
@@ -93,7 +95,7 @@ if Student_taught:
               parameter_numbers=PARAMETER_NUMBER,
               teacher=False,
               enable_second_output=enable_second_output,
-              inference=False)
+              inference=INFERENCE)
 
 
     print("#########  Preparing for fine tuning the Student #########")
@@ -101,20 +103,21 @@ if Student_taught:
     dataset_train = dataset
     enable_second_output = False
 
-    trainDK2_fineTuning(data_dir=data_dir,
-            #   save_folder=model+dataset+str(UNITS) + name,
-            save_folder=DK + model + dataset + "8-16-32-64-32-16-8" + name,
-            model_save_dir=model_save_dir,
-            dataset_train=dataset_train,
-            dataset_test=dataset,
-            batch_size=BATCH_SIZE,
-            learning_rate=LR,
-            units=UNITS,
-            epochs=EPOCHS,
-            model=model,
-            parameter_numbers=PARAMETER_NUMBER,
-            enable_second_output=enable_second_output,
-            inference=False)
+    if not INFERENCE:
+
+        trainDK2_fineTuning(data_dir=data_dir,
+                #   save_folder=model+dataset+str(UNITS) + name,
+                save_folder=DK + model + dataset + "8-16-32-64-32-16-8" + name,
+                model_save_dir=model_save_dir,
+                dataset_train=dataset_train,
+                dataset_test=dataset,
+                batch_size=BATCH_SIZE,
+                learning_rate=LR,
+                units=UNITS,
+                epochs=EPOCHS,
+                model=model,
+                parameter_numbers=PARAMETER_NUMBER,
+                enable_second_output=enable_second_output)
 
 if Student_self_taught:
     # we are student but self-taught
@@ -140,4 +143,4 @@ if Student_self_taught:
           parameter_numbers=PARAMETER_NUMBER,
           teacher=False,
           enable_second_output=enable_second_output,
-          inference=False)
+          inference=INFERENCE)

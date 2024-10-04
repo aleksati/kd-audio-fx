@@ -187,7 +187,8 @@ def trainDK1(**kwargs):
     esr = tf.get_static_value(ESR(y, predictions))
     rmse = tf.get_static_value(RMSE(y, predictions))
     stft = tf.get_static_value(STFT_loss(y, predictions))
-    # writhe and store the metrics values
+
+    # write and store the metrics values
     results_ = {'mse': mse, 'mae': mae, 'esr': esr, 'rmse': rmse, 'stft': stft}
     with open(os.path.normpath('/'.join([model_save_dir, save_folder, save_folder + '_results.txt'])), 'w') as f:
         for key, value in results_.items():

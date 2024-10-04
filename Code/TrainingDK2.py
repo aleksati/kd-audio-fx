@@ -211,7 +211,7 @@ def trainDK2(**kwargs):
     rmse = tf.get_static_value(RMSE(y, predictions))
     stft = tf.get_static_value(STFT_loss(y, predictions))
 
-    # writhe and store the metrics values
+    # write and store the metrics values
     results_ = {'mse': mse, 'mae': mae,
                 'esr': esr, 'rmse': rmse, 'stft': stft}
 

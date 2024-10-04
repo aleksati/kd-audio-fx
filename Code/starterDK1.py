@@ -25,6 +25,7 @@ PARAMETER_NUMBER = 0
 BATCH_SIZE = 2400
 # initial learning rate
 LR = 3e-4
+INFERENCE = False
 
 # the directory in which datasets are stored
 data_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\Datasets'
@@ -62,7 +63,7 @@ if Teacher:
           model=model,
           parameter_numbers=PARAMETER_NUMBER,
           teacher=True,
-          inference=False)
+          inference=INFERENCE)
 
 
 if Student_taught:
@@ -87,7 +88,7 @@ if Student_taught:
           model=model,
           parameter_numbers=PARAMETER_NUMBER,
           teacher=False,
-          inference=False)
+          inference=INFERENCE)
 
 if Student_self_taught:
     # we are student but self-taught
@@ -111,4 +112,4 @@ if Student_self_taught:
           model=model,
           parameter_numbers=PARAMETER_NUMBER,
           teacher=False,
-          inference=False)
+          inference=INFERENCE)
