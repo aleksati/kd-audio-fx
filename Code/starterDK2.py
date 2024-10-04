@@ -19,7 +19,7 @@ DK = 'DK2_'
 print('DK2 phase')
 
 # number of epochs
-EPOCHS = 1#200
+EPOCHS = 200
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size
@@ -31,10 +31,10 @@ INFERENCE = False
 
 # the directory in which datasets are stored
 data_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\Datasets'
-data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
+#data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
 # where to store the results ++
 model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\TrainedModels\\DK2'
-model_save_dir = '../' # Riccardo's folder
+#model_save_dir = '../' # Riccardo's folder
 
 # name of the mdoel to be used
 model = 'LSTM'
