@@ -1,10 +1,10 @@
 import os
-import pickle
 import tensorflow as tf
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 from Utils import filterAudio
 from ModelsDK2 import create_model_LSTM_DK2
-from DatasetsClassDK2_fineTuning import DataGeneratorPickles
+from DatasetsClassDK2_fineTuning import DataGeneratorPicklesTuning
+from DatasetsClassDK2 import DataGeneratorPicklesStudent
 import numpy as np
 import random
 from Metrics import ESR, RMSE, STFT_loss
@@ -65,7 +65,7 @@ def trainDK2_fineTuning(**kwargs):
         model_save_dir, save_folder)
 
     # create the DataGenerator object to retrieve the weight in the training set aìand build the student model
-    train_gen = DataGeneratorPickles(data_dir, 'DK2_Teacher_' + dataset_train + '_train.pickle',
+    train_gen = DataGeneratorPicklesStudent(data_dir, 'DK2_Teacher_' + dataset_train + '_train.pickle',
                                      input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
     model = create_model_LSTM_DK2(
@@ -84,11 +84,11 @@ def trainDK2_fineTuning(**kwargs):
     model.layers[-1].set_weights(train_gen.weights)
 
     # create the DataGenerator object to retrieve the data in the test set
-    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle',
+    test_gen = DataGeneratorPicklesTuning(data_dir, dataset_test + '_test.pickle',
                                     input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
     # create the DataGenerator object to retrieve the data in the training set
-    train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
+    train_gen = DataGeneratorPicklesTuning(data_dir, dataset_train + '_train.pickle',
                                      input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
     # the number of total training steps
