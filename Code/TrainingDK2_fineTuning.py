@@ -8,6 +8,7 @@ from DatasetsClassDK2 import DataGeneratorPicklesStudent
 import numpy as np
 import random
 from Metrics import ESR, RMSE, STFT_loss
+from LossFunctions import DCloss
 import sys
 import time
 import matplotlib.pyplot as plt
@@ -99,7 +100,7 @@ def trainDK2_fineTuning(**kwargs):
     # opt = tf.keras.optimizers.Adam(learning_rate=learning_rate, clipnorm=1)
 
     # compile the model with the optimizer and selected loss function
-    model.compile(loss='mse', optimizer=opt)
+    model.compile(loss=DCloss(), optimizer=opt)
 
     # defining the array taking the training and validation losses
     loss_training = np.empty(epochs)
