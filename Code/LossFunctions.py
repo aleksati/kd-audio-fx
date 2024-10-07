@@ -9,7 +9,8 @@ class DCloss(tf.keras.losses.Loss):
     def call(self, y_true, y_pred):
 
         #loss = tf.divide(K.mean(K.square(y_true - y_pred)), K.mean(K.square(y_true) + self.delta))
-        loss = K.abs(K.mean(y_true) - K.mean(y_true))
+        #loss = (K.mean(K.square(y_true - y_pred)))
+        loss = K.abs((K.mean((y_true))) - (K.mean((y_pred))))
         return loss
 
     def get_config(self):

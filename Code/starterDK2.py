@@ -6,8 +6,8 @@ from TrainingDK2_fineTuning import trainDK2_fineTuning
 main script
 
 """
-USER = "RIC"
-#USER = "ALE"
+#USER = "RIC"
+USER = "ALE"
 
 
 ####### Define what type of training
@@ -22,7 +22,7 @@ DK = 'DK2_'
 print('DK2 phase')
 
 # number of epochs
-EPOCHS = 1#200
+EPOCHS = 200
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size

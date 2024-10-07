@@ -6,8 +6,8 @@ main script
 
 """
 
-USER = "RIC"
-#USER = "ALE"
+#USER = "RIC"
+USER = "ALE"
 
 
 ####### Define what type of training
