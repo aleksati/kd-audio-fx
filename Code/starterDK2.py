@@ -22,7 +22,7 @@ DK = 'DK2_'
 print('DK2 phase')
 
 # number of epochs
-EPOCHS = 200
+EPOCHS = 1#200
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size

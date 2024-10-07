@@ -64,6 +64,7 @@ def trainDK2_fineTuning(**kwargs):
     callbacks = []
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
         model_save_dir, save_folder)
+    callbacks += [ckpt_callback, ckpt_callback_latest]
 
     # create the DataGenerator object to retrieve the weight in the training set aìand build the student model
     train_gen = DataGeneratorPicklesStudent(data_dir, 'DK2_Teacher_' + dataset_train + '_train.pickle',
@@ -101,6 +102,7 @@ def trainDK2_fineTuning(**kwargs):
 
     # compile the model with the optimizer and selected loss function
     model.compile(loss=DCloss(), optimizer=opt)
+    model.compile(loss='mse', optimizer=opt)
 
     # defining the array taking the training and validation losses
     loss_training = np.empty(epochs)
@@ -108,6 +110,7 @@ def trainDK2_fineTuning(**kwargs):
     best_loss = 1e9
     # counting for early stopping
     count = 0
+
 
     # training loop
     for i in range(0, epochs, 1):
