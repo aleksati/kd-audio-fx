@@ -1,7 +1,10 @@
 import tensorflow as tf
 
 
-def create_model_LSTM_DK2(units, input_dim=1, conditioning_size=0, enable_second_output=False, b_size=2399):
+def create_model_LSTM_DK2(units, input_dim=1, conditioning_size=0, enable_second_output=False,  training_just_out=False, b_size=2399):
+
+    training_lstms = not training_just_out
+
 
     # Defining inputs
     inputs = tf.keras.layers.Input(
@@ -30,16 +33,16 @@ def create_model_LSTM_DK2(units, input_dim=1, conditioning_size=0, enable_second
             outputs)
 
     elif units == 8:
-        outputs = tf.keras.layers.LSTM(8*2, stateful=True, return_sequences=True, return_state=False, name='LSTM')(
+        outputs = tf.keras.layers.LSTM(8*2, stateful=True, return_sequences=True, return_state=False, traininable=training_lstms, name='LSTM')(
             inputs)
-        outputs = tf.keras.layers.LSTM(4*2, stateful=True, return_sequences=False, return_state=False, name='LastLSTM')(
+        outputs = tf.keras.layers.LSTM(4*2, stateful=True, return_sequences=False, return_state=False, traininable=training_lstms, name='LastLSTM')(
             outputs)
 
     if conditioning_size != 0:
         cond_inputs = tf.keras.layers.Input(batch_shape=(
             b_size, conditioning_size), name='cond_inputs')
 
-    outputs_ = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
+    outputs_ = tf.keras.layers.Dense(1, traininable=training_just_out, name='OutLayer')(outputs)
 
     if conditioning_size != 0:
         if enable_second_output: # we want only the latent space of last layer

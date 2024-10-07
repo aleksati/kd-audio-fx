@@ -70,7 +70,7 @@ def trainDK2_fineTuning(**kwargs):
 
     model = create_model_LSTM_DK2(
         input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size,
-        enable_second_output=False)
+        enable_second_output=False, training_just_out=True)
 
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)
