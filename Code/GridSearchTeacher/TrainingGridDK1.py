@@ -1,15 +1,15 @@
-import os
-import tensorflow as tf
-from Code.UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
-from Code.Utils import filterAudio
-from ModelsForGreadySearch import create_model_LSTM_DK1
-from DatasetsClassDK1 import DataGeneratorPickles
-import numpy as np
-import random
-from Code.Metrics import ESR, RMSE, STFT_loss
-import sys
-import time
+from Metrics import ESR, RMSE, STFT_loss
+from ModelsForGridSearch import create_model_LSTM_DK1
+from Utils import filterAudio
+from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 import matplotlib.pyplot as plt
+import time
+import random
+import numpy as np
+from DatasetsClassDK1 import DataGeneratorPickles
+import tensorflow as tf
+import os
+import sys
 
 
 def trainDK1(**kwargs):
@@ -29,7 +29,6 @@ def trainDK1(**kwargs):
       :param fs: the sampling rate [int]
       :param conditioning_size: the numeber of parameters to be included [int]
     """
-    # TODO: add a input parameter
 
     batch_size = kwargs.get('batch_size', 1)
     learning_rate = kwargs.get('learning_rate', 1e-1)
@@ -45,6 +44,7 @@ def trainDK1(**kwargs):
     teacher = kwargs.get('teacher', False)
     fs = kwargs.get('fs', 48000)
     conditioning_size = kwargs.get('conditioning_size', 0)
+    trial = kwargs.get("trial", [])
 
     # set all the seed in case reproducibility is desired
     np.random.seed(42)
@@ -62,9 +62,8 @@ def trainDK1(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    # TODO: remove units and add a parameter to pass the trial info
     model = create_model_LSTM_DK1(
-        input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size)
+        input_dim=1, trial=trial, conditioning_size=conditioning_size, b_size=batch_size)
 
     # define callbacks: where to store the weights
     callbacks = []
@@ -194,6 +193,5 @@ def trainDK1(**kwargs):
     with open(os.path.normpath('/'.join([model_save_dir, save_folder, save_folder + '_results.txt'])), 'w') as f:
         for key, value in results_.items():
             print('\n', key, '  : ', value, file=f)
-
 
     return 42
