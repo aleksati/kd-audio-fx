@@ -1,7 +1,7 @@
 from Metrics import ESR, RMSE, STFT_loss
 from ModelsForGridSearch import create_model_LSTM_DK1
-from Utils import filterAudio
-from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
+from UtilsGridSearch import filterAudio
+from UtilsForTrainingsGridSearch import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 import matplotlib.pyplot as plt
 import time
 import random
