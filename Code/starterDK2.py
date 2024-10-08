@@ -6,11 +6,11 @@ from TrainingDK2_fineTuning import trainDK2_fineTuning
 main script
 
 """
-#USER = "RIC"
+# USER = "RIC"
 USER = "ALE"
 
 
-####### Define what type of training
+# Define what type of training
 Teacher = False
 Student_taught = True
 Student_self_taught = False
@@ -41,9 +41,10 @@ if USER == 'ALE':
     model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\TrainedModels\\DK2'
 elif USER == 'RIC':
     # the directory in which datasets are stored
-    data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
+    # Riccardo's folder
+    data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK'
     # where to store the results ++
-    model_save_dir = '../' # Riccardo's folder
+    model_save_dir = '../'  # Riccardo's folder
 
 # name of the mdoel to be used
 model = 'LSTM'
@@ -78,7 +79,6 @@ if Teacher:
           inference=INFERENCE)
 
 
-
 if Student_taught:
 
     # we are student but we are been taught
@@ -91,21 +91,20 @@ if Student_taught:
     print("\n")
 
     train(data_dir=data_dir,
-              #   save_folder=model+dataset+str(UNITS) + name,
-              save_folder=DK + model + dataset + "8-16-32-64-32-16-8" + name,
-              model_save_dir=model_save_dir,
-              dataset_train=dataset_train,
-              dataset_test=dataset,
-              batch_size=BATCH_SIZE,
-              learning_rate=LR,
-              units=UNITS,
-              epochs=EPOCHS,
-              model=model,
-              parameter_numbers=PARAMETER_NUMBER,
-              teacher=False,
-              enable_second_output=enable_second_output,
-              inference=INFERENCE)
-
+          #   save_folder=model+dataset+str(UNITS) + name,
+          save_folder=DK + model + dataset + "8-16-32-64-32-16-8" + name,
+          model_save_dir=model_save_dir,
+          dataset_train=dataset_train,
+          dataset_test=dataset,
+          batch_size=BATCH_SIZE,
+          learning_rate=LR,
+          units=UNITS,
+          epochs=EPOCHS,
+          model=model,
+          parameter_numbers=PARAMETER_NUMBER,
+          teacher=False,
+          enable_second_output=enable_second_output,
+          inference=INFERENCE)
 
     print("#########  Preparing for fine tuning the Student #########")
     print("\n")
@@ -115,18 +114,18 @@ if Student_taught:
     if not INFERENCE:
 
         trainDK2_fineTuning(data_dir=data_dir,
-                #   save_folder=model+dataset+str(UNITS) + name,
-                save_folder=DK + model + dataset + "8-16-32-64-32-16-8" + name,
-                model_save_dir=model_save_dir,
-                dataset_train=dataset_train,
-                dataset_test=dataset,
-                batch_size=BATCH_SIZE,
-                learning_rate=LR,
-                units=UNITS,
-                epochs=EPOCHS,
-                model=model,
-                parameter_numbers=PARAMETER_NUMBER,
-                enable_second_output=enable_second_output)
+                            #   save_folder=model+dataset+str(UNITS) + name,
+                            save_folder=DK + model + dataset + "8-16-32-64-32-16-8" + name,
+                            model_save_dir=model_save_dir,
+                            dataset_train=dataset_train,
+                            dataset_test=dataset,
+                            batch_size=BATCH_SIZE,
+                            learning_rate=LR,
+                            units=UNITS,
+                            epochs=EPOCHS,
+                            model=model,
+                            parameter_numbers=PARAMETER_NUMBER,
+                            enable_second_output=enable_second_output)
 
 if Student_self_taught:
     # we are student but self-taught
