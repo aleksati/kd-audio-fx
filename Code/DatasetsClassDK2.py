@@ -3,6 +3,7 @@ import os
 import numpy as np
 from tensorflow.keras.utils import Sequence
 from scipy.signal.windows import tukey
+from Utils import filterAudio
 
 
 class DataGeneratorPickles(Sequence):
@@ -36,6 +37,7 @@ class DataGeneratorPickles(Sequence):
         Z = pickle.load(file_data)
         x = np.array(Z['x'][:1, :], dtype=np.float32)
         y = np.array(Z['y'][:1, :], dtype=np.float32)
+        y = filterAudio(y)
 
         # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
         if x.shape[0] == 1:
@@ -144,7 +146,6 @@ class DataGeneratorPicklesStudent(Sequence):
             '/'.join([data_dir, filename])), 'rb')
         Z = pickle.load(file_data)
         x = np.array(Z['x'][:1, :], dtype=np.float32)
-        #y = np.array(Z['y'][:1, :], dtype=np.float32)
         yh = np.array(Z['yh'], dtype=np.float32)
         weights = Z['w'] # those are the weight of the output layer
 
@@ -155,20 +156,17 @@ class DataGeneratorPicklesStudent(Sequence):
         # windowing the signals in order to avoid misalignments
         x = x * np.array(tukey(x.shape[1], alpha=0.000005),
                          dtype=np.float32).reshape(1, -1)
-        #y = y * np.array(tukey(x.shape[1], alpha=0.000005),
-        #                 dtype=np.float32).reshape(1, -1)
+
 
         # reshape to one dimension
         rep = x.shape[1]
         x = x.reshape(-1)
-        #y = y.reshape(-1)
 
         # how many iteration it is needed
         N = int((x.shape[0] - self.input_size) / self.batch_size)-1
         # how many total samples is the audio
         lim = int(N * self.batch_size) + self.input_size - 1
         x = x[:lim]
-        #y = y[:lim]
 
         # loading the conditioning values
         if self.conditioning_size != 0:

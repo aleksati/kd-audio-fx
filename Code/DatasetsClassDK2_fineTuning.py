@@ -3,6 +3,7 @@ import os
 import numpy as np
 from tensorflow.keras.utils import Sequence
 from scipy.signal.windows import tukey
+from Utils import filterAudio
 
 
 class DataGeneratorPicklesTuning(Sequence):
@@ -36,6 +37,7 @@ class DataGeneratorPicklesTuning(Sequence):
         Z = pickle.load(file_data)
         x = np.array(Z['x'][:1, :], dtype=np.float32)
         y = np.array(Z['y'][:1, :], dtype=np.float32)
+        y = filterAudio(y)
 
         # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
         if x.shape[0] == 1:
