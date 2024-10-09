@@ -25,7 +25,7 @@ def create_model_LSTM_DK1(trial, input_dim=1, conditioning_size=0, b_size=2399):
         if len(trial)-1 == i:
             # if the last layer add new layer but with  return_sequences=False
             outputs = tf.keras.layers.LSTM(
-                unit, stateful=True, return_sequences=False, name="LSTM{}".format(i))(tail)
+                unit, stateful=True, return_sequences=False, name="last LSTM")(tail)
         else:
             # add new layer
             outputs = tf.keras.layers.LSTM(
