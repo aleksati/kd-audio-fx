@@ -41,7 +41,6 @@ def trainDK1(**kwargs):
     dataset_test = kwargs.get('dataset_test', None)
     data_dir = kwargs.get('data_dir', '../../../Files/')
     epochs = kwargs.get('epochs', 60)
-    teacher = kwargs.get('teacher', False)
     fs = kwargs.get('fs', 48000)
     conditioning_size = kwargs.get('conditioning_size', 0)
     trial = kwargs.get("trial", [])
@@ -95,7 +94,6 @@ def trainDK1(**kwargs):
         # define the Adam optimizer with initial learning rate, training steps
         opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
             learning_rate, training_steps), clipnorm=1)
-        # opt = tf.keras.optimizers.Adam(learning_rate=learning_rate, clipnorm=1)
 
         # compile the model with the optimizer and selected loss function
         model.compile(loss='mse', optimizer=opt)

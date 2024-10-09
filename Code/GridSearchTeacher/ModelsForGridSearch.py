@@ -22,9 +22,14 @@ def create_model_LSTM_DK1(trial, input_dim=1, conditioning_size=0, b_size=2399):
         else:
             tail = outputs
 
-        # add new layer
-        outputs = tf.keras.layers.LSTM(
-            unit, stateful=True, return_sequences=True, return_state=False, name="LSTM{}".format(i))(tail)
+        if len(trial)-1 == i:
+            # if the last layer add new layer but with  return_sequences=False
+            outputs = tf.keras.layers.LSTM(
+                unit, stateful=True, return_sequences=False, name="LSTM{}".format(i))(tail)
+        else:
+            # add new layer
+            outputs = tf.keras.layers.LSTM(
+                unit, stateful=True, return_sequences=True, name="LSTM{}".format(i))(tail)
 
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
 
