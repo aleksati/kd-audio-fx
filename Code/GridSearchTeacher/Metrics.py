@@ -13,7 +13,7 @@ def Normalized_AE(y_true, y_pred):
 
 
 def ESR(y_true, y_pred):  # auraloss
-    return tf.divide(K.square(y_pred - y_true), (K.square(y_true) + 0.00001))
+    return tf.reduce_mean(tf.divide(K.square(y_pred - y_true), (K.square(y_true) + 0.00001)))
 
 
 def MFCC(y_true, y_pred, sr):
