@@ -1,4 +1,4 @@
-from TrainingGridDK1 import trainDK1
+from InferingDatasets_DK import trainDK1
 
 
 """

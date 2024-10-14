@@ -16,13 +16,13 @@ def create_model_LSTM_DK(units=[8, 16, 32, 64, 32, 16, 8], input_dim=1, conditio
 
     # add layers to the model dynamically with the units from the trial.
 
-    outputs0 = tf.keras.layers.LSTM(units[0], stateful=True, return_sequences=False, name="LSTM0")(inputs)
-    outputs1 = tf.keras.layers.LSTM(units[1], stateful=True, return_sequences=False, name="LSTM1")(outputs0)
-    outputs2 = tf.keras.layers.LSTM(units[2], stateful=True, return_sequences=False, name="LSTM2")(outputs1)
-    outputs3 = tf.keras.layers.LSTM(units[3], stateful=True, return_sequences=False, name="LSTM3")(outputs2)
-    outputs4 = tf.keras.layers.LSTM(units[4], stateful=True, return_sequences=False, name="LSTM4")(outputs3)
-    outputs5 = tf.keras.layers.LSTM(units[5], stateful=True, return_sequences=False, name="LSTM5")(outputs4)
-    outputs6 = tf.keras.layers.LSTM(units[6], stateful=True, return_sequences=True, name="LastLSTM")(outputs5)
+    outputs0 = tf.keras.layers.LSTM(units[0], stateful=True, return_sequences=True, name="LSTM0")(inputs)
+    outputs1 = tf.keras.layers.LSTM(units[1], stateful=True, return_sequences=True, name="LSTM1")(outputs0)
+    outputs2 = tf.keras.layers.LSTM(units[2], stateful=True, return_sequences=True, name="LSTM2")(outputs1)
+    outputs3 = tf.keras.layers.LSTM(units[3], stateful=True, return_sequences=True, name="LSTM3")(outputs2)
+    outputs4 = tf.keras.layers.LSTM(units[4], stateful=True, return_sequences=True, name="LSTM4")(outputs3)
+    outputs5 = tf.keras.layers.LSTM(units[5], stateful=True, return_sequences=True, name="LSTM5")(outputs4)
+    outputs6 = tf.keras.layers.LSTM(units[6], stateful=True, return_sequences=False, name="LastLSTM")(outputs5)
 
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs6)
 
