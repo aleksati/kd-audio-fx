@@ -5,8 +5,8 @@ from TrainingGridDK1 import trainDK1
 main script
 
 """
-#USER = "RIC"
-USER = "ALE"
+USER = "RIC"
+#USER = "ALE"
 
 
 DK = 'DK1_'
@@ -33,7 +33,7 @@ elif USER == 'RIC':
     # the directory in which datasets are stored
     data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
     # where to store the results ++
-    model_save_dir = '../' # Riccardo's folder
+    model_save_dir = '../Models' # Riccardo's folder
 
 # name of the model to be used
 model = 'LSTM_'
