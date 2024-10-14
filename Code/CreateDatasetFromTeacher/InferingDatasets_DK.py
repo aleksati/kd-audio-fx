@@ -76,8 +76,12 @@ def trainDK1(**kwargs):
     predictions = model.predict(train_gen, verbose=0)
     z = {'x': train_gen.x.reshape(
         1, -1), 'y': predictions[0].reshape(1, -1), 'z': train_gen.z,
-        'y_l0': predictions[1], 'y_l1': predictions[2], 'y_l2': predictions[3],
-        'y_l3': predictions[4], 'y_l4': predictions[5], 'y_l5': predictions[6],
+        #'y_l0': predictions[1],
+        #'y_l1': predictions[2],
+        #'y_l2': predictions[3],
+        #'y_l3': predictions[4],
+        'y_l4': predictions[5],
+        'y_l5': predictions[6],
         'y_l6': predictions[7], 'w': last_layer_weights}
 
     file_data = open(os.path.normpath(

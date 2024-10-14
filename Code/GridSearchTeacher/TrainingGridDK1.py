@@ -96,7 +96,10 @@ def trainDK1(**kwargs):
             learning_rate, training_steps), clipnorm=1)
 
         # compile the model with the optimizer and selected loss function
-        model.compile(loss='mse', optimizer=opt)
+        if dataset_test == 'DK_Drive':
+            model.compile(loss='mae', optimizer=opt)
+        elif dataset_test == 'DK_CL1B':
+            model.compile(loss='mse', optimizer=opt)
 
         # defining the array taking the training and validation losses
         loss_training = np.empty(epochs)
