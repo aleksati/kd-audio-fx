@@ -69,11 +69,11 @@ def trainDK1(**kwargs):
     last_layer_weights = model.layers[-1].get_weights()
 
     print('Saving the new dataset...')
-    # create the DataGenerator object to retrive the data in the training set
-    train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
+    # create the DataGenerator object to retrieve the data in the training set
+    train_gen = DataGeneratorPickles(data_dir, dataset_test + '_train.pickle',
                                      input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
-    predictions = model.predict(train_gen, verbose=0).reshape(-1)
+    predictions = model.predict(train_gen, verbose=0)
     z = {'x': train_gen.x.reshape(
         1, -1), 'y': predictions[0].reshape(1, -1), 'z': train_gen.z,
         'y_l0': predictions[1], 'y_l1': predictions[2], 'y_l2': predictions[3],
@@ -81,7 +81,7 @@ def trainDK1(**kwargs):
         'y_l6': predictions[7], 'w': last_layer_weights}
 
     file_data = open(os.path.normpath(
-        '/'.join([data_dir, 'DK1_Teacher_' + dataset_test + '_train.pickle'])), 'wb')
+        '/'.join([data_dir, 'DK_Teacher_' + dataset_test + '_train.pickle'])), 'wb')
     pickle.dump(z, file_data)
     file_data.close()
 

@@ -13,7 +13,7 @@ DK = 'DK1_'
 print('DK1 phase')
 
 # number of epochs
-EPOCHS = 2
+EPOCHS = 300
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size
@@ -33,7 +33,7 @@ elif USER == 'RIC':
     # the directory in which datasets are stored
     data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
     # where to store the results ++
-    model_save_dir = '../Models' # Riccardo's folder
+    model_save_dir = '../../Models' # Riccardo's folder
 
 # name of the model to be used
 model = 'LSTM_'
@@ -46,7 +46,7 @@ units = [2, 4, 8, 16, 32, 64]
 
 for unit in units:
     # we are a student being taught
-    dataset_train = DK + 'Teacher_' + dataset_train
+    dataset_train = 'DK_Teacher_' + dataset_train
     name = '_student_taught'
     print("######### Preparing for Student taught training #########")
     print("\n")
