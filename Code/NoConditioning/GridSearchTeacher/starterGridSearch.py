@@ -33,7 +33,7 @@ elif USER == 'RIC':
     # the directory in which datasets are stored
     data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
     # where to store the results ++
-    model_save_dir = '../' # Riccardo's folder
+    model_save_dir = '../../'  # Riccardo's folder
 
 # name of the model to be used
 model = 'LSTM_'
