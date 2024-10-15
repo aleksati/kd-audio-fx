@@ -39,8 +39,8 @@ elif USER == 'RIC':
 model = 'LSTM_'
 
 # name of dataset to be used
-#dataset = "DrDrive_DK"
-dataset = "CL1B_DK"
+dataset = "DrDrive_DK"
+#dataset = "CL1B_DK"
 dataset_train = dataset
 
 units = [2, 4, 8, 16, 32, 64]
@@ -48,7 +48,6 @@ name = '_student_self_taught'
 
 for unit in units:
     # we are a student being taught
-
     print("######### Preparing for Student taught training #########")
     print("\n")
 
