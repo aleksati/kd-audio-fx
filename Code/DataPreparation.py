@@ -5,23 +5,109 @@ import glob
 import pickle
 import Code.audio_format
 import matplotlib.pyplot as plt
-from scipy.signal import find_peaks
 from Utils import filterAudio
 
 
-DATA_DIR = 'C:/Users/riccarsi/OneDrive - Universitetet i Oslo/Datasets/Compressors/CL1B_n/Audio'
+DATA_DIR = 'C:/Users/riccarsi/OneDrive - Universitetet i Oslo/Datasets/DK/DrDriveCond_DK'
 DATA_DIR = '../../Files'
+SAVE_DIR = 'C:/Users/riccarsi/OneDrive - Universitetet i Oslo/Datasets/DK/Pickles'
 SAVE_DIR = '../../Files'
-SAVE_DIR = 'C:/Users/riccarsi/OneDrive - Universitetet i Oslo/Datasets/Compressors/Pickles'
-SAVE_DIR = '../../Files'
 
-def data_preparation_CL1B(folder):#
+def data_preparation_DRIVECond():#
+
+    start = 0
+    lim = 22250000
+
+    tars = []
+    inps = []
+    tars_test = []
+    inps_test = []
+
+    file = glob.glob(os.path.normpath('/'.join([DATA_DIR, 'input', '*.wav'])))[0]
+    fs, audio = wavfile.read(file)
+
+    inps.append(audio[start:lim])
+    inps_test.append(audio[lim:])
+
+    files = glob.glob(os.path.normpath('/'.join([DATA_DIR, '*.wav'])))
+    conds = []
+    for file in files:
+        fs, audio = wavfile.read(file)
+
+        filename = os.path.split(file)[-1]
+        filename = filename[:-4]
+        param = filename.split('-')[1]
+        conds.append(float(param.split('_')[0]))
+
+        tars.append(audio[start:lim])
+        tars_test.append(audio[lim:])
+
+    inps = np.array(inps, dtype=np.float32)
+    tars = np.array(tars, dtype=np.float32)
+    conds = np.array(conds, dtype=np.float32)
+
+    data = {'z': conds, 'y': tars, 'x': inps}
+
+    file_data = open(os.path.normpath('/'.join([SAVE_DIR, 'DrDriveCond_DK_train.pickle'])), 'wb')
+    pickle.dump(data, file_data)
+    file_data.close()
+
+    inps = np.array(inps_test, dtype=np.float32)[:, :lim]
+    tars = np.array(tars_test, dtype=np.float32)
+
+    data = {'z': conds, 'y': tars, 'x': inps}
+    #
+    file_data = open(os.path.normpath('/'.join([SAVE_DIR, 'DrDriveCond_DK_test.pickle'])), 'wb')
+    pickle.dump(data, file_data)
+    file_data.close()
+
+def data_preparation_DRIVE():#
+
+    start = 0
+    lim = 22250000
+
+    tars = []
+    inps = []
+    tars_test = []
+    inps_test = []
+
+    file = glob.glob(os.path.normpath('/'.join([DATA_DIR, 'DrDrive_input.wav'])))[0]
+    fs, audio = wavfile.read(file)
+
+    inps.append(audio[start:lim])
+    inps_test.append(audio[lim:])
+
+    file = glob.glob(os.path.normpath('/'.join([DATA_DIR, 'DrDrive_target.wav'])))[0]
+    fs, audio = wavfile.read(file)
+
+    tars.append(audio[start:lim])
+    tars_test.append(audio[lim:])
+
+    inps = np.array(inps, dtype=np.float32)
+    tars = np.array(tars, dtype=np.float32)
+
+    data = {'z': None, 'y': tars, 'x': inps}
+
+    file_data = open(os.path.normpath('/'.join([SAVE_DIR, 'DrDrive_DK_train.pickle'])), 'wb')
+    pickle.dump(data, file_data)
+    file_data.close()
+
+    inps = np.array(inps_test, dtype=np.float32)[:, :lim]
+    tars = np.array(tars_test, dtype=np.float32)
+
+    data = {'z': None, 'y': tars, 'x': inps}
+    #
+    file_data = open(os.path.normpath('/'.join([SAVE_DIR, 'DrDrive_DK_test.pickle'])), 'wb')
+    pickle.dump(data, file_data)
+    file_data.close()
+
+def data_preparation_CL1B():#
 
 
 
-    start = 576000
-    lim = int(134.45*48000)
-    end = 2918644#2900000#2918644
+    start = 0
+    lim = 22250000
+
 
     min_ = 1e9
 
@@ -30,55 +116,41 @@ def data_preparation_CL1B(folder):#
     tars_test = []
     inps_test = []
 
-    file = glob.glob(os.path.normpath('/'.join([DATA_DIR, 'input.wav'])))[0]
+    file = glob.glob(os.path.normpath('/'.join([DATA_DIR, 'CL1B_input.wav'])))[0]
     fs, audio = wavfile.read(file)
-    audio = Code.audio_format.pcm2float(audio)
+    #audio = Code.audio_format.pcm2float(audio)
 
     # plt.plot(audio)
     inps.append(audio[start:lim])
-    inps_test.append(audio[lim:lim+end])
-    peaks_ = find_peaks(audio[:3000], height=0.1)[0][0]
+    inps_test.append(audio[lim:])
 
-    file_dirs = glob.glob(os.path.normpath('/'.join([DATA_DIR, 'target.wav'])))
-
-    audio = Code.audio_format.pcm2float(audio)
-
-
-    peaks = find_peaks(audio[:3000], height=0.01)[0][0]
-    if peaks_ != peaks:
-        audio = audio[np.abs(peaks_-peaks):]
-        #plt.plot(audio[:3000])
-        #plt.plot(inps[0][:3000])
-
-
-    if min_ > len(audio[lim:]):
-        min_ = len(audio[lim:])
+    file = glob.glob(os.path.normpath('/'.join([DATA_DIR, 'CL1B_target.wav'])))[0]
+    fs, audio = wavfile.read(file)
 
     tars.append(audio[start:lim])
-    tars_test.append(audio[lim:lim+end])
+    tars_test.append(audio[lim:])
 
     inps = np.array(inps, dtype=np.float32)
     tars = np.array(tars, dtype=np.float32)
 
     data = {'z': None, 'y': tars, 'x': inps}
 
-    file_data = open(os.path.normpath('/'.join([SAVE_DIR, 'CL1B_DK_train' + folder + '.pickle'])), 'wb')
+    file_data = open(os.path.normpath('/'.join([SAVE_DIR, 'CL1B_DK_train.pickle'])), 'wb')
     pickle.dump(data, file_data)
     file_data.close()
 
-    inps = np.array(inps_test, dtype=np.float32)[:, :lim+end]
+    inps = np.array(inps_test, dtype=np.float32)[:, :lim]
     tars = np.array(tars_test, dtype=np.float32)
 
     data = {'z': None, 'y': tars, 'x': inps}
     #
-    file_data = open(os.path.normpath('/'.join([SAVE_DIR, 'CL1B_DK_test' + folder + '.pickle'])), 'wb')
+    file_data = open(os.path.normpath('/'.join([SAVE_DIR, 'CL1B_DK_test.pickle'])), 'wb')
     pickle.dump(data, file_data)
     file_data.close()
 
 
 if __name__ == '__main__':
 
-
-
-    data_preparation_CL1B_analog()
-
+    #data_preparation_CL1B(DATA_DIR)
+    #data_preparation_DRIVE(DATA_DIR)
+    data_preparation_DRIVECond(DATA_DIR)
