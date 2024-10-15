@@ -1,5 +1,5 @@
 from Metrics import ESR, RMSE, STFT_loss
-from ModelsForGridSearchStudent import create_model_LSTM_DK1
+from ModelsForStudentsTaught import create_model_LSTM_DK1
 from UtilsGridSearch import filterAudio
 from UtilsForTrainingsGridSearch import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 import matplotlib.pyplot as plt
@@ -89,7 +89,7 @@ def trainDK1(**kwargs):
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
         # the number of total training steps
-        training_steps = train_gen.training_steps
+        training_steps = train_gen.training_steps*epochs
         # define the Adam optimizer with initial learning rate, training steps
         opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
             learning_rate, training_steps), clipnorm=1)

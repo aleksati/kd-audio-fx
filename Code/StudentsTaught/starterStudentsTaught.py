@@ -1,4 +1,4 @@
-from TrainingGridDK1Student import trainDK1
+from TrainingDK1StudentsTaught import trainDK1
 
 
 """
