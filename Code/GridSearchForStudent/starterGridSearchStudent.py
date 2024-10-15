@@ -43,11 +43,12 @@ dataset = "DrDrive_DK"  # 'CL1B_DK'  #
 dataset_train = dataset
 
 units = [2, 4, 8, 16, 32, 64]
+dataset_train = 'DK_Teacher_' + dataset_train
+name = '_student_taught'
 
 for unit in units:
     # we are a student being taught
-    dataset_train = 'DK_Teacher_' + dataset_train
-    name = '_student_taught'
+
     print("######### Preparing for Student taught training #########")
     print("\n")
 
