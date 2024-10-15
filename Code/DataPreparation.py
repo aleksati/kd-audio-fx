@@ -3,15 +3,12 @@ from scipy.io import wavfile
 import os
 import glob
 import pickle
-import Code.audio_format
 import matplotlib.pyplot as plt
 from Utils import filterAudio
 
 
 DATA_DIR = 'C:/Users/riccarsi/OneDrive - Universitetet i Oslo/Datasets/DK/DrDriveCond_DK'
-DATA_DIR = '../../Files'
-SAVE_DIR = 'C:/Users/riccarsi/OneDrive - Universitetet i Oslo/Datasets/DK/Pickles'
-SAVE_DIR = '../../Files'
+SAVE_DIR = 'C:/Users/riccarsi/OneDrive - Universitetet i Oslo/Datasets/DK/'
 
 def data_preparation_DRIVECond():#
 
@@ -44,7 +41,7 @@ def data_preparation_DRIVECond():#
 
     inps = np.array(inps, dtype=np.float32)
     tars = np.array(tars, dtype=np.float32)
-    conds = np.array(conds, dtype=np.float32)
+    conds = np.array(conds, dtype=np.float32).reshape(-1, 1)
 
     data = {'z': conds, 'y': tars, 'x': inps}
 
@@ -52,7 +49,7 @@ def data_preparation_DRIVECond():#
     pickle.dump(data, file_data)
     file_data.close()
 
-    inps = np.array(inps_test, dtype=np.float32)[:, :lim]
+    inps = np.array(inps_test, dtype=np.float32)
     tars = np.array(tars_test, dtype=np.float32)
 
     data = {'z': conds, 'y': tars, 'x': inps}
@@ -151,6 +148,6 @@ def data_preparation_CL1B():#
 
 if __name__ == '__main__':
 
-    #data_preparation_CL1B(DATA_DIR)
-    #data_preparation_DRIVE(DATA_DIR)
-    data_preparation_DRIVECond(DATA_DIR)
+    #data_preparation_CL1B()
+    #data_preparation_DRIVE()
+    data_preparation_DRIVECond()
