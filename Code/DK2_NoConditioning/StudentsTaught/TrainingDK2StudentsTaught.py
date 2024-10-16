@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import time
 import random
 import numpy as np
-from DatasetsClassDK2 import DataGeneratorPickles
+from DatasetsClassDK2 import DataGeneratorPicklesTest, DataGeneratorPicklesTrain
 import tensorflow as tf
 import os
 import sys
@@ -69,7 +69,7 @@ def trainDK2(**kwargs):
         model_save_dir, save_folder)
 
     # create the DataGenerator object to retrive the data in the test set
-    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle',
+    test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle',
                                     input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
     # if inference is True, it jump directly to the inference section without train the model
@@ -85,7 +85,7 @@ def trainDK2(**kwargs):
             print("Initializing random weights.")
 
         # create the DataGenerator object to retrive the data in the training set
-        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
+        train_gen = DataGeneratorPicklesTrain(data_dir, dataset_train + '_train.pickle',
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
         # the number of total training steps

@@ -1,4 +1,4 @@
-from TrainingDK2StudentsTaught import trainDK1
+from TrainingDK2StudentsTaught import trainDK2
 
 
 """
@@ -9,8 +9,8 @@ USER = "RIC"
 #USER = "ALE"
 #USER == 'PC'
 
-DK = 'DK1_'
-print('DK1 phase')
+DK = 'DK2_'
+print('DK2 phase')
 
 # number of epochs
 EPOCHS = 300
@@ -57,7 +57,7 @@ for unit in units:
     print("######### Preparing for Student taught training (DK2) #########")
     print("\n")
 
-    trainDK1(data_dir=data_dir,
+    trainDK2(data_dir=data_dir,
              save_folder=DK + model+dataset+str(unit) + name,
              model_save_dir=model_save_dir,
              dataset_train=dataset_train,
