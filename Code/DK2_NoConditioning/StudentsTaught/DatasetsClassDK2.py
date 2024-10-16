@@ -41,14 +41,9 @@ class DataGeneratorPicklesTrain(Sequence):
         #yh = np.array(Z['y_l4'], dtype=np.float32)
         weights = Z['w'] # those are the weight of the output layer
 
-        # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
-        if x.shape[0] == 1:
-            x = np.repeat(x, yh.shape[0], axis=0)
-
         # windowing the signals in order to avoid misalignments
         x = x * np.array(tukey(x.shape[1], alpha=0.000005),
                          dtype=np.float32).reshape(1, -1)
-
 
         # reshape to one dimension
         rep = x.shape[1]
