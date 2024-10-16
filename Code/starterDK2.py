@@ -19,7 +19,7 @@ Student_self_taught = False
 
 train = trainDK2
 DK = 'DK2_'
-print('DK2 phase')
+print('DK2_NoConditioning phase')
 
 # number of epochs
 EPOCHS = 200
@@ -38,7 +38,7 @@ if USER == 'ALE':
     # the directory in which datasets are stored
     data_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\Datasets'
     # where to store the results ++
-    model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\TrainedModels\\DK2'
+    model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\TrainedModels\\DK2_NoConditioning'
 elif USER == 'RIC':
     # the directory in which datasets are stored
     # Riccardo's folder
