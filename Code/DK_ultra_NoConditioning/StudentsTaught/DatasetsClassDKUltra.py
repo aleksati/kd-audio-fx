@@ -5,7 +5,7 @@ from tensorflow.keras.utils import Sequence
 from scipy.signal.windows import tukey
 from UtilsGridSearch import filterAudio
 
-class DataGeneratorPicklesTrain(Sequence):
+class DataGeneratorPickles(Sequence):
 
     def __init__(self, data_dir, filename, input_size, conditioning_size, batch_size=10):
         """

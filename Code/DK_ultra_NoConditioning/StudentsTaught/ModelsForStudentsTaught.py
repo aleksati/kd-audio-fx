@@ -8,7 +8,7 @@ Initializes a data generator object
 """
 
 
-def create_model_LSTM_DK2(units, input_dim=1, b_size=2400, training=True):
+def create_model_LSTM_DK_Ultra(units, input_dim=1, b_size=2400, training=True):
 
     # Defining inputs
     inputs = tf.keras.layers.Input(
