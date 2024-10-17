@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import time
 import random
 import numpy as np
-from DatasetsClassDKUltra import DataGeneratorPickles
+from DatasetsClassDKUltra import DataGeneratorPickles, DataGeneratorPicklesTest
 import tensorflow as tf
 import os
 import sys
@@ -69,7 +69,7 @@ def trainDK2(**kwargs):
         model_save_dir, save_folder)
 
     # create the DataGenerator object to retrive the data in the test set
-    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle',
+    test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle',
                                     input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
     # if inference is True, it jump directly to the inference section without train the model
@@ -160,7 +160,7 @@ def trainDK2(**kwargs):
     sys.stdout.flush()
 
     # re-create the model to include last layer
-    model = create_model_LSTM_DK2(
+    model = create_model_LSTM_DK_Ultra(
         input_dim=1, units=units, b_size=batch_size, training=False)
 
     # load the best weights of the model
