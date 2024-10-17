@@ -94,9 +94,20 @@ def trainDK2(**kwargs):
         opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
             learning_rate, training_steps), clipnorm=1)
 
+
+        lossesName = ['OutLayer', 'LSTM2']
+        losses = {
+            lossesName[0]: 'mae',
+            lossesName[1]: 'mae'
+        }
+
+        lossWeights = {lossesName[0]: 1,
+                       lossesName[1]: 1
+                       }
+
         # compile the model with the optimizer and selected loss function
         if dataset_test == 'DrDrive_DK':
-            model.compile(loss=['mae', 'mae'], optimizer=opt)
+            model.compile(loss=losses, loss_weights=lossWeights, optimizer=opt)
         elif dataset_test == 'CL1B_DK':
             model.compile(loss=['mse', 'mse'], optimizer=opt)
 

@@ -23,7 +23,7 @@ class DataGeneratorPickles(Sequence):
         self.conditioning_size = conditioning_size
 
         # prepare the input, taget and conditioning matrix
-        self.x, self.yh, self.y, self.z, rep, lim, self.weights = self.prepareXYZ(
+        self.x, self.yh, self.y, self.z, rep, lim = self.prepareXYZ(
             data_dir, filename)
 
         self.training_steps = (lim // self.batch_size)
@@ -49,6 +49,7 @@ class DataGeneratorPickles(Sequence):
         # reshape to one dimension
         rep = x.shape[1]
         x = x.reshape(-1)
+        y = y.reshape(-1)
 
         # how many iteration it is needed
         N = int((x.shape[0] - self.input_size) / self.batch_size)-1
@@ -58,7 +59,7 @@ class DataGeneratorPickles(Sequence):
 
         z = None
 
-        return x, yh, y, z, rep, lim, weights
+        return x, yh, y, z, rep, lim
 
     def on_epoch_end(self):
         # create/reset the vector containing the indices of the batches
