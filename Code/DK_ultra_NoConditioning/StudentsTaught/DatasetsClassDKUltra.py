@@ -92,7 +92,7 @@ class DataGeneratorPickles(Sequence):
             Y[c, :] = np.array(self.y[t])
             c = c + 1
 
-        return X, Y, YH
+        return X, [Y, YH]
 
 
 class DataGeneratorPicklesTest(Sequence):

@@ -85,7 +85,7 @@ def trainDK2(**kwargs):
             print("Initializing random weights.")
 
         # create the DataGenerator object to retrive the data in the training set
-        train_gen = DataGeneratorPicklesTest(data_dir, dataset_train + '_train.pickle',
+        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
         # the number of total training steps
@@ -93,7 +93,6 @@ def trainDK2(**kwargs):
         # define the Adam optimizer with initial learning rate, training steps
         opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
             learning_rate, training_steps), clipnorm=1)
-
 
         lossesName = ['OutLayer', 'LSTM2']
         losses = {
