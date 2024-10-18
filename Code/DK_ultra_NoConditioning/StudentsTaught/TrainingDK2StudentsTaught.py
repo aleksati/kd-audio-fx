@@ -85,7 +85,7 @@ def trainDK2(**kwargs):
             print("Initializing random weights.")
 
         # create the DataGenerator object to retrive the data in the training set
-        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
+        train_gen = DataGeneratorPicklesTest(data_dir, dataset_train + '_train.pickle',
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
         # the number of total training steps
@@ -108,6 +108,7 @@ def trainDK2(**kwargs):
         # compile the model with the optimizer and selected loss function
         if dataset_test == 'DrDrive_DK':
             model.compile(loss=losses, loss_weights=lossWeights, optimizer=opt)
+            #model.compile(loss='mae', optimizer=opt)
         elif dataset_test == 'CL1B_DK':
             model.compile(loss=['mse', 'mse'], optimizer=opt)
 

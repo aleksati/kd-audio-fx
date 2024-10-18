@@ -138,6 +138,7 @@ class DataGeneratorPicklesTest(Sequence):
         # reshape to one dimension
         rep = x.shape[1]
         x = x.reshape(-1)
+        y = y.reshape(-1)
 
         # how many iteration it is needed
         N = int((x.shape[0] - self.input_size) / self.batch_size)-1
