@@ -9,11 +9,11 @@ USER = "RIC"
 #USER = "ALE"
 #USER == 'PC'
 
-DK = 'DK2_'
-print('DK2 phase')
+DK = 'DK_'
+print('DK Ultra phase')
 
 # number of epochs
-EPOCHS = 1#300
+EPOCHS = 300
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size
