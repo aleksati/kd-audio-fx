@@ -5,8 +5,8 @@ from TrainingGridDK1 import trainDK1
 main script
 
 """
-# USER = "RIC"
-USER = "ALE"
+USER = "RIC"
+#USER = "ALE"
 
 
 DK = 'DK1_'
@@ -16,7 +16,7 @@ print('DK1 conditioning phase')
 CONDITIONING = 1
 
 # number of epochs
-EPOCHS = 300
+EPOCHS = 1
 
 # batch size
 BATCH_SIZE = 2400
@@ -36,8 +36,8 @@ elif USER == 'RIC':
     # the directory in which datasets are stored
     # Riccardo's folder
     data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK'
-    # where to store the results ++
-    model_save_dir = '../../'  # Riccardo's folder
+    # where to store the results
+    model_save_dir = '../../../'  # Riccardo's folder
 elif USER == 'PC':
     # the directory in which datasets are stored
     data_dir = '../../Files'
@@ -48,7 +48,7 @@ elif USER == 'PC':
 model = 'LSTM_'
 
 # name of dataset to be used
-dataset = "DrDrive_DK"  # 'CL1B_DK'  #
+dataset = "DrDriveCond_DK"  # 'CL1B_DK'  #
 dataset_train = dataset
 
 # trials = [[2, 4, 8, 16, 8, 4, 2],

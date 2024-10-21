@@ -35,7 +35,7 @@ class DataGeneratorPicklesTrain(Sequence):
         file_data = open(os.path.normpath(
             '/'.join([data_dir, filename])), 'rb')
         Z = pickle.load(file_data)
-        x = np.array(Z['x'][:1, :], dtype=np.float32)
+        x = np.array(Z['x'][:, :], dtype=np.float32)
         yh = np.array(Z['y_l6'], dtype=np.float32)
         #yh = np.array(Z['y_l5'], dtype=np.float32)
         #yh = np.array(Z['y_l4'], dtype=np.float32)
@@ -55,7 +55,9 @@ class DataGeneratorPicklesTrain(Sequence):
         lim = int(N * self.batch_size) + self.input_size - 1
         x = x[:lim]
 
-        z = None
+        # loading the conditioning values
+        z = np.array(Z['z'], dtype=np.float32)
+        z = np.repeat(z, rep, axis=0)
 
         return x, yh, z, rep, lim, weights
 
@@ -119,8 +121,8 @@ class DataGeneratorPicklesTest(Sequence):
         file_data = open(os.path.normpath(
             '/'.join([data_dir, filename])), 'rb')
         Z = pickle.load(file_data)
-        x = np.array(Z['x'][:1, :], dtype=np.float32)
-        y = np.array(Z['y'][:1, :], dtype=np.float32)
+        x = np.array(Z['x'][:, :], dtype=np.float32)
+        y = np.array(Z['y'][:, :], dtype=np.float32)
         y = filterAudio(y)
 
         # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
@@ -144,7 +146,11 @@ class DataGeneratorPicklesTest(Sequence):
         lim = int(N * self.batch_size) + self.input_size - 1
         x = x[:lim]
         y = y[:lim]
-        z = None
+
+        # loading the conditioning values
+        z = np.array(Z['z'], dtype=np.float32)
+        z = np.repeat(z, rep, axis=0)
+
         return x, y, z, rep, lim
 
     def on_epoch_end(self):
@@ -170,11 +176,12 @@ class DataGeneratorPicklesTest(Sequence):
         indices = self.indices[idx*self.batch_size:(idx+1)*self.batch_size]
         c = 0
 
+        Z = np.empty((self.batch_size, self.conditioning_size))
         # fill the batches
-        for t in range(indices[0], indices[-1] + 1, 1):
+        for t in range(indices[0], indices[-1]+1, 1):
             X[c, :] = np.array(self.x[t - self.input_size+1: t+1])
             Y[c, :] = np.array(self.y[t])
-
+            Z[c, :] = np.array(self.z[t])
             c = c + 1
 
-        return X, Y
+        return [Z, X], Y

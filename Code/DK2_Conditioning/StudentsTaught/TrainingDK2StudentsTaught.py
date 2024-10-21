@@ -68,7 +68,7 @@ def trainDK2(**kwargs):
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
         model_save_dir, save_folder)
 
-    # create the DataGenerator object to retrive the data in the test set
+    # create the DataGenerator object to retrieve the data in the test set
     test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle',
                                         input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
@@ -95,7 +95,7 @@ def trainDK2(**kwargs):
             learning_rate, training_steps), clipnorm=1)
 
         # compile the model with the optimizer and selected loss function
-        if dataset_test == 'DrDrive_DK':
+        if dataset_test == 'DrDriveCond_DK':
             model.compile(loss='mae', optimizer=opt)
         elif dataset_test == 'CL1B_DK':
             model.compile(loss='mse', optimizer=opt)

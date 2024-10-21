@@ -48,7 +48,7 @@ elif USER == 'PC':
 model = 'LSTM_'
 
 # name of dataset to be used
-dataset = "DrDrive_DK"  # 'CL1B_DK'  #
+dataset = "DrDriveCond_DK"  # 'CL1B_DK'  #
 dataset_train = dataset
 
 units = [8, 16, 32, 64]

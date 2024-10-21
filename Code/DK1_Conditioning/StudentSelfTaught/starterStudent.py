@@ -46,7 +46,7 @@ elif USER == 'PC':
 model = 'LSTM_'
 
 # name of dataset to be used
-dataset = "DrDrive_DK"
+dataset = "DrDriveCond_DK"
 # dataset = "CL1B_DK"
 dataset_train = dataset
 
