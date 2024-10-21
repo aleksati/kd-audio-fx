@@ -13,12 +13,10 @@ DK = 'DK1_'
 print('DK1 phase')
 
 # number of conditioning parameters
-CONDITIONING = 0
+CONDITIONING = 1
 
 # number of epochs
 EPOCHS = 300
-# number of parameters
-PARAMETER_NUMBER = 0
 # batch size
 BATCH_SIZE = 2400
 # initial learning rate
@@ -52,8 +50,8 @@ dataset = "DrDrive_DK"
 # dataset = "CL1B_DK"
 dataset_train = dataset
 
-units = [2, 4, 8, 16, 32, 64]
-name = '_student_self_taught'
+units = [8, 16, 32, 64]
+name = '_student_self_taught_conditioned'
 
 for unit in units:
     # we are a student being taught
@@ -70,6 +68,5 @@ for unit in units:
              units=unit,
              epochs=EPOCHS,
              model=model,
-             parameter_numbers=PARAMETER_NUMBER,
              conditioning_size=CONDITIONING,
              inference=INFERENCE)

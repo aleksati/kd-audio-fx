@@ -60,11 +60,8 @@ class DataGeneratorPickles(Sequence):
         y = y[:lim]
 
         # loading the conditioning values
-        if self.conditioning_size != 0:
-            z = np.array(Z['z'], dtype=np.float32)
-            z = np.repeat(z, rep, axis=0)
-        else:
-            z = None
+        z = np.array(Z['z'], dtype=np.float32)
+        z = np.repeat(z, rep, axis=0)
 
         return x, y, z, rep, lim
 
@@ -91,23 +88,12 @@ class DataGeneratorPickles(Sequence):
         indices = self.indices[idx*self.batch_size:(idx+1)*self.batch_size]
         c = 0
 
-        if self.conditioning_size != 0:
-            Z = np.empty((self.batch_size, self.conditioning_size))
-            # fill the batches
-            for t in range(indices[0], indices[-1]+1, 1):
-                X[c, :] = np.array(self.x[t - self.input_size+1: t+1])
-                Y[c, :] = np.array(self.y[t])
-                Z[c, :] = np.array(self.z[t])
-                c = c + 1
+        Z = np.empty((self.batch_size, self.conditioning_size))
+        # fill the batches
+        for t in range(indices[0], indices[-1]+1, 1):
+            X[c, :] = np.array(self.x[t - self.input_size+1: t+1])
+            Y[c, :] = np.array(self.y[t])
+            Z[c, :] = np.array(self.z[t])
+            c = c + 1
 
-            return [Z, X], Y
-
-        else:
-            # fill the batches
-            for t in range(indices[0], indices[-1] + 1, 1):
-                X[c, :] = np.array(self.x[t - self.input_size+1: t+1])
-                Y[c, :] = np.array(self.y[t])
-
-                c = c + 1
-
-            return X, Y
+        return [Z, X], Y

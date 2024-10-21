@@ -13,7 +13,7 @@ DK = 'DK1_'
 print('DK1 phase')
 
 # number of conditioning parameters
-CONDITIONING = 0
+CONDITIONING = 1
 
 # number of epochs
 EPOCHS = 300
@@ -51,9 +51,9 @@ model = 'LSTM_'
 dataset = "DrDrive_DK"  # 'CL1B_DK'  #
 dataset_train = dataset
 
-units = [2, 4, 8, 16, 32, 64]
-dataset_train = 'DK_Teacher_' + dataset_train
-name = '_student_taught'
+units = [8, 16, 32, 64]
+dataset_train = 'DK_Teacher__conditioned_' + dataset_train
+name = '_student_taught_conditioned'
 
 for unit in units:
     # we are a student being taught

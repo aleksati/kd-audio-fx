@@ -10,15 +10,14 @@ USER = "ALE"
 
 
 DK = 'DK1_'
-print('DK1 phase')
+print('DK1 conditioning phase')
 
 # number of conditioning parameters
-CONDITIONING = 0
+CONDITIONING = 1
 
 # number of epochs
-EPOCHS = 2
-# number of parameters
-PARAMETER_NUMBER = 0
+EPOCHS = 300
+
 # batch size
 BATCH_SIZE = 2400
 # initial learning rate
@@ -64,7 +63,7 @@ for trial in trials:
     # we are a teacher
     # UNITS = 64
     dataset_train = dataset
-    name = '_teacher'
+    name = '_teacher_conditioned'
     print("######### Preparing for Teacher training #########")
     print("\n")
 
@@ -78,6 +77,5 @@ for trial in trials:
              trial=trial,
              epochs=EPOCHS,
              model=model,
-             parameter_numbers=PARAMETER_NUMBER,
              conditioning_size=CONDITIONING,
              inference=INFERENCE)

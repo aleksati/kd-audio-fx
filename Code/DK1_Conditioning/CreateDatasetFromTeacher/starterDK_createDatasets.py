@@ -14,18 +14,12 @@ DK = 'DK1_'
 print('DK1 phase')
 
 # number of conditioning parameters
-CONDITIONING = 0
+CONDITIONING = 1
 
 # number of epochs
-EPOCHS = 2
-# number of parameters
-PARAMETER_NUMBER = 0
+EPOCHS = 300
 # batch size
 BATCH_SIZE = 2400
-# initial learning rate
-LR = 3e-4
-
-INFERENCE = False
 
 print('Welcome back ', USER)
 
@@ -51,12 +45,11 @@ model = 'LSTM_'
 
 # name of dataset to be used
 dataset = "DrDrive_DK"  # 'CL1B_DK'  #
-dataset_train = dataset
 
 # trials = [[8, 16, 32, 64, 32, 16, 8]]
 
 # we are a teacher
-name = '_teacher'
+name = '_teacher_conditioned'
 print("######### Preparing for creating the Datasets #########")
 print("\n")
 
@@ -68,5 +61,4 @@ trainDK1(data_dir=data_dir,
          epochs=EPOCHS,
          model=model,
          trial=[8, 16, 32, 64, 32, 16, 8],
-         conditioning_size=CONDITIONING,
-         parameter_numbers=PARAMETER_NUMBER)
+         conditioning_size=CONDITIONING)

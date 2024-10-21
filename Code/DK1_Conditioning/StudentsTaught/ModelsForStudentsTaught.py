@@ -19,16 +19,13 @@ def create_model_LSTM_DK1(units, input_dim=1, conditioning_size=0, b_size=2400):
     outputs = tf.keras.layers.LSTM(
         units, stateful=True, return_sequences=False, name="LSTM2")(outputs)
 
-    if conditioning_size != 0:
-        cond_inputs = tf.keras.layers.Input(batch_shape=(
+
+    cond_inputs = tf.keras.layers.Input(batch_shape=(
             b_size, conditioning_size), name='cond_inputs')
 
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
 
-    if conditioning_size != 0:
-        model = tf.keras.models.Model([inputs, cond_inputs], outputs)
-    else:
-        model = tf.keras.models.Model(inputs, outputs)
+    model = tf.keras.models.Model([inputs, cond_inputs], outputs)
 
     model.summary()
 

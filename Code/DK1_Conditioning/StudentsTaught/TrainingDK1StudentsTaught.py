@@ -68,7 +68,7 @@ def trainDK1(**kwargs):
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
         model_save_dir, save_folder)
 
-    # create the DataGenerator object to retrive the data in the test set
+    # create the DataGenerator object to retrieve the data in the test set
     test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle',
                                     input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 

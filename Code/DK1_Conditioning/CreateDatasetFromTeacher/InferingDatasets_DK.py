@@ -31,7 +31,6 @@ def trainDK1(**kwargs):
     input_dim = kwargs.get('input_dim', 1)
     model_save_dir = kwargs.get('model_save_dir', '../../TrainedModels')
     save_folder = kwargs.get('save_folder', 'ED_Testing')
-    dataset_train = kwargs.get('dataset_train', None)
     dataset_test = kwargs.get('dataset_test', None)
     data_dir = kwargs.get('data_dir', '../../../Files/')
     conditioning_size = kwargs.get('conditioning_size', 0)
@@ -85,7 +84,7 @@ def trainDK1(**kwargs):
         'y_l6': predictions[7], 'w': last_layer_weights}
 
     file_data = open(os.path.normpath(
-        '/'.join([data_dir, 'DK_Teacher_' + dataset_test + '_train.pickle'])), 'wb')
+        '/'.join([data_dir, 'DK_Teacher__conditioned_' + dataset_test + '_train.pickle'])), 'wb')
     pickle.dump(z, file_data)
     file_data.close()
 
