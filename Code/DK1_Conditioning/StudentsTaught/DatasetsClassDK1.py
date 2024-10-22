@@ -63,9 +63,9 @@ class DataGeneratorPickles(Sequence):
 
         # loading the conditioning values
         z = np.array(Z['z'], dtype=np.float32)
-        if len(z[0]) > 10:
+        if len(z[0]) < 10:
             z = np.repeat(z, rep, axis=0)[:lim]
-
+        z = z[:lim]
         return x, y, z, rep, lim
 
     def on_epoch_end(self):
