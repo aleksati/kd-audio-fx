@@ -1,4 +1,5 @@
 import tensorflow as tf
+from Layers import FiLM
 
 """
 Initializes a data generator object

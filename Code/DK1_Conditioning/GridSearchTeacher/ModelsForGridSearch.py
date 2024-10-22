@@ -1,5 +1,5 @@
 import tensorflow as tf
-
+from Layers import FiLM
 """
 Initializes a data generator object
   :param data_dir: the directory in which data are stored
@@ -34,6 +34,7 @@ def create_model_LSTM_DK1(trial, input_dim=1, conditioning_size=0, b_size=2399):
 
     cond_inputs = tf.keras.layers.Input(batch_shape=(b_size, conditioning_size), name='cond_inputs')
 
+    outputs = FiLM(in_size=unit)(outputs, cond_inputs)
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
     model = tf.keras.models.Model([inputs, cond_inputs], outputs)
 
