@@ -173,6 +173,7 @@ def trainDK2(**kwargs):
         print("Something is wrong.")
 
     model.layers[-1].set_weights(train_gen.weights)
+    model.layers[-2].set_weights(train_gen.weights_film)
 
     # reset the states before predicting
     model.reset_states()

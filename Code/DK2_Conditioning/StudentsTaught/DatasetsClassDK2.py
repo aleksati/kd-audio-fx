@@ -23,7 +23,7 @@ class DataGeneratorPicklesTrain(Sequence):
         self.conditioning_size = conditioning_size
 
         # prepare the input, taget and conditioning matrix
-        self.x, self.yh, self.z, rep, lim, self.weights = self.prepareXYZ(
+        self.x, self.yh, self.z, rep, lim, self.weights, self.weights_film = self.prepareXYZ(
             data_dir, filename)
 
         self.training_steps = (lim // self.batch_size)
@@ -40,6 +40,7 @@ class DataGeneratorPicklesTrain(Sequence):
         #yh = np.array(Z['y_l5'], dtype=np.float32)
         #yh = np.array(Z['y_l4'], dtype=np.float32)
         weights = Z['w'] # those are the weight of the output layer
+        weights_film = Z['w_film'] # those are the weight of the output layer
 
         # windowing the signals in order to avoid misalignments
         x = x * np.array(tukey(x.shape[1], alpha=0.000005),
@@ -59,7 +60,7 @@ class DataGeneratorPicklesTrain(Sequence):
         z = np.array(Z['z'], dtype=np.float32)
         z = np.repeat(z, rep, axis=0)
 
-        return x, yh, z, rep, lim, weights
+        return x, yh, z, rep, lim, weights, weights_film
 
     def on_epoch_end(self):
         # create/reset the vector containing the indices of the batches

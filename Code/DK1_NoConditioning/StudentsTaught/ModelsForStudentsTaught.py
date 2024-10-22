@@ -8,7 +8,7 @@ Initializes a data generator object
 """
 
 
-def create_model_LSTM_DK1(units, input_dim=1, conditioning_size=0, b_size=2400):
+def create_model_LSTM_DK1(units, input_dim=1, b_size=2400):
 
     # Defining inputs
     inputs = tf.keras.layers.Input(
@@ -17,7 +17,7 @@ def create_model_LSTM_DK1(units, input_dim=1, conditioning_size=0, b_size=2400):
     outputs = tf.keras.layers.LSTM(
                 units, stateful=True, return_sequences=True, name="LSTM")(inputs)
     outputs = tf.keras.layers.LSTM(
-                units, stateful=True, return_sequences=False, name="LSTM2")(outputs)
+                8, stateful=True, return_sequences=False, name="LSTM2")(outputs)
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
 
     model = tf.keras.models.Model(inputs, outputs)

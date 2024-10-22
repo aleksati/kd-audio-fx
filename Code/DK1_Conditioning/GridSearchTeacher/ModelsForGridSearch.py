@@ -31,7 +31,6 @@ def create_model_LSTM_DK1(trial, input_dim=1, conditioning_size=0, b_size=2399):
             outputs = tf.keras.layers.LSTM(
                 unit, stateful=True, return_sequences=True, name="LSTM{}".format(i))(tail)
 
-
     cond_inputs = tf.keras.layers.Input(batch_shape=(b_size, conditioning_size), name='cond_inputs')
 
     outputs = FiLM(in_size=unit)(outputs, cond_inputs)

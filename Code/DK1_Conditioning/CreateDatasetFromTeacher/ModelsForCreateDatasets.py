@@ -9,7 +9,7 @@ Initializes a data generator object
 """
 
 
-def create_model_LSTM_DK(units=[8, 16, 32, 64, 32, 16, 8], input_dim=1, conditioning_size=0, b_size=2399):
+def create_model_LSTM_DK(units=[8, 16, 32, 64, 32, 16, 8], input_dim=1, conditioning_size=1, b_size=2400):
 
     # Defining inputs
     inputs = tf.keras.layers.Input(
@@ -34,9 +34,9 @@ def create_model_LSTM_DK(units=[8, 16, 32, 64, 32, 16, 8], input_dim=1, conditio
     cond_inputs = tf.keras.layers.Input(batch_shape=(
             b_size, conditioning_size), name='cond_inputs')
 
-    outputs = FiLM(in_size=units)(outputs6, cond_inputs)
+    outputs_film = FiLM(in_size=units[6])(outputs6, cond_inputs)
 
-    outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs6)
+    outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs_film)
 
     model = tf.keras.models.Model([inputs, cond_inputs], [
                                       outputs, outputs0, outputs1, outputs2, outputs3, outputs4, outputs5, outputs6])
