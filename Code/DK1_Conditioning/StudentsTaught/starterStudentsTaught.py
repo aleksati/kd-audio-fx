@@ -52,7 +52,7 @@ dataset = "DrDriveCond_DK"  # 'CL1B_DK'  #
 dataset_train = dataset
 
 units = [8, 16, 32, 64]
-dataset_train = 'DK_Teacher__conditioned_' + dataset_train
+dataset_train = 'DK_Teacher_' + dataset_train
 name = '_student_taught_conditioned'
 
 for unit in units:
