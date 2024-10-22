@@ -35,7 +35,7 @@ class DataGeneratorPicklesTrain(Sequence):
         file_data = open(os.path.normpath(
             '/'.join([data_dir, filename])), 'rb')
         Z = pickle.load(file_data)
-        x = np.array(Z['x'][:1, :], dtype=np.float32)
+        x = np.array(Z['x'][:, :], dtype=np.float32)
         yh = np.array(Z['y_l6'], dtype=np.float32)
         #yh = np.array(Z['y_l5'], dtype=np.float32)
         #yh = np.array(Z['y_l4'], dtype=np.float32)

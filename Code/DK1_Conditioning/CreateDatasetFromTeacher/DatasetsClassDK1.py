@@ -34,8 +34,8 @@ class DataGeneratorPickles(Sequence):
         file_data = open(os.path.normpath(
             '/'.join([data_dir, filename])), 'rb')
         Z = pickle.load(file_data)
-        x = np.array(Z['x'][:1, :], dtype=np.float32)
-        y = np.array(Z['y'][:1, :], dtype=np.float32)
+        x = np.array(Z['x'][:, :], dtype=np.float32)
+        y = np.array(Z['y'][:, :], dtype=np.float32)
         y = filterAudio(y)
         # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
         if x.shape[0] == 1:
@@ -61,7 +61,7 @@ class DataGeneratorPickles(Sequence):
 
         # loading the conditioning values
         z = np.array(Z['z'], dtype=np.float32)
-        z = np.repeat(z, rep, axis=0)
+        z = np.repeat(z, rep, axis=0)[:lim]
 
         return x, y, z, rep, lim
 

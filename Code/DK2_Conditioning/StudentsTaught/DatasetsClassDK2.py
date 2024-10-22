@@ -23,7 +23,7 @@ class DataGeneratorPicklesTrain(Sequence):
         self.conditioning_size = conditioning_size
 
         # prepare the input, taget and conditioning matrix
-        self.x, self.yh, self.z, rep, lim, self.weights, self.weights_film = self.prepareXYZ(
+        self.x, self.yh, self.z, lim, self.weights, self.weights_film = self.prepareXYZ(
             data_dir, filename)
 
         self.training_steps = (lim // self.batch_size)
@@ -42,25 +42,20 @@ class DataGeneratorPicklesTrain(Sequence):
         weights = Z['w'] # those are the weight of the output layer
         weights_film = Z['w_film'] # those are the weight of the output layer
 
-        # windowing the signals in order to avoid misalignments
-        x = x * np.array(tukey(x.shape[1], alpha=0.000005),
-                         dtype=np.float32).reshape(1, -1)
 
         # reshape to one dimension
-        rep = x.shape[1]
         x = x.reshape(-1)
 
         # how many iteration it is needed
         N = int((x.shape[0] - self.input_size) / self.batch_size)-1
         # how many total samples is the audio
         lim = int(N * self.batch_size) + self.input_size - 1
-        x = x[:lim]
+
 
         # loading the conditioning values
         z = np.array(Z['z'], dtype=np.float32)
-        z = np.repeat(z, rep, axis=0)
 
-        return x, yh, z, rep, lim, weights, weights_film
+        return x, yh, z, lim, weights, weights_film
 
     def on_epoch_end(self):
         # create/reset the vector containing the indices of the batches
@@ -150,7 +145,7 @@ class DataGeneratorPicklesTest(Sequence):
 
         # loading the conditioning values
         z = np.array(Z['z'], dtype=np.float32)
-        z = np.repeat(z, rep, axis=0)
+        z = np.repeat(z, rep, axis=0)[:lim]
 
         return x, y, z, rep, lim
 
