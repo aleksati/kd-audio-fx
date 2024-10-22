@@ -37,7 +37,7 @@ elif USER == 'RIC':
     # Riccardo's folder
     data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK'
     # where to store the results
-    model_save_dir = '../../../'  # Riccardo's folder
+    model_save_dir = '../../../Models'  # Riccardo's folder
 elif USER == 'PC':
     # the directory in which datasets are stored
     data_dir = '../../Files'
@@ -68,7 +68,7 @@ for trial in trials:
     print("\n")
 
     trainDK1(data_dir=data_dir,
-             save_folder=DK + model+dataset+str(trial) + name,
+             save_folder=DK + model+dataset + name,
              model_save_dir=model_save_dir,
              dataset_train=dataset_train,
              dataset_test=dataset,

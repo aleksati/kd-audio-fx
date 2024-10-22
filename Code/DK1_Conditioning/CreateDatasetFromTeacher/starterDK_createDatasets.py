@@ -54,7 +54,7 @@ print("######### Preparing for creating the Datasets #########")
 print("\n")
 
 trainDK1(data_dir=data_dir,
-         save_folder=DK + model+dataset + name,
+         save_folder=DK + model + dataset + name,
          model_save_dir=model_save_dir,
          dataset_test=dataset,
          batch_size=BATCH_SIZE,

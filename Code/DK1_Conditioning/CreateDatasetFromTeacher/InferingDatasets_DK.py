@@ -24,7 +24,7 @@ def trainDK1(**kwargs):
       :param epochs: the number of epochs [int]
       :param teacher: if True it is inferring the training set and store in save_folder [bool]
       :param fs: the sampling rate [int]
-      :param conditioning_size: the numeber of parameters to be included [int]
+      :param conditioning_size: the number of parameters to be included [int]
     """
 
     batch_size = kwargs.get('batch_size', 1)
@@ -81,10 +81,10 @@ def trainDK1(**kwargs):
         #'y_l3': predictions[4],
         'y_l4': predictions[5],
         'y_l5': predictions[6],
-        'y_l6': predictions[7], 'w': last_layer_weights}
+        'y_l6': predictions[7], 'w': last_layer_weights, 'w_film': last_layer_weights}
 
     file_data = open(os.path.normpath(
-        '/'.join([data_dir, 'DK_Teacher__conditioned_' + dataset_test + '_train.pickle'])), 'wb')
+        '/'.join([data_dir, 'DK_Teacher_' + dataset_test + '_train.pickle'])), 'wb')
     pickle.dump(z, file_data)
     file_data.close()
 
