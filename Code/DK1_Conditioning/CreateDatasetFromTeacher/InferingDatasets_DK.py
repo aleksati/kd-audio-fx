@@ -49,8 +49,7 @@ def trainDK1(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    model = create_model_LSTM_DK(units=trial,
-        input_dim=1, conditioning_size=conditioning_size, b_size=batch_size)
+    model = create_model_LSTM_DK(input_dim=1, conditioning_size=conditioning_size, b_size=batch_size)
 
     # define callbacks: where to store the weights
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(

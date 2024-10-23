@@ -62,7 +62,7 @@ def trainDK1(**kwargs):
 
     # create the model
     model = create_model_LSTM_DK1(
-        input_dim=1, trial=trial, conditioning_size=conditioning_size, b_size=batch_size)
+        input_dim=1, conditioning_size=conditioning_size, b_size=batch_size)
 
     # define callbacks: where to store the weights
     callbacks = []
