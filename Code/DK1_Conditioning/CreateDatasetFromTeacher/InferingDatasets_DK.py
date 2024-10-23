@@ -81,8 +81,8 @@ def trainDK1(**kwargs):
         #'y_l2': predictions[3],
         #'y_l3': predictions[4],
         #'y_l4': predictions[5],
-        'y_l5': predictions[1],
-        'y_l6': predictions[2], 'w': last_layer_weights, 'w_film': film_layer_weights}
+        #'y_l5': predictions[1],
+        'y_l6': predictions[1], 'w': last_layer_weights, 'w_film': film_layer_weights}
 
     file_data = open(os.path.normpath(
         '/'.join([data_dir, 'DK_Teacher_' + dataset_test + '_train.pickle'])), 'wb')

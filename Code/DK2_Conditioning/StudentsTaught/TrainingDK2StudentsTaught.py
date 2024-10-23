@@ -181,7 +181,7 @@ def trainDK2(**kwargs):
     predictions = model.predict(test_gen, verbose=0).reshape(-1)
 
     # plot and render the output audio file, together with the input and target
-    predictWaves(predictions, test_gen.x,  test_gen.y,
+    predictWaves(predictions, test_gen.x,  test_gen.y, test_gen.z,
                  model_save_dir, save_folder, fs, '0')
     predictions = np.array(filterAudio(predictions), dtype=np.float32)
     y = np.array(filterAudio(test_gen.y), dtype=np.float32)

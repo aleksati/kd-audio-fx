@@ -4,6 +4,7 @@ import numpy as np
 from tensorflow.keras.utils import Sequence
 from scipy.signal.windows import tukey
 from UtilsGridSearch import filterAudio
+import matplotlib.pyplot as plt
 
 
 class DataGeneratorPickles(Sequence):

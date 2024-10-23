@@ -55,7 +55,7 @@ def writeResults(results, units, epochs, b_size, learning_rate, model_save_dir,
                          'wb'))
 
 
-def plotResult(pred, inp, tar, model_save_dir, save_folder, fs, filename):
+def plotResult(pred, inp, tar, z, model_save_dir, save_folder, fs, filename):
     """
     Plot the rendered results
       :param pred: the model's prediction  [array of floats]
@@ -81,6 +81,7 @@ def plotResult(pred, inp, tar, model_save_dir, save_folder, fs, filename):
         ax.plot(time, y, label='target', alpha=0.9)
         ax.plot(time, predictions, label='pred', alpha=0.7)
         ax.legend(loc='upper right')
+        ax.set_title('Drive: ', str(z))
         fig.savefig(model_save_dir + '/' + save_folder + '/plot' +
                     filename + str(i) + '.pdf', format='pdf')
         plt.close('all')
@@ -108,7 +109,7 @@ def plotTraining(loss_training, loss_val, model_save_dir, save_folder, name):
     plt.close('all')
 
 
-def predictWaves(pred, x_test, y_test, model_save_dir, save_folder, fs, filename):
+def predictWaves(pred, x_test, y_test, z, model_save_dir, save_folder, fs, filename):
     """
     Render the prediction, target and input as wav audio file
       :param pred: the model's prediction  [array of floats]
@@ -141,7 +142,7 @@ def predictWaves(pred, x_test, y_test, model_save_dir, save_folder, fs, filename
     wavfile.write(inp_dir, fs, x_test.reshape(-1))
     wavfile.write(tar_dir, fs, y_test.reshape(-1))
 
-    plotResult(pred, x_test, y_test, model_save_dir, save_folder, fs, filename)
+    plotResult(pred, x_test, y_test, z, model_save_dir, save_folder, fs, filename)
 
 
 def checkpoints(model_save_dir, save_folder):
