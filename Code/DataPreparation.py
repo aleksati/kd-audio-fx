@@ -42,6 +42,7 @@ def data_preparation_DRIVECond():#
     inps = np.array(inps, dtype=np.float32)
     tars = np.array(tars, dtype=np.float32)
     conds = np.array(conds, dtype=np.float32).reshape(-1, 1)
+    conds = conds/np.max(conds)
 
     data = {'z': conds, 'y': tars, 'x': inps}
 
@@ -106,7 +107,6 @@ def data_preparation_CL1B():#
     lim = 22250000
 
 
-    min_ = 1e9
 
     tars = []
     inps = []
