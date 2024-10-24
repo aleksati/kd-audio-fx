@@ -81,7 +81,7 @@ def plotResult(pred, inp, tar, z, model_save_dir, save_folder, fs, filename):
         ax.plot(time, y, label='target', alpha=0.9)
         ax.plot(time, predictions, label='pred', alpha=0.7)
         ax.legend(loc='upper right')
-        ax.set_title('Drive: ' +  str(z[int(i * fs * seconds)]))
+        ax.set_title('Drive: ' + str(z[int(i * fs * seconds)]))
         fig.savefig(model_save_dir + '/' + save_folder + '/plot' +
                     filename + str(i) + '.pdf', format='pdf')
         plt.close('all')
