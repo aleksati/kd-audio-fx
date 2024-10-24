@@ -42,7 +42,7 @@ elif USER == 'RIC':
 elif USER == 'PC':
     # the directory in which datasets are stored
     data_dir = '../../Files'
-    # where to store the results ++
+    # where to store the results
     model_save_dir = '../../TrainedModels'  # Riccardo's folder
 
 # name of the model to be used
