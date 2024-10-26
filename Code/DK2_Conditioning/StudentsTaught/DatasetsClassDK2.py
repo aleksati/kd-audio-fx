@@ -54,7 +54,6 @@ class DataGeneratorPicklesTrain(Sequence):
 
         # loading the conditioning values
         z = np.array(Z['z'], dtype=np.float32)
-
         return x, yh, z, lim, weights, weights_film
 
     def on_epoch_end(self):
@@ -73,8 +72,9 @@ class DataGeneratorPicklesTrain(Sequence):
 
     def __getitem__(self, idx):
         # Initializing input, target, and conditioning batches
-        X = np.empty((self.batch_size, self.input_size))
-        YH = np.empty((self.batch_size, 8))
+        X = np.zeros((self.batch_size, self.input_size))
+        YH = np.zeros((self.batch_size, 8))
+        Z = np.zeros((self.batch_size, self.conditioning_size))
 
         # get the indices of the requested batch
         indices = self.indices[idx*self.batch_size:(idx+1)*self.batch_size]
@@ -84,9 +84,11 @@ class DataGeneratorPicklesTrain(Sequence):
         for t in range(indices[0], indices[-1] + 1, 1):
             X[c, :] = np.array(self.x[t - self.input_size+1: t+1])
             YH[c, :] = np.array(self.yh[t])
+            Z[c, :] = np.array(self.z[t])
+
             c = c + 1
 
-        return X, YH
+        return [Z, X], YH
 
 class DataGeneratorPicklesTest(Sequence):
 
@@ -145,7 +147,9 @@ class DataGeneratorPicklesTest(Sequence):
 
         # loading the conditioning values
         z = np.array(Z['z'], dtype=np.float32)
-        z = np.repeat(z, rep, axis=0)[:lim]
+        if len(z[:, 0]) < 10:
+            z = np.repeat(z, rep, axis=0)
+        z = z[:lim]
 
         return x, y, z, rep, lim
 
@@ -165,14 +169,14 @@ class DataGeneratorPicklesTest(Sequence):
 
     def __getitem__(self, idx):
         # Initializing input, target, and conditioning batches
-        X = np.empty((self.batch_size, self.input_size))
-        Y = np.empty((self.batch_size, 1))
+        X = np.zeros((self.batch_size, self.input_size))
+        Y = np.zeros((self.batch_size, 1))
 
         # get the indices of the requested batch
         indices = self.indices[idx*self.batch_size:(idx+1)*self.batch_size]
         c = 0
 
-        Z = np.empty((self.batch_size, self.conditioning_size))
+        Z = np.zeros((self.batch_size, self.conditioning_size))
         # fill the batches
         for t in range(indices[0], indices[-1]+1, 1):
             X[c, :] = np.array(self.x[t - self.input_size+1: t+1])

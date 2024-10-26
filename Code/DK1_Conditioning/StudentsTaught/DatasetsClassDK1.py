@@ -64,7 +64,7 @@ class DataGeneratorPickles(Sequence):
         # loading the conditioning values
         z = np.array(Z['z'], dtype=np.float32)
         if len(z[:, 0]) < 10:
-            z = np.repeat(z, rep, axis=0)[:lim]
+            z = np.repeat(z, rep, axis=0)
         z = z[:lim]
         return x, y, z, rep, lim
 
