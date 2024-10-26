@@ -17,8 +17,6 @@ CONDITIONING = 0
 
 # number of epochs
 EPOCHS = 1  # 300
-# number of parameters
-PARAMETER_NUMBER = 0
 # batch size
 BATCH_SIZE = 2400
 # initial learning rate
@@ -58,7 +56,7 @@ name = '_student_taught'
 for unit in units:
     # we are a student being taught
 
-    print("######### Preparing for Student taught training (DK2) #########")
+    print("######### Preparing for Student taught training (DK2) conditioned#########")
     print("\n")
 
     trainDK2(data_dir=data_dir,
@@ -71,6 +69,5 @@ for unit in units:
              units=unit,
              epochs=EPOCHS,
              model=model,
-             parameter_numbers=PARAMETER_NUMBER,
              conditioning_size=CONDITIONING,
              inference=INFERENCE)

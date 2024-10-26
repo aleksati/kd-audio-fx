@@ -60,9 +60,7 @@ def trainDK2(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    model = create_model_LSTM_DK2(conditioning_size=conditioning_size,
-                                  input_dim=1, units=units, b_size=batch_size, training=True)
-
+    model = create_model_LSTM_DK2(input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size, training=True)
     # define callbacks: where to store the weights
     callbacks = []
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
@@ -160,8 +158,7 @@ def trainDK2(**kwargs):
     sys.stdout.flush()
 
     # re-create the model to include last layer
-    model = create_model_LSTM_DK2(
-        input_dim=1, units=units, b_size=batch_size, training=False)
+    model = create_model_LSTM_DK2(input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size, training=False)
 
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)
@@ -173,7 +170,7 @@ def trainDK2(**kwargs):
         print("Something is wrong.")
 
     model.layers[-1].set_weights(train_gen.weights)
-    model.layers[-2].set_weights(train_gen.weights_film)
+    #model.layers[-2].set_weights(train_gen.weights_film)
 
     # reset the states before predicting
     model.reset_states()
