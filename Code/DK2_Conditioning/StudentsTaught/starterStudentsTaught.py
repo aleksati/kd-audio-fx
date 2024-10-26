@@ -7,7 +7,7 @@ main script
 """
 USER = "RIC"
 # USER = "ALE"
-# USER == 'PC'
+# USER = 'PC'
 
 DK = 'DK2_'
 print('DK2 phase')
