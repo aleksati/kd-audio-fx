@@ -21,7 +21,7 @@ def create_model_LSTM_DK1(units, input_dim=1, conditioning_size=0, b_size=2400):
         b_size, conditioning_size), name='cond_inputs')
 
     outputs = FiLM(in_size=units)(outputs[:, :, 0], cond_inputs)
-    outputs = tf.expand_dims(outputs, axis=-1)
+    outputs = tf.expand_dims(outputs, axis=1)
 
     outputs = tf.keras.layers.LSTM(
         8, stateful=True, return_sequences=False, name="LSTM2")(outputs)

@@ -16,28 +16,28 @@ def create_model_LSTM_DK1(input_dim=1, conditioning_size=0, b_size=2399):
     cond_inputs = tf.keras.layers.Input(batch_shape=(b_size, conditioning_size), name='cond_inputs')
 
 
-    outputs = tf.keras.layers.LSTM(8, stateful=True, return_sequences=True, return_state=False, name='LSTM')(
+    outputs = tf.keras.layers.LSTM(8, stateful=True, return_sequences=True, name='LSTM')(
         inputs)
 
-    outputs = tf.keras.layers.LSTM(16, stateful=True, return_sequences=True, return_state=False, name='LSTM1')(
+    outputs = tf.keras.layers.LSTM(16, stateful=True, return_sequences=True, name='LSTM1')(
         outputs)
 
-    outputs = tf.keras.layers.LSTM(32, stateful=True, return_sequences=True, return_state=False, name='LSTM2')(
+    outputs = tf.keras.layers.LSTM(32, stateful=True, return_sequences=True, name='LSTM2')(
         outputs)
 
-    outputs = tf.keras.layers.LSTM(64, stateful=True, return_sequences=True, return_state=False, name='LSTM3')(
+    outputs = tf.keras.layers.LSTM(64, stateful=True, return_sequences=True, name='LSTM3')(
         outputs)
 
-    outputs = tf.keras.layers.LSTM(32, stateful=True, return_sequences=True, return_state=False, name='LSTM4')(
+    outputs = tf.keras.layers.LSTM(32, stateful=True, return_sequences=True, name='LSTM4')(
         outputs)
 
     outputs = FiLM(in_size=32)(outputs[:, :, 0], cond_inputs)
-    outputs = tf.expand_dims(outputs, axis=-1)
+    outputs = tf.expand_dims(outputs, axis=1)
 
-    outputs = tf.keras.layers.LSTM(16, stateful=True, return_sequences=True, return_state=False, name='LSTM5')(
+    outputs = tf.keras.layers.LSTM(16, stateful=True, return_sequences=True, name='LSTM5')(
         outputs)
 
-    outputs = tf.keras.layers.LSTM(8, stateful=True, return_sequences=False, return_state=False, name='LastLSTM')(
+    outputs = tf.keras.layers.LSTM(8, stateful=True, return_sequences=False, name='LastLSTM')(
         outputs)
 
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
