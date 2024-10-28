@@ -21,9 +21,8 @@ def create_model_LSTM_DK2(units, input_dim=1, b_size=2400, training=True):
 
     if not training:
         outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
-        model = tf.keras.models.Model(inputs, outputs)
-    else:
-        model = tf.keras.models.Model(inputs, outputs)
+
+    model = tf.keras.models.Model(inputs, outputs)
 
     model.summary()
 
