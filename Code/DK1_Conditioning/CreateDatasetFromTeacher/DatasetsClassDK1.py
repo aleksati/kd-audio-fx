@@ -70,7 +70,7 @@ class DataGeneratorPickles(Sequence):
         self.indices = np.arange(self.input_size-1, self.x.shape[0]+1)
 
     def __len__(self):
-        # compute the iteration needed number of iteration before conclude one epoch
+        # compute the needed number of iteration before conclude one epoch
         return int(self.x.shape[0] / self.batch_size)
 
     def __call__(self):
