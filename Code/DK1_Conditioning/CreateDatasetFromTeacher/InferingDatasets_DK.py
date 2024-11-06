@@ -64,8 +64,20 @@ def trainDK1(**kwargs):
         # if no weights are found,there is something wrong
         raise ValueError("Something is wrong.")
 
-    last_layer_weights = model.layers[-1].get_weights()
-    film_layer_weights = model.layers[-2].get_weights()
+
+    if model.layers[-1].name == 'OutLayer':
+        last_layer_weights = model.layers[-1].get_weights()
+    elif model.layers[-2].name == 'OutLayer':
+        last_layer_weights = model.layers[-2].get_weights()
+    elif model.layers[-3].name == 'OutLayer':
+        last_layer_weights = model.layers[-3].get_weights()
+
+    if model.layers[-1].name == 'fi_lm':
+        film_layer_weights = model.layers[-1].get_weights()
+    elif model.layers[-2].name == 'fi_lm':
+        film_layer_weights = model.layers[-2].get_weights()
+    elif model.layers[-3].name == 'fi_lm':
+        film_layer_weights = model.layers[-3].get_weights()
 
     print('Saving the new dataset...')
     # create the DataGenerator object to retrieve the data in the training set
