@@ -26,7 +26,7 @@ def create_model_LSTM_DK(input_dim=1, conditioning_size=1, b_size=2400):
 
     outputs_film = FiLM(in_size=8)(outputs6, cond_inputs)
 
-    outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
+    outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs_film)
 
     model = tf.keras.models.Model([cond_inputs, inputs], [outputs, outputs6, outputs_film])
 

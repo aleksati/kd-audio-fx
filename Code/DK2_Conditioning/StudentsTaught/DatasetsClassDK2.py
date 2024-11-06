@@ -23,7 +23,7 @@ class DataGeneratorPicklesTrain(Sequence):
         self.conditioning_size = conditioning_size
 
         # prepare the input, taget and conditioning matrix
-        self.x, self.yh, self.z, lim, self.weights, self.weights_film = self.prepareXYZ(
+        self.x, self.yh, self.y_film, self.z, lim, self.weights, self.weights_film = self.prepareXYZ(
             data_dir, filename)
 
         self.training_steps = (lim // self.batch_size)
@@ -37,6 +37,7 @@ class DataGeneratorPicklesTrain(Sequence):
         Z = pickle.load(file_data)
         x = np.array(Z['x'][:, :], dtype=np.float32)
         yh = np.array(Z['y_l6'], dtype=np.float32)
+        y_film = np.array(Z['y_film'], dtype=np.float32)
         #yh = np.array(Z['y_l5'], dtype=np.float32)
         #yh = np.array(Z['y_l4'], dtype=np.float32)
         weights = Z['w'] # those are the weight of the output layer
@@ -54,7 +55,7 @@ class DataGeneratorPicklesTrain(Sequence):
 
         # loading the conditioning values
         z = np.array(Z['z'], dtype=np.float32)
-        return x, yh, z, lim, weights, weights_film
+        return x, yh, y_film, z, lim, weights, weights_film
 
     def on_epoch_end(self):
         # create/reset the vector containing the indices of the batches
@@ -74,6 +75,7 @@ class DataGeneratorPicklesTrain(Sequence):
         # Initializing input, target, and conditioning batches
         X = np.zeros((self.batch_size, self.input_size))
         YH = np.zeros((self.batch_size, 8))
+        Y_film = np.zeros((self.batch_size, 8))
         Z = np.zeros((self.batch_size, self.conditioning_size))
 
         # get the indices of the requested batch
@@ -84,11 +86,12 @@ class DataGeneratorPicklesTrain(Sequence):
         for t in range(indices[0], indices[-1] + 1, 1):
             X[c, :] = np.array(self.x[t - self.input_size+1: t+1])
             YH[c, :] = np.array(self.yh[t])
+            Y_film[c, :] = np.array(self.y_film[t])
             Z[c, :] = np.array(self.z[t])
 
             c = c + 1
 
-        return [Z, X], YH
+        return [Z, X], [YH, Y_film]
 
 class DataGeneratorPicklesTest(Sequence):
 
