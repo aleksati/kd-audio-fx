@@ -31,17 +31,16 @@ def create_model_LSTM_DK(input_dim=1, conditioning_size=1, b_size=2400):
     outputs4 = tf.keras.layers.LSTM(
         32, stateful=True, return_sequences=True, name="LSTM4")(outputs3)
 
-    outputs4 = FiLM(in_size=32)(outputs4[:, :, 0], cond_inputs)
-    outputs4 = tf.expand_dims(outputs4, axis=1)
-
     outputs5 = tf.keras.layers.LSTM(
         16, stateful=True, return_sequences=True, name="LSTM5")(outputs4)
     outputs6 = tf.keras.layers.LSTM(
         8, stateful=True, return_sequences=False, name="LastLSTM")(outputs5)
 
+    outputs_film = FiLM(in_size=8)(outputs6, cond_inputs)
+
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs6)
 
-    model = tf.keras.models.Model([cond_inputs, inputs], [outputs, outputs6])
+    model = tf.keras.models.Model([cond_inputs, inputs], [outputs, outputs6, outputs_film])
 
     model.summary()
 

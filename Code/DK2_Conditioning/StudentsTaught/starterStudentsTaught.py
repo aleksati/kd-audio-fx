@@ -13,7 +13,7 @@ DK = 'DK2_'
 print('DK2 phase')
 
 # number of conditioning parameters
-CONDITIONING = 0
+CONDITIONING = 1
 
 # number of epochs
 EPOCHS = 1  # 300
@@ -21,7 +21,7 @@ EPOCHS = 1  # 300
 BATCH_SIZE = 2400
 # initial learning rate
 LR = 3e-4
-INFERENCE = False
+INFERENCE = True
 
 print('Welcome back ', USER)
 

@@ -32,7 +32,7 @@ elif USER == 'RIC':
     # the directory in which datasets are stored
     # Riccardo's folder
     data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK'
-    # where to store the results ++
+    # where to store the results
     model_save_dir = '../../../Models'  # Riccardo's folder
 elif USER == 'PC':
     # the directory in which datasets are stored

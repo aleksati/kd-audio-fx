@@ -70,6 +70,11 @@ def trainDK2(**kwargs):
     test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle',
                                         input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
+    # create the DataGenerator object to retrieve the data in the training set
+    train_gen = DataGeneratorPicklesTrain(data_dir, dataset_train + '_train.pickle',
+                                          input_size=input_dim, conditioning_size=conditioning_size,
+                                          batch_size=batch_size)
+
     # if inference is True, it jump directly to the inference section without train the model
     if not inference:
         callbacks += [ckpt_callback, ckpt_callback_latest]
@@ -82,12 +87,10 @@ def trainDK2(**kwargs):
             # if no weights are found,the weights are random generated
             print("Initializing random weights.")
 
-        # create the DataGenerator object to retrive the data in the training set
-        train_gen = DataGeneratorPicklesTrain(data_dir, dataset_train + '_train.pickle',
-                                              input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+
 
         # the number of total training steps
-        training_steps = train_gen.training_steps*30
+        training_steps = train_gen.trainig_steps*30
         # define the Adam optimizer with initial learning rate, training steps
         opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
             learning_rate, training_steps), clipnorm=1)
@@ -130,7 +133,7 @@ def trainDK2(**kwargs):
             # if not count is increased by one and if equal to 20 the training is stopped
             else:
                 count = count + 1
-                if count == 20:
+                if count == 50:
                     break
 
             avg_time_epoch = (time.time() - start)
