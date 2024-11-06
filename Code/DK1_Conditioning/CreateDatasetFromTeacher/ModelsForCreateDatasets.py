@@ -10,35 +10,23 @@ Initializes a data generator object
 
 
 def create_model_LSTM_DK(input_dim=1, conditioning_size=1, b_size=2400):
-
     # Defining inputs
     inputs = tf.keras.layers.Input(
         batch_shape=(b_size, 1, input_dim), name='input')
 
-    cond_inputs = tf.keras.layers.Input(batch_shape=(
-            b_size, conditioning_size), name='cond_inputs')
+    cond_inputs = tf.keras.layers.Input(batch_shape=(b_size, conditioning_size), name='cond_inputs')
 
-    # add layers to the model dynamically with the units from the trial.
-    outputs0 = tf.keras.layers.LSTM(
-        8, stateful=True, return_sequences=True, name="LSTM0")(inputs)
-    outputs1 = tf.keras.layers.LSTM(
-        16, stateful=True, return_sequences=True, name="LSTM1")(outputs0)
-    outputs2 = tf.keras.layers.LSTM(
-        32, stateful=True, return_sequences=True, name="LSTM2")(outputs1)
+    outputs = tf.keras.layers.LSTM(8, stateful=True, return_sequences=True, name='LSTM')(inputs)
 
-    outputs3 = tf.keras.layers.LSTM(
-        64, stateful=True, return_sequences=True, name="LSTM3")(outputs2)
-    outputs4 = tf.keras.layers.LSTM(
-        32, stateful=True, return_sequences=True, name="LSTM4")(outputs3)
+    outputs = tf.keras.layers.LSTM(32, stateful=True, return_sequences=True, name='LSTM3')(outputs)
 
-    outputs5 = tf.keras.layers.LSTM(
-        16, stateful=True, return_sequences=True, name="LSTM5")(outputs4)
-    outputs6 = tf.keras.layers.LSTM(
-        8, stateful=True, return_sequences=False, name="LastLSTM")(outputs5)
+    outputs = tf.keras.layers.LSTM(32, stateful=True, return_sequences=True, name='LSTM5')(outputs)
+
+    outputs6 = tf.keras.layers.LSTM(8, stateful=True, return_sequences=False, name='LSTM7')(outputs)
 
     outputs_film = FiLM(in_size=8)(outputs6, cond_inputs)
 
-    outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs6)
+    outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
 
     model = tf.keras.models.Model([cond_inputs, inputs], [outputs, outputs6, outputs_film])
 
