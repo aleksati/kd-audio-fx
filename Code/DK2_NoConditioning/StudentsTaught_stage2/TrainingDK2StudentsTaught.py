@@ -1,18 +1,18 @@
 from Metrics import ESR, RMSE, STFT_loss
-from ModelsForStudentsTaught import create_model_LSTM_DK1
+from ModelsForStudentsTaught import create_model_LSTM_DK2
 from UtilsGridSearch import filterAudio
 from UtilsForTrainingsGridSearch import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 import matplotlib.pyplot as plt
 import time
 import random
 import numpy as np
-from DatasetsClassDK1 import DataGeneratorPickles
+from DatasetsClassDK2 import DataGeneratorPicklesForWeights, DataGeneratorPickles
 import tensorflow as tf
 import os
 import sys
 
 
-def trainDK1(**kwargs):
+def trainDK2(**kwargs):
     """
       :param data_dir: the directory in which dataset are stored [string]
       :param save_folder: the directory in which the models are saved [string]
@@ -60,8 +60,8 @@ def trainDK1(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    model = create_model_LSTM_DK1(
-        input_dim=1, units=units, conditioning_size=conditioning_size, b_size=batch_size)
+    model = create_model_LSTM_DK2(
+        input_dim=1, units=units, b_size=batch_size, training=False)
 
     # define callbacks: where to store the weights
     callbacks = []
@@ -69,7 +69,7 @@ def trainDK1(**kwargs):
         model_save_dir, save_folder)
 
     # create the DataGenerator object to retrive the data in the test set
-    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle',
+    test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle',
                                     input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
     # if inference is True, it jump directly to the inference section without train the model
@@ -84,8 +84,8 @@ def trainDK1(**kwargs):
             # if no weights are found,the weights are random generated
             print("Initializing random weights.")
 
-        # create the DataGenerator object to retrive the data in the training set
-        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
+        # create the DataGenerator object to retrieve the data in the training set
+        train_gen = DataGeneratorPicklesForWeights(data_dir, dataset_train + '_train.pickle',
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
         # the number of total training steps
@@ -96,8 +96,7 @@ def trainDK1(**kwargs):
 
         # compile the model with the optimizer and selected loss function
         if dataset_test == 'DrDrive_DK':
-            #model.compile(loss='mae', optimizer=opt)
-            model.compile(loss='mse', optimizer=opt)
+            model.compile(loss='mae', optimizer=opt)
         elif dataset_test == 'CL1B_DK':
             model.compile(loss='mse', optimizer=opt)
 
@@ -118,7 +117,7 @@ def trainDK1(**kwargs):
             model.reset_states()
             print(model.optimizer.learning_rate)
 
-            results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=test_gen,
+            results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=train_gen,
                                 callbacks=callbacks)
 
             # store the training and validation loss
@@ -160,6 +159,7 @@ def trainDK1(**kwargs):
     sys.stdout.write("\n")
     sys.stdout.flush()
 
+
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)
     if best is not None:
@@ -168,6 +168,13 @@ def trainDK1(**kwargs):
     else:
         # if no weights are found,there is something wrong
         print("Something is wrong.")
+
+    dataset_train = 'DK_Teacher_' + dataset_train
+    train_gen = DataGeneratorPicklesTrainForWeights(data_dir, dataset_train + '_train.pickle',
+                                         input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+
+
+    model.layers[-1].set_weights(train_gen.weights)
 
     # reset the states before predicting
     model.reset_states()
