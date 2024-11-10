@@ -69,7 +69,7 @@ def trainDK2(**kwargs):
         model_save_dir, save_folder)
 
     # create the DataGenerator object to retrive the data in the test set
-    test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle',
+    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle',
                                     input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
     # if inference is True, it jump directly to the inference section without train the model
@@ -170,7 +170,7 @@ def trainDK2(**kwargs):
         print("Something is wrong.")
 
     dataset_train = 'DK_Teacher_' + dataset_train
-    train_gen = DataGeneratorPicklesTrainForWeights(data_dir, dataset_train + '_train.pickle',
+    train_gen = DataGeneratorPicklesForWeights(data_dir, dataset_train + '_train.pickle',
                                          input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
 
 
