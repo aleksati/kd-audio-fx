@@ -99,7 +99,7 @@ def trainDK2(**kwargs):
             model.layers[-3].set_weights(weight_gen.weights)
 
         # the number of total training steps
-        training_steps = train_gen.trainig_steps*30
+        training_steps = train_gen.training_steps*30
         # define the Adam optimizer with initial learning rate, training steps
         opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
             learning_rate, training_steps), clipnorm=1)
