@@ -178,20 +178,6 @@ def trainDK2(**kwargs):
         # if no weights are found,there is something wrong
         print("Something is wrong.")
 
-    if model.layers[-1].name == 'OutLayer':
-        model.layers[-1].set_weights(train_gen.weights)
-    elif model.layers[-2].name == 'OutLayer':
-        model.layers[-2].set_weights(train_gen.weights)
-    elif model.layers[-3].name == 'OutLayer':
-        model.layers[-3].set_weights(train_gen.weights)
-
-    # if model.layers[-1].name == 'fi_lm':
-    #     model.layers[-1].set_weights(train_gen.weights_film)
-    # elif model.layers[-2].name == 'fi_lm':
-    #     model.layers[-2].set_weights(train_gen.weights_film)
-    # elif model.layers[-3].name == 'fi_lm':
-    #     model.layers[-3].set_weights(train_gen.weights_film)
-
     # reset the states before predicting
     model.reset_states()
     # predict the test set

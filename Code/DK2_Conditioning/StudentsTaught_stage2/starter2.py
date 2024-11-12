@@ -21,7 +21,7 @@ EPOCHS = 300
 BATCH_SIZE = 2400
 # initial learning rate
 LR = 3e-4
-INFERENCE = True
+INFERENCE = False
 
 print('Welcome back ', USER)
 
