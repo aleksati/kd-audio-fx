@@ -28,12 +28,12 @@ def data_preparation():
             tar = Code.audio_format.pcm2float(audio)
         #
     #
-            inps = np.array(inp, dtype=np.float32)
-            tars = np.array(tar, dtype=np.float32)
+            inps = np.array(inp, dtype=np.float32).reshape(1, -1)
+            tars = np.array(tar, dtype=np.float32).reshape(1, -1)
 
             data = {'y': tars, 'x': inps}
 
-            file_data = open(os.path.normpath('/'.join([SAVE_DIR, device + folder + '.pickle'])), 'wb')
+            file_data = open(os.path.normpath('/'.join([SAVE_DIR, device + '_' + folder + '.pickle'])), 'wb')
             pickle.dump(data, file_data)
             file_data.close()
 
