@@ -47,7 +47,8 @@ model = 'LSTM_'
 # name of dataset to be used
 dataset = "DrDrive_DK"
 #dataset = "CL1B_DK"
-datasets = ["ht1-" , "muff-"] # 'CL1B_DK'  #
+#datasets = ["ht1-", "muff-"] # 'CL1B_DK'  #
+datasets = ["DrDrive_DK"] # 'CL1B_DK'  #
 
 
 units = [8, 16, 32, 64]
