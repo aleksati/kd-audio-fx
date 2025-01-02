@@ -5,19 +5,19 @@ from TrainingDKStudent import trainDK1
 main script
 
 """
-USER = "RIC"
+#USER = "RIC"
 #USER = "ALE"
-
+USER = "PC"
 
 DK = 'DK1_'
 print('DK1 phase')
 
 # number of epochs
-EPOCHS = 300
+EPOCHS = 1000
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size
-BATCH_SIZE = 2400
+BATCH_SIZE = 8
 # initial learning rate
 LR = 3e-4
 INFERENCE = False
@@ -28,7 +28,7 @@ if USER == 'ALE':
     # the directory in which datasets are stored
     data_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\Datasets'
     # where to store the results ++
-    model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\TrainedModels\\DK2_NoConditioning'
+    model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\TrainedModels\\DK2'
 elif USER == 'RIC':
     # the directory in which datasets are stored
     data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
@@ -46,25 +46,30 @@ model = 'LSTM_'
 # name of dataset to be used
 dataset = "DrDrive_DK"
 #dataset = "CL1B_DK"
-dataset_train = dataset
+datasets = ["ht1-" , "muff-"] # 'CL1B_DK'  #
 
-units = [2, 4, 8, 16, 32, 64]
+
+units = [8, 16, 32, 64]
 name = '_student_self_taught'
 
-for unit in units:
-    # we are a student being taught
-    print("######### Preparing for Student taught training #########")
-    print("\n")
+for dataset in datasets:
+    dataset_train = dataset
 
-    trainDK1(data_dir=data_dir,
-             save_folder=DK + model+dataset+str(unit) + name,
-             model_save_dir=model_save_dir,
-             dataset_train=dataset_train,
-             dataset_test=dataset,
-             batch_size=BATCH_SIZE,
-             learning_rate=LR,
-             units=unit,
-             epochs=EPOCHS,
-             model=model,
-             parameter_numbers=PARAMETER_NUMBER,
-             inference=INFERENCE)
+    for unit in units:
+        # we are a student being taught
+        print("######### Preparing for Student taught training #########")
+        print("\n")
+
+        trainDK1(data_dir=data_dir,
+                 save_folder=DK + model+dataset+str(unit) + name,
+                 model_save_dir=model_save_dir,
+                 dataset_train=dataset_train,
+                 dataset_test=dataset,
+                 batch_size=BATCH_SIZE,
+                 mini_batch_size=2048,
+                 learning_rate=LR,
+                 units=unit,
+                 epochs=EPOCHS,
+                 model=model,
+                 parameter_numbers=PARAMETER_NUMBER,
+                 inference=INFERENCE)

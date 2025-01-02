@@ -8,48 +8,36 @@ Initializes a data generator object
 """
 
 
-def create_model_LSTM_DK1(input_dim=1, conditioning_size=1, b_size=2399):
+def create_model_LSTM_DK1(units=512, mini_batch_size=2048, input_dim=1, b_size=2399):
 
     # Defining inputs
     inputs = tf.keras.layers.Input(
-        batch_shape=(b_size, input_dim), name='input')
-    cond_inputs = tf.keras.layers.Input(batch_shape=(b_size, conditioning_size), name='cond_inputs')
+        batch_shape=(b_size, mini_batch_size, input_dim), name='input')
 
-    inputs = tf.expand_dims(inputs, axis=1)
-
-    outputs = tf.keras.layers.LSTM(512, stateful=True, return_sequences=True, name='LSTM')(
+    outputs = tf.keras.layers.LSTM(units, stateful=False, return_sequences=True, name='LSTM')(
         inputs)
 
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
-    model = tf.keras.models.Model([cond_inputs, inputs], outputs)
+    model = tf.keras.models.Model(inputs, outputs)
 
 
     model.summary()
 
     return model
 
-def __create_model_LSTM_DK1(trial, input_dim=1, conditioning_size=0, b_size=2399):
+def create_model_LSTM_DK1_morelay(units=[8, 16, 32, 64, 32, 16, 8], mini_batch_size=2048, input_dim=1, b_size=2399):
 
     # Defining inputs
     inputs = tf.keras.layers.Input(
-        batch_shape=(b_size, 1, input_dim), name='input')
+        batch_shape=(b_size, mini_batch_size, input_dim), name='input')
 
-    # add layers to the model dynamically with the units from the trial.
-    for i, unit in enumerate(trial):
-        # for the first loop, attach the layer to the input layer, otherwise, attach to previous layer.
-        if i == 0:
-            tail = inputs
-        else:
-            tail = outputs
-
-        if len(trial)-1 == i:
-            # if the last layer add new layer but with  return_sequences=False
-            outputs = tf.keras.layers.LSTM(
-                unit, stateful=True, return_sequences=False, name="lastLSTM")(tail)
-        else:
-            # add new layer
-            outputs = tf.keras.layers.LSTM(
-                unit, stateful=True, return_sequences=True, name="LSTM{}".format(i))(tail)
+    outputs = tf.keras.layers.LSTM(units[0], return_sequences=True, name="LSTM0")(inputs)
+    outputs = tf.keras.layers.LSTM(units[1], return_sequences=True, name="LSTM1")(outputs)
+    outputs = tf.keras.layers.LSTM(units[2], return_sequences=True, name="LSTM2")(outputs)
+    outputs = tf.keras.layers.LSTM(units[3], return_sequences=True, name="LSTM3")(outputs)
+    outputs = tf.keras.layers.LSTM(units[4], return_sequences=True, name="LSTM4")(outputs)
+    outputs = tf.keras.layers.LSTM(units[5], return_sequences=True, name="LSTM5")(outputs)
+    outputs = tf.keras.layers.LSTM(units[6], return_sequences=True, name="LastLSTM")(outputs)
 
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
 

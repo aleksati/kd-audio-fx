@@ -1,4 +1,5 @@
 from Metrics import ESR, RMSE, STFT_loss
+from LossFunctions import combinedLoss
 from ModelsForGridSearch import create_model_LSTM_DK1
 from UtilsGridSearch import filterAudio
 from UtilsForTrainingsGridSearch import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
@@ -43,7 +44,7 @@ def trainDK1(**kwargs):
     epochs = kwargs.get('epochs', 60)
     fs = kwargs.get('fs', 48000)
     conditioning_size = kwargs.get('conditioning_size', 0)
-    trial = kwargs.get("trial", [])
+    units = kwargs.get("units", 2)
 
     # set all the seed in case reproducibility is desired
     np.random.seed(42)
@@ -87,17 +88,18 @@ def trainDK1(**kwargs):
 
         # create the DataGenerator object to retrive the data in the training set
         train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
-                                         input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+                                         input_size=input_dim, batch_size=batch_size)
 
         # the number of total training steps
-        training_steps = train_gen.training_steps*30
+        #training_steps = train_gen.training_steps*30
         # define the Adam optimizer with initial learning rate, training steps
-        opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
-            learning_rate, training_steps), clipnorm=1)
+        #opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(learning_rate, training_steps), clipnorm=1)
+        opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
 
         # compile the model with the optimizer and selected loss function
         if dataset_test == 'DrDrive_DK':
-            model.compile(loss='mae', optimizer=opt)
+            #model.compile(loss='mae', optimizer=opt)
+            model.compile(loss=combinedLoss(), optimizer=opt)
         elif dataset_test == 'CL1B_DK':
             model.compile(loss='mse', optimizer=opt)
 
@@ -107,7 +109,7 @@ def trainDK1(**kwargs):
         best_loss = 1e9
         # counting for early stopping
         count = 0
-
+        count2 = 0
         # training loop
         for i in range(0, epochs, 1):
             # start the timer for each epoch
