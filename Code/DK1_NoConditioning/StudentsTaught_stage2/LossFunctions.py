@@ -1,6 +1,24 @@
 import tensorflow as tf
 from tensorflow.keras import backend as K
 
+class combinedLoss(tf.keras.losses.Loss):
+    def __init__(self, name="combinedLoss", **kwargs):
+        super().__init__(name=name, **kwargs)
+        self.DCloss = DCloss()
+        self.ESRloss = ESRloss()
+
+    def call(self, y_true, y_pred):
+
+        loss = self.DCloss(y_true, y_pred) + self.ESRloss(y_true, y_pred)
+
+        return loss
+
+    def get_config(self):
+        config = {
+
+        }
+        base_config = super().get_config()
+        return {**base_config, **config}
 
 class DCloss(tf.keras.losses.Loss):
     def __init__(self, delta=1e-6, name="ESR", **kwargs):
@@ -8,9 +26,9 @@ class DCloss(tf.keras.losses.Loss):
         self.delta = 0.00001
     def call(self, y_true, y_pred):
 
-        #loss = tf.divide(K.mean(K.square(y_true - y_pred)), K.mean(K.square(y_true) + self.delta))
+        loss = tf.divide(K.mean(K.square(y_true - y_pred)), K.mean(K.square(y_true) + self.delta))
         #loss = (K.mean(K.square(y_true - y_pred)))
-        loss = K.abs((K.mean((y_true))) - (K.mean((y_pred))))
+        #loss = K.abs((K.mean((y_true))) - (K.mean((y_pred))))
         return loss
 
     def get_config(self):

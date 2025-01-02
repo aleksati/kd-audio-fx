@@ -3,7 +3,7 @@ import os
 import numpy as np
 from tensorflow.keras.utils import Sequence
 from scipy.signal.windows import tukey
-from UtilsStudent import filterAudio
+from Utils import filterAudio
 
 
 class DataGeneratorPickles(Sequence):

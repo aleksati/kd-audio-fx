@@ -16,6 +16,8 @@ def create_model_LSTM_DK1(units=512, mini_batch_size=2048, input_dim=1, b_size=2
 
     outputs = tf.keras.layers.LSTM(units, stateful=False, return_sequences=True, name='LSTM')(
         inputs)
+    outputs = tf.keras.layers.LSTM(8, stateful=False, return_sequences=True, name='LSTM')(
+        outputs)
 
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
     model = tf.keras.models.Model(inputs, outputs)

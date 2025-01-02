@@ -1,7 +1,7 @@
 from Metrics import ESR, RMSE, STFT_loss
 from LossFunctions import combinedLoss
 from ModelsForStudentsTaught import create_model_LSTM_DK1
-from UtilsGridSearch import filterAudio
+from Utils import filterAudio
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 import matplotlib.pyplot as plt
 import time
@@ -71,9 +71,11 @@ def trainDK1(**kwargs):
         model_save_dir, save_folder)
 
     # create the DataGenerator object to retrive the data in the test set
-    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size,
+    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle',
+                                    mini_batch_size=mini_batch_size,
                                     input_size=input_dim,
                                     batch_size=batch_size)
+
     # if inference is True, it jump directly to the inference section without train the model
     if not inference:
         callbacks += [ckpt_callback, ckpt_callback_latest]
