@@ -2,7 +2,7 @@ from Metrics import ESR, RMSE, STFT_loss
 from LossFunctions import combinedLoss
 from ModelsForStudentsTaught import create_model_LSTM_DK1
 from Utils import filterAudio
-from UtilsForTrainingsGridSearch import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
+from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 import matplotlib.pyplot as plt
 import time
 import random

@@ -9,8 +9,8 @@ main script
 #USER = "ALE"
 USER = "PC"
 
-DK = 'DK1_'
-print('DK1 phase')
+DK = 'DK2_'
+print('DK2 phase')
 
 # number of epochs
 EPOCHS = 1000
