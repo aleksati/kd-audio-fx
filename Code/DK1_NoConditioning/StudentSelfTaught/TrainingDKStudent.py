@@ -120,7 +120,7 @@ def trainDK1(**kwargs):
             print('epochs:', i)
 
             # reset the model's states
-            model.reset_states()
+            #model.reset_states()
             print(model.optimizer.learning_rate)
 
             results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=test_gen,
@@ -181,7 +181,7 @@ def trainDK1(**kwargs):
         print("Something is wrong.")
 
     # reset the states before predicting
-    model.reset_states()
+    #model.reset_states()
     # predict the test set
     predictions = model.predict(test_gen, verbose=0).flatten()
 

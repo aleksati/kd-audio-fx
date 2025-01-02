@@ -128,14 +128,19 @@ def trainDK1(**kwargs):
             loss_val[i] = results.history['val_loss'][-1]
             print(results.history['val_loss'][-1])
 
-            # if validation loss is smaller then the best loss, the early stopping counting is reset
             if results.history['val_loss'][-1] < best_loss:
                 best_loss = results.history['val_loss'][-1]
                 count = 0
+                count2 = 0
             # if not count is increased by one and if equal to 20 the training is stopped
             else:
                 count = count + 1
-                if count == 20:
+                count2 = count2 + 1
+
+                if count2 == 5:
+                    model.optimizer.learning_rate = model.optimizer.learning_rate / 2
+                    count2 = 0
+                if count == 50:
                     break
 
             avg_time_epoch = (time.time() - start)
@@ -172,15 +177,14 @@ def trainDK1(**kwargs):
         print("Something is wrong.")
 
     # reset the states before predicting
-    model.reset_states()
+    #model.reset_states()
     # predict the test set
-    predictions = model.predict(test_gen, verbose=0).reshape(-1)
+    predictions = model.predict(test_gen, verbose=0).flatten()
 
     # plot and render the output audio file, together with the input and target
-    predictWaves(predictions, test_gen.x,  test_gen.y,
-                 model_save_dir, save_folder, fs, '0')
+    predictWaves(predictions, test_gen.x[0], test_gen.y[0], model_save_dir, save_folder, fs, '0')
     predictions = np.array(filterAudio(predictions), dtype=np.float32)
-    y = np.array(filterAudio(test_gen.y), dtype=np.float32)
+    y = np.array(filterAudio(test_gen.y[0, :len(predictions)]), dtype=np.float32)
 
     # compute the metrics: mse, mae, esr and rmse
     mse = tf.get_static_value(
