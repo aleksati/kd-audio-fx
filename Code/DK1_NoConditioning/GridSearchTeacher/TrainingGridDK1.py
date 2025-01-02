@@ -1,6 +1,6 @@
 from Metrics import ESR, RMSE, STFT_loss
 from LossFunctions import combinedLoss
-from ModelsForGridSearch import create_model_LSTM_DK1
+from ModelsForGridSearch import create_model_LSTM_DK, create_model_LSTM_DK_morelay
 from Utils import filterAudio
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 import matplotlib.pyplot as plt
@@ -61,7 +61,7 @@ def trainDK1(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    model = create_model_LSTM_DK1(
+    model = create_model_LSTM_DK_morelay(
         input_dim=1, mini_batch_size=mini_batch_size, units=units,
         b_size=batch_size)
 

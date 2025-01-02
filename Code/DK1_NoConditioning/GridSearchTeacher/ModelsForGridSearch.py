@@ -8,7 +8,7 @@ Initializes a data generator object
 """
 
 
-def create_model_LSTM_DK1(units=512, mini_batch_size=2048, input_dim=1, b_size=2399):
+def create_model_LSTM_DK(units=512, mini_batch_size=2048, input_dim=1, b_size=2399):
 
     # Defining inputs
     inputs = tf.keras.layers.Input(
@@ -27,7 +27,7 @@ def create_model_LSTM_DK1(units=512, mini_batch_size=2048, input_dim=1, b_size=2
 
     return model
 
-def create_model_LSTM_DK1_morelay(units=[8, 16, 32, 64, 32, 16, 8], mini_batch_size=2048, input_dim=1, b_size=2399):
+def create_model_LSTM_DK_morelay(units=[8, 16, 32, 64, 32, 16, 8], mini_batch_size=2048, input_dim=1, b_size=2399):
 
     # Defining inputs
     inputs = tf.keras.layers.Input(

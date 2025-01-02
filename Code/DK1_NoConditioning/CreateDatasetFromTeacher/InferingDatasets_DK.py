@@ -1,6 +1,6 @@
 import pickle
 from UtilsForTrainings import checkpoints
-from ModelsForCreateDatasets import create_model_LSTM_DK
+from ModelsForCreateDatasets import create_model_LSTM_DK, create_model_LSTM_DK_morelay
 import matplotlib.pyplot as plt
 import random
 import numpy as np
@@ -50,7 +50,7 @@ def trainDK1(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    model = create_model_LSTM_DK(
+    model = create_model_LSTM_DK_morelay(
         input_dim=1, mini_batch_size=mini_batch_size, units=units,
         b_size=batch_size)
 
