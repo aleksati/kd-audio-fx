@@ -1,7 +1,8 @@
 from Metrics import ESR, RMSE, STFT_loss
+from LossFunctions import combinedLoss
 from ModelsForStudentsTaught import create_model_LSTM_DK2
-from UtilsGridSearch import filterAudio
-from UtilsForTrainingsGridSearch import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
+from Utils import filterAudio
+from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 import matplotlib.pyplot as plt
 import time
 import random
@@ -31,6 +32,7 @@ def trainDK2(**kwargs):
     """
 
     batch_size = kwargs.get('batch_size', 1)
+    mini_batch_size = kwargs.get('mini_batch_size', 2048)
     learning_rate = kwargs.get('learning_rate', 1e-1)
     input_dim = kwargs.get('input_dim', 1)
     model_save_dir = kwargs.get('model_save_dir', '../../TrainedModels')
@@ -41,7 +43,6 @@ def trainDK2(**kwargs):
     data_dir = kwargs.get('data_dir', '../../../Files/')
     epochs = kwargs.get('epochs', 60)
     fs = kwargs.get('fs', 48000)
-    conditioning_size = kwargs.get('conditioning_size', 0)
     units = kwargs.get("units", 2)
 
     # set all the seed in case reproducibility is desired
@@ -60,8 +61,10 @@ def trainDK2(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
+    # create the model
     model = create_model_LSTM_DK2(
-        input_dim=1, units=units, b_size=batch_size, training=True)
+        input_dim=1, mini_batch_size=mini_batch_size, units=units,
+        b_size=batch_size, training=True)
 
     # define callbacks: where to store the weights
     callbacks = []
@@ -69,8 +72,10 @@ def trainDK2(**kwargs):
         model_save_dir, save_folder)
 
     # create the DataGenerator object to retrive the data in the test set
-    test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle',
-                                    input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+    test_gen = DataGeneratorPicklesTrain(data_dir, dataset_test + '_test.pickle',
+                                    mini_batch_size=mini_batch_size,
+                                    input_size=input_dim,
+                                    batch_size=batch_size)
 
     # if inference is True, it jump directly to the inference section without train the model
     if not inference:
@@ -84,15 +89,15 @@ def trainDK2(**kwargs):
             # if no weights are found,the weights are random generated
             print("Initializing random weights.")
 
-        # create the DataGenerator object to retrive the data in the training set
-        train_gen = DataGeneratorPicklesTrain(data_dir, dataset_train + '_train.pickle',
-                                         input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
-
+        # create the DataGenerator object to retrieve the data in the training set
+        train_gen = DataGeneratorPicklesTrain(data_dir, dataset_train + '_train.pickle', mini_batch_size=mini_batch_size,
+                                         input_size=input_dim, batch_size=batch_size)
         # the number of total training steps
         training_steps = train_gen.training_steps*30
         # define the Adam optimizer with initial learning rate, training steps
-        opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(
-            learning_rate, training_steps), clipnorm=1)
+        # opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(learning_rate, training_steps), clipnorm=1)
+        opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+
 
         # compile the model with the optimizer and selected loss function
         if dataset_test == 'DrDrive_DK':
@@ -106,6 +111,7 @@ def trainDK2(**kwargs):
         best_loss = 1e9
         # counting for early stopping
         count = 0
+        count2 = 0
 
         # training loop
         for i in range(0, epochs, 1):
@@ -129,10 +135,16 @@ def trainDK2(**kwargs):
             if results.history['val_loss'][-1] < best_loss:
                 best_loss = results.history['val_loss'][-1]
                 count = 0
+                count2 = 0
             # if not count is increased by one and if equal to 20 the training is stopped
             else:
                 count = count + 1
-                if count == 20:
+                count2 = count2 + 1
+
+                if count2 == 5:
+                    model.optimizer.learning_rate = model.optimizer.learning_rate / 2
+                    count2 = 0
+                if count == 50:
                     break
 
             avg_time_epoch = (time.time() - start)
@@ -160,8 +172,8 @@ def trainDK2(**kwargs):
     sys.stdout.flush()
 
     # re-create the model to include last layer
-    model = create_model_LSTM_DK2(
-        input_dim=1, units=units, b_size=batch_size, training=False)
+    model = create_model_LSTM_DK2(input_dim=1, mini_batch_size=mini_batch_size, units=units,
+        b_size=batch_size, training=False)
 
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)
@@ -175,15 +187,14 @@ def trainDK2(**kwargs):
     model.layers[-1].set_weights(train_gen.weights)
 
     # reset the states before predicting
-    model.reset_states()
+    #model.reset_states()
     # predict the test set
-    predictions = model.predict(test_gen, verbose=0).reshape(-1)
+    predictions = model.predict(test_gen, verbose=0).flatten()
 
     # plot and render the output audio file, together with the input and target
-    predictWaves(predictions, test_gen.x,  test_gen.y,
-                 model_save_dir, save_folder, fs, '0')
+    predictWaves(predictions, test_gen.x[0], test_gen.y[0], model_save_dir, save_folder, fs, '0')
     predictions = np.array(filterAudio(predictions), dtype=np.float32)
-    y = np.array(filterAudio(test_gen.y), dtype=np.float32)
+    y = np.array(filterAudio(test_gen.y[0, :len(predictions)]), dtype=np.float32)
 
     # compute the metrics: mse, mae, esr and rmse
     mse = tf.get_static_value(

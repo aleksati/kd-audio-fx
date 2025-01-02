@@ -9,10 +9,10 @@ Initializes a data generator object
 """
 
 
-def create_model_LSTM_DK2(units, input_dim=1, conditioning_size=0, b_size=2400, training=True):
+def create_model_LSTM_DK2(units, mini_batch_size=2048, input_dim=1, conditioning_size=1, b_size=2400, training=True):
     # Defining inputs
     inputs = tf.keras.layers.Input(
-        batch_shape=(b_size, 1, input_dim), name='input')
+        batch_shape=(b_size, mini_batch_size, input_dim), name='input')
 
     outputs = tf.keras.layers.LSTM(
         units, stateful=True, return_sequences=True, name="LSTM")(inputs)
