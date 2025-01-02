@@ -18,6 +18,7 @@ EPOCHS = 1000
 PARAMETER_NUMBER = 0
 # batch size
 BATCH_SIZE = 8
+MINI_BATCH_SIZE = 2048
 # initial learning rate
 LR = 3e-4
 INFERENCE = False
@@ -66,7 +67,7 @@ for dataset in datasets:
                  dataset_train=dataset_train,
                  dataset_test=dataset,
                  batch_size=BATCH_SIZE,
-                 mini_batch_size=2048,
+                 mini_batch_size=MINI_BATCH_SIZE,
                  learning_rate=LR,
                  units=unit,
                  epochs=EPOCHS,

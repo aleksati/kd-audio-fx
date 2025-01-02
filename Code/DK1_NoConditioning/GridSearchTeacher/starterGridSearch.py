@@ -6,18 +6,19 @@ main script
 
 """
 #USER = "RIC"
-USER = "ALE"
-
+#USER = "ALE"
+USER = "PC"
 
 DK = 'DK1_'
 print('DK1 phase')
 
 # number of epochs
-EPOCHS = 2
+EPOCHS = 1000
 # number of parameters
 PARAMETER_NUMBER = 0
 # batch size
-BATCH_SIZE = 2400
+BATCH_SIZE = 8
+MINI_BATCH_SIZE = 2048
 # initial learning rate
 LR = 3e-4
 INFERENCE = False
@@ -69,6 +70,7 @@ for trial in trials:
              dataset_train=dataset_train,
              dataset_test=dataset,
              batch_size=BATCH_SIZE,
+             mini_batch_size=MINI_BATCH_SIZE,
              learning_rate=LR,
              trial=trial,
              epochs=EPOCHS,
