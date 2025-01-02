@@ -3,11 +3,12 @@ import os
 import numpy as np
 from tensorflow.keras.utils import Sequence
 from scipy.signal.windows import tukey
-from Utils import filterAudio
+from UtilsStudent import filterAudio
+
 
 class DataGeneratorPickles(Sequence):
 
-    def __init__(self, data_dir, filename, input_size, conditioning_size, batch_size=10):
+    def __init__(self, data_dir, filename, mini_batch_size, input_size, batch_size=10):
         """
         Initializes a data generator object
           :param data_dir: the directory in which data are stored
@@ -19,13 +20,19 @@ class DataGeneratorPickles(Sequence):
         self.data_dir = data_dir
         self.filename = filename
         self.batch_size = batch_size
+        self.mini_batch_size = mini_batch_size
         self.input_size = input_size
-        self.conditioning_size = conditioning_size
 
         # prepare the input, taget and conditioning matrix
         self.x, self.y, self.z, rep, lim = self.prepareXYZ(data_dir, filename)
 
+        self.max_1 = (self.x.shape[1] // self.mini_batch_size) - 1
+        self.max = (self.max_1 // self.batch_size) - 1
+
+        self.training_steps = self.max
+
         self.training_steps = (lim // self.batch_size)
+
         self.on_epoch_end()
 
     def prepareXYZ(self, data_dir, filename):
@@ -37,6 +44,7 @@ class DataGeneratorPickles(Sequence):
         x = np.array(Z['x'][:1, :], dtype=np.float32)
         y = np.array(Z['y'][:1, :], dtype=np.float32)
         y = filterAudio(y)
+
         # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
         if x.shape[0] == 1:
             x = np.repeat(x, y.shape[0], axis=0)
@@ -49,32 +57,29 @@ class DataGeneratorPickles(Sequence):
 
         # reshape to one dimension
         rep = x.shape[1]
-        x = x.reshape(-1)
-        y = y.reshape(-1)
+        x = x.reshape(1, -1)
+        y = y.reshape(1, -1)
 
         # how many iteration it is needed
-        N = int((x.shape[0] - self.input_size) / self.batch_size)-1
+        N = int((x.shape[0] - self.input_size) / self.batch_size) - 1
         # how many total samples is the audio
         lim = int(N * self.batch_size) + self.input_size - 1
-        x = x[:lim]
-        y = y[:lim]
+        x = x[:, :lim]
+        y = y[:, :lim]
 
         # loading the conditioning values
-        if self.conditioning_size != 0:
-            z = np.array(Z['z'], dtype=np.float32)
-            z = np.repeat(z, rep, axis=0)
-        else:
-            z = None
+
+        z = None
 
         return x, y, z, rep, lim
 
     def on_epoch_end(self):
         # create/reset the vector containing the indices of the batches
-        self.indices = np.arange(self.input_size-1, self.x.shape[0]+1)
+        self.indices = np.arange(0, self.x.shape[1])
 
     def __len__(self):
         # compute the itneeded number of iteration before conclude one epoch
-        return int(self.x.shape[0] / self.batch_size)
+        return int(self.max)
 
     def __call__(self):
         for i in range(self.__len__()):
@@ -84,30 +89,13 @@ class DataGeneratorPickles(Sequence):
 
     def __getitem__(self, idx):
         # Initializing input, target, and conditioning batches
-        X = np.empty((self.batch_size, self.input_size))
-        Y = np.empty((self.batch_size, 1))
 
         # get the indices of the requested batch
-        indices = self.indices[idx*self.batch_size:(idx+1)*self.batch_size]
-        c = 0
+        indices = self.indices[
+                  idx * self.mini_batch_size * self.batch_size:(idx + 1) * self.mini_batch_size * self.batch_size]
 
-        if self.conditioning_size != 0:
-            Z = np.empty((self.batch_size, self.conditioning_size))
-            # fill the batches
-            for t in range(indices[0], indices[-1]+1, 1):
-                X[c, :] = np.array(self.x[t - self.input_size+1: t+1])
-                Y[c, :] = np.array(self.y[t])
-                Z[c, :] = np.array(self.z[t])
-                c = c + 1
+        # fill the batches
+        X = np.array(self.x[0, indices]).reshape(self.batch_size, self.mini_batch_size, 1)
+        Y = np.array(self.y[0, indices]).reshape(self.batch_size, self.mini_batch_size, 1)
 
-            return [Z, X], Y
-
-        else:
-            # fill the batches
-            for t in range(indices[0], indices[-1] + 1, 1):
-                X[c, :] = np.array(self.x[t - self.input_size+1: t+1])
-                Y[c, :] = np.array(self.y[t])
-
-                c = c + 1
-
-            return X, Y
+        return X, Y

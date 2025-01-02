@@ -32,8 +32,8 @@ def trainDK1(**kwargs):
     """
 
     batch_size = kwargs.get('batch_size', 1)
+    mini_batch_size = kwargs.get('mini_batch_size', 2048)
     learning_rate = kwargs.get('learning_rate', 1e-1)
-    units = kwargs.get('units', 16)
     input_dim = kwargs.get('input_dim', 1)
     model_save_dir = kwargs.get('model_save_dir', '../../TrainedModels')
     save_folder = kwargs.get('save_folder', 'ED_Testing')
@@ -43,7 +43,6 @@ def trainDK1(**kwargs):
     data_dir = kwargs.get('data_dir', '../../../Files/')
     epochs = kwargs.get('epochs', 60)
     fs = kwargs.get('fs', 48000)
-    conditioning_size = kwargs.get('conditioning_size', 0)
     units = kwargs.get("units", 2)
 
     # set all the seed in case reproducibility is desired
@@ -63,7 +62,8 @@ def trainDK1(**kwargs):
 
     # create the model
     model = create_model_LSTM_DK1(
-        input_dim=1, trial=trial, conditioning_size=conditioning_size, b_size=batch_size)
+        input_dim=1, mini_batch_size=mini_batch_size, units=units,
+        b_size=batch_size)
 
     # define callbacks: where to store the weights
     callbacks = []

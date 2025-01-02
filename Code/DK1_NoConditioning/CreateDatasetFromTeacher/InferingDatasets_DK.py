@@ -24,18 +24,18 @@ def trainDK1(**kwargs):
       :param epochs: the number of epochs [int]
       :param teacher: if True it is inferring the training set and store in save_folder [bool]
       :param fs: the sampling rate [int]
-      :param conditioning_size: the numeber of parameters to be included [int]
     """
 
     batch_size = kwargs.get('batch_size', 1)
+    mini_batch_size = kwargs.get('mini_batch_size', 2048)
     input_dim = kwargs.get('input_dim', 1)
     model_save_dir = kwargs.get('model_save_dir', '../../TrainedModels')
     save_folder = kwargs.get('save_folder', 'ED_Testing')
     dataset_train = kwargs.get('dataset_train', None)
     dataset_test = kwargs.get('dataset_test', None)
     data_dir = kwargs.get('data_dir', '../../../Files/')
-    conditioning_size = kwargs.get('conditioning_size', 0)
-    trial = kwargs.get("trial", [])
+    fs = kwargs.get('fs', 48000)
+    units = kwargs.get("units", 2)
 
     # set all the seed in case reproducibility is desired
     np.random.seed(42)
@@ -50,8 +50,9 @@ def trainDK1(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    model = create_model_LSTM_DK(units=trial,
-        input_dim=1, conditioning_size=conditioning_size, b_size=batch_size)
+    model = create_model_LSTM_DK(
+        input_dim=1, mini_batch_size=mini_batch_size, units=units,
+        b_size=batch_size)
 
     # define callbacks: where to store the weights
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
@@ -70,8 +71,8 @@ def trainDK1(**kwargs):
 
     print('Saving the new dataset...')
     # create the DataGenerator object to retrieve the data in the training set
-    train_gen = DataGeneratorPickles(data_dir, dataset_test + '_train.pickle',
-                                     input_size=input_dim, conditioning_size=conditioning_size, batch_size=batch_size)
+    train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle',
+                                     input_size=input_dim, batch_size=batch_size)
 
     predictions = model.predict(train_gen, verbose=0)
     z = {'x': train_gen.x.reshape(

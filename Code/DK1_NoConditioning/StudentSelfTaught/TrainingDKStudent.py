@@ -43,7 +43,6 @@ def trainDK1(**kwargs):
     data_dir = kwargs.get('data_dir', '../../../Files/')
     epochs = kwargs.get('epochs', 60)
     fs = kwargs.get('fs', 48000)
-    conditioning_size = kwargs.get('conditioning_size', 0)
     units = kwargs.get("units", 2)
 
     # set all the seed in case reproducibility is desired
