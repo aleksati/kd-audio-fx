@@ -61,7 +61,6 @@ def trainDK2(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    # create the model
     model = create_model_LSTM_DK2(
         input_dim=1, mini_batch_size=mini_batch_size, units=units,
         b_size=batch_size, training=True)
@@ -93,10 +92,11 @@ def trainDK2(**kwargs):
         train_gen = DataGeneratorPicklesTrain(data_dir, dataset_train + '_train.pickle', mini_batch_size=mini_batch_size,
                                          input_size=input_dim, batch_size=batch_size)
         # the number of total training steps
-        training_steps = train_gen.training_steps*30
+        #training_steps = train_gen.training_steps * 30
         # define the Adam optimizer with initial learning rate, training steps
         # opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(learning_rate, training_steps), clipnorm=1)
         opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+
 
 
         # compile the model with the optimizer and selected loss function
