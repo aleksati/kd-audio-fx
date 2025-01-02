@@ -23,7 +23,7 @@ class DataGeneratorPickles(Sequence):
         self.mini_batch_size = mini_batch_size
         self.input_size = input_size
 
-        # prepare the input, taget and conditioning matrix
+        # prepare the input, target and conditioning matrix
         self.x, self.y, self.z, rep, lim = self.prepareXYZ(data_dir, filename)
 
         self.max_1 = (self.x.shape[1] // self.mini_batch_size) - 1

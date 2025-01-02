@@ -22,12 +22,17 @@ class DataGeneratorPicklesTrain(Sequence):
         self.mini_batch_size = mini_batch_size
         self.input_size = input_size
 
-
         # prepare the input, taget and conditioning matrix
         self.x, self.yh, self.z, rep, lim, self.weights = self.prepareXYZ(
             data_dir, filename)
 
+        self.max_1 = (self.x.shape[1] // self.mini_batch_size) - 1
+        self.max = (self.max_1 // self.batch_size) - 1
+
+        self.training_steps = self.max
+
         self.training_steps = (lim // self.batch_size)
+
         self.on_epoch_end()
 
     def prepareXYZ(self, data_dir, filename):
@@ -107,7 +112,6 @@ class DataGeneratorPicklesTest(Sequence):
 
         # prepare the input, taget and conditioning matrix
         self.x, self.y, self.z, rep, lim = self.prepareXYZ(data_dir, filename)
-
 
         self.max_1 = (self.x.shape[1] // self.mini_batch_size) - 1
         self.max = (self.max_1 // self.batch_size) - 1
