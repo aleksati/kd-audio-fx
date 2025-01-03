@@ -5,17 +5,16 @@ from TrainingDKStudent import trainDK1
 main script
 
 """
-#USER = "RIC"
+USER = "RIC"
 #USER = "ALE"
-USER = "PC"
+#USER = "PC"
 
 DK = 'DK1_'
 print('DK1 phase')
 
 # number of epochs
-EPOCHS = 1000
-# number of parameters
-PARAMETER_NUMBER = 0
+EPOCHS = 1#1000
+
 # batch size
 BATCH_SIZE = 8
 MINI_BATCH_SIZE = 2048
@@ -45,13 +44,14 @@ elif USER == 'PC':
 model = 'LSTM_'
 
 # name of dataset to be used
-dataset = "DrDrive_DK"
+#dataset = "DrDrive_DK"
 #dataset = "CL1B_DK"
 #datasets = ["ht1-", "muff-"] # 'CL1B_DK'  #
 datasets = ["DrDrive_DK"] # 'CL1B_DK'  #
 
 
 units = [8, 16, 32, 64]
+units = [8]
 name = '_student_self_taught'
 
 for dataset in datasets:
@@ -73,5 +73,4 @@ for dataset in datasets:
                  units=unit,
                  epochs=EPOCHS,
                  model=model,
-                 parameter_numbers=PARAMETER_NUMBER,
                  inference=INFERENCE)
