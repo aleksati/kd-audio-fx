@@ -125,7 +125,7 @@ def trainDK2(**kwargs):
             model.reset_states()
             print(model.optimizer.learning_rate)
 
-            results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=train_gen,
+            results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=test_gen,
                                 callbacks=callbacks)
 
             # store the training and validation loss
@@ -173,6 +173,13 @@ def trainDK2(**kwargs):
     sys.stdout.write("\n")
     sys.stdout.flush()
 
+    # re-create the model to include last layer
+    model = create_model_LSTM_DK2(input_dim=1, mini_batch_size=1, units=units,
+                                  b_size=batch_size, stateful=True, training=False)
+
+    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=1,
+                                        input_size=input_dim,
+                                        batch_size=batch_size)
 
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)

@@ -172,7 +172,7 @@ def trainDK1(**kwargs):
 
     model = create_model_LSTM_DK1(
         input_dim=1, mini_batch_size=1, units=units,
-        b_size=batch_size)
+        b_size=batch_size, stateful=True)
 
     test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=1,
                                     input_size=input_dim,

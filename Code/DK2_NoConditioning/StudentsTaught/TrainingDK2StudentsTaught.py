@@ -172,8 +172,12 @@ def trainDK2(**kwargs):
     sys.stdout.flush()
 
     # re-create the model to include last layer
-    model = create_model_LSTM_DK2(input_dim=1, mini_batch_size=mini_batch_size, units=units,
-        b_size=batch_size, training=False)
+    model = create_model_LSTM_DK2(input_dim=1, mini_batch_size=1, units=units,
+        b_size=batch_size, stateful=True, training=False)
+
+    test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle', mini_batch_size=1,
+                                    input_size=input_dim,
+                                    batch_size=batch_size)
 
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)

@@ -168,6 +168,14 @@ def trainDK1(**kwargs):
     sys.stdout.write("\n")
     sys.stdout.flush()
 
+    model = create_model_LSTM_DK1(
+        input_dim=1, mini_batch_size=1, units=units,
+        b_size=batch_size, stateful=True)
+
+    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=1,
+                                    input_size=input_dim,
+                                    batch_size=batch_size)
+
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)
     if best is not None:

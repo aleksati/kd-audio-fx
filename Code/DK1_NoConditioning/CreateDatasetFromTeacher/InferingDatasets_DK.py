@@ -52,7 +52,7 @@ def trainDK1(**kwargs):
     # create the model
     model = create_model_LSTM_DK_morelay(
         input_dim=1, mini_batch_size=mini_batch_size, units=units,
-        b_size=batch_size)
+        b_size=batch_size, stateful=True)
 
     # define callbacks: where to store the weights
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
