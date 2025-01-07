@@ -68,10 +68,10 @@ def plotResult(pred, inp, tar, model_save_dir, save_folder, fs, filename):
       """
 
     # the loop split the prediction in 5 second long extracts
-    seconds = 10
+    seconds = 4
     l = len(inp) // (fs * seconds)
 
-    for i in range(0, l - 1, 1):
+    for i in range(0, l, 1):
         y = tar[i * fs * seconds: (i + 1) * fs * seconds]
         predictions = pred[i * fs * seconds: (i + 1) * fs * seconds]
         inp_ = inp[i * fs * seconds: (i + 1) * fs * seconds]

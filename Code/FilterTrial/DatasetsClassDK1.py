@@ -62,7 +62,7 @@ class DataGeneratorPickles(Sequence):
         y = y.reshape(1, -1)
 
         # how many iteration it is needed
-        N = int((x.shape[0] - self.input_size) / self.batch_size) - 1 #####???????
+        N = int((x.shape[1] - self.input_size) / self.batch_size) - 1 #####???????
         # how many total samples is the audio
         lim = int(N * self.batch_size) + self.input_size - 1
         x = x[:, :lim]

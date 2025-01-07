@@ -48,6 +48,7 @@ model = 'LSTM_'
 #dataset = "CL1B_DK"
 #datasets = ["ht1-", "muff-"] # 'CL1B_DK'  #
 datasets = ["FilterNeutron5"] # 'CL1B_DK'  #
+datasets = ["Spring"] # 'CL1B_DK'  #
 
 
 units = [8, 16, 32, 64]
