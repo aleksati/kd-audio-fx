@@ -20,7 +20,7 @@ BATCH_SIZE = 8
 MINI_BATCH_SIZE = 2048
 # initial learning rate
 LR = 3e-4
-INFERENCE = False
+INFERENCE = True
 
 print('Welcome back ', USER)
 
