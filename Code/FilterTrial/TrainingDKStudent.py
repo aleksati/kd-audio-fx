@@ -1,6 +1,6 @@
 from Metrics import ESR, RMSE, STFT_loss
 from LossFunctions import combinedLoss
-from ModelsStudent import create_model_LSTM_DK1
+from ModelsStudent import create_model_LSTM_DK1, create_model_REV
 from Utils import filterAudio
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves, MyLRScheduler
 import matplotlib.pyplot as plt
@@ -61,7 +61,7 @@ def trainDK1(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    model = create_model_LSTM_DK1(
+    model = create_model_REV(
         input_dim=1, mini_batch_size=mini_batch_size, units=units,
         b_size=batch_size)
 
@@ -170,8 +170,10 @@ def trainDK1(**kwargs):
     sys.stdout.write("\n")
     sys.stdout.flush()
 
-    model = create_model_LSTM_DK1(input_dim=1, mini_batch_size=1, units=units, b_size=1, stateful=True)
-
+    #model = create_model_LSTM_DK1(input_dim=1, mini_batch_size=1, units=units, b_size=1, stateful=True)
+    model = create_model_REV(
+        input_dim=1, mini_batch_size=1, units=units,
+        b_size=1, stateful=True)
     test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=1, input_size=input_dim, batch_size=1)
 
     # load the best weights of the model

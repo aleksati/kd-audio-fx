@@ -16,11 +16,11 @@ print('DK1 phase')
 EPOCHS = 1000
 
 # batch size
-BATCH_SIZE = 8
-MINI_BATCH_SIZE = 2048
+BATCH_SIZE = 1
+MINI_BATCH_SIZE = 2048*5
 # initial learning rate
 LR = 3e-4
-INFERENCE = True
+INFERENCE = False
 
 print('Welcome back ', USER)
 
