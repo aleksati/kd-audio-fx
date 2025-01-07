@@ -17,12 +17,12 @@ class DelayAndFeedbackNN(tf.keras.layers.Layer):
                                                name='LSTM')
 
         self.dense = tf.keras.layers.Dense(1, name='OutLayer')
-        self.gain_feedback = tf.Variable(tf.ones(batch_size), trainable=True, name='GainFeed')
+        self.gain_feedback = tf.Variable(tf.ones(1), trainable=True, name='GainFeed')
 
-        self.residuals = (tf.Variable(tf.zeros([batch_size, num_of_steps, 1]), trainable=False, name='res'))
+        #self.residuals = (tf.Variable(tf.zeros([batch_size, num_of_steps, 1]), trainable=False, name='res'))
 
-        inputs = (tf.Variable(tf.ones([batch_size, num_of_steps, 1], dtype=tf.float32), trainable=False, name='inp'))
-        inputs = tf.expand_dims(inputs, axis=-1)
+        #inputs = (tf.Variable(tf.ones([batch_size, num_of_steps, 1], dtype=tf.float32), trainable=False, name='inp'))
+        #inputs = tf.expand_dims(inputs, axis=-1)
 
     def call(self, inputs):
 
