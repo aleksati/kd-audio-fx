@@ -13,7 +13,7 @@ DK = 'DK1_'
 print('DK1 phase')
 
 # number of epochs
-EPOCHS = 1#1000
+EPOCHS = 1000
 
 # batch size
 BATCH_SIZE = 8
@@ -46,13 +46,13 @@ model = 'LSTM_'
 # name of dataset to be used
 #dataset = "DrDrive_DK"
 #dataset = "CL1B_DK"
-#datasets = ["ht1-", "muff-"] # 'CL1B_DK'  #
-datasets = ["DrDrive_DK"] # 'CL1B_DK'  #
+datasets = ["ht1-", "muff-"] # 'CL1B_DK'  #
+#datasets = ["DrDrive_DK"] # 'CL1B_DK'  #
 
 
 units = [8, 16, 32, 64]
-units = [8]
-name = '_student_self_taught'
+#units = [8]
+name = '_student_self_taught_esr'
 
 for dataset in datasets:
     dataset_train = dataset
