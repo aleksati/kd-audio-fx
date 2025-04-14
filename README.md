@@ -20,6 +20,14 @@ Below are just a few non-parametric examples comparing our distilled student mod
 DrDrive - Target - Distilled - NonDistilled
 HT-1 - Target - Distilled - NonDistilled
 
+<figure style="float: none">
+  <audio controls>
+    <source src="PATH-TO-AUDIO" type="./examples/test.wav">
+    Alternate Text
+  </audio>
+  <figcaption>Text Caption</figcaption>
+</figure>
+
 **8 unit networks**
 Big Muff - Target - Distilled - NonDistilled
 
