@@ -1,6 +1,6 @@
 # Lightweight Neural Audio Distortion FX With Knowledge Distillation
 
-This code repository contains scripts, code and models for the article *Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques*, accepted at ... conference in ... 2025.
+This code repository contains scripts, code and models for the article _Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques_, accepted at ... conference in ... 2025.
 
 Knowledge distillation is a technique for compressing complex and large "teacher" networks into smaller "student" networks. It offers ways to minimize the computational expenses often associated with neural networks and to optimize models for deployment and real-time usage.
 
@@ -12,7 +12,7 @@ In our paper, we explore the application of knowledge distillation for compressi
 
 # Audio Examples
 
-Our distillation architecture was evaluated on three datasets, the Blackstar HT-1 vacuum tube amplifier (HT-1), Electro-Harmonix Big Muff (Big Muff) guitar pedal, and the analog-modeled overdrive plugin DrDrive. 
+Our distillation architecture was evaluated on three datasets, the Blackstar HT-1 vacuum tube amplifier (HT-1), Electro-Harmonix Big Muff (Big Muff) guitar pedal, and the analog-modeled overdrive plugin DrDrive.
 
 Below are just a few non-parametric examples comparing our distilled student models against regular students networks (non-distilled).
 
@@ -20,13 +20,10 @@ Below are just a few non-parametric examples comparing our distilled student mod
 DrDrive - Target - Distilled - NonDistilled
 HT-1 - Target - Distilled - NonDistilled
 
-<figure style="float: none">
   <audio controls>
-    <source src="./examples/test.wav" type="audio/mpeg">
+    <source src="./examples/test.mp3" type="audio/mpeg">
     Alternate Text
   </audio>
-  <figcaption>Text Caption</figcaption>
-</figure>
 
 **8 unit networks**
 Big Muff - Target - Distilled - NonDistilled
@@ -35,27 +32,26 @@ Big Muff - Target - Distilled - NonDistilled
 
 This repository contains all the necessary utilities to use our knowledge distillation architecture. Find the code and models located inside the "./src" folder.
 
-Clone repo. 
+Clone repo.
 
 Install the dependencies. requirements.txt
 
-Creater starter for training the model with terminal 
+Creater starter for training the model with terminal
 Same for training and inference (flag)
 
 A starter per folder.
-one teacher. not gridsearch 
+one teacher. not gridsearch
 
 Another starter for conditioning. choose between conditioning and not.
 
-https://github.com/Alec-Wright/Automated-GuitarAmpModelling/blob/main/proc_audio.py 
-
+https://github.com/Alec-Wright/Automated-GuitarAmpModelling/blob/main/proc_audio.py
 
 Save mushra for later.
-Send to Riccardo. 
+Send to Riccardo.
 
-# VST Download 
+# VST Download
 
-Avaliable soon. 
+Avaliable soon.
 
 aleks try with neutone
 ricc with other.
