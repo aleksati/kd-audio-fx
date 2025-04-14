@@ -10,6 +10,8 @@ In our paper, we explore the application of knowledge distillation for compressi
  <img src="./fig/dk2.png" width="400">
 </div>
 
+https://github.com/user-attachments/assets/5847a6ff-16e5-4151-af0b-314d0ccc97b5
+
 # Audio Examples
 
 Our distillation architecture was evaluated on three datasets, the Blackstar HT-1 vacuum tube amplifier (HT-1), Electro-Harmonix Big Muff (Big Muff) guitar pedal, and the analog-modeled overdrive plugin DrDrive.
