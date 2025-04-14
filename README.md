@@ -1,4 +1,5 @@
 # Neural Audio Effect Compression With Knowledge Distillation
+By Riccardo Simmionato and Aleksander Tidemann
 
 This code repository contains scripts, code and models for the article *Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques*, accepted at ... conference in ... 2025.
 
