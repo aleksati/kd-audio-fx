@@ -22,7 +22,7 @@ HT-1 - Target - Distilled - NonDistilled
 
 <figure style="float: none">
   <audio controls>
-    <source src="PATH-TO-AUDIO" type="./examples/test.wav">
+    <source src="./examples/test.wav" type="audio/mpeg">
     Alternate Text
   </audio>
   <figcaption>Text Caption</figcaption>
