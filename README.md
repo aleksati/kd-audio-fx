@@ -1,5 +1,4 @@
-# Neural Audio Effect Compression With Knowledge Distillation
-By Riccardo Simmionato and Aleksander Tidemann
+# Lightweight Neural Audio Distortion FX With Knowledge Distillation
 
 This code repository contains scripts, code and models for the article *Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques*, accepted at ... conference in ... 2025.
 
@@ -15,16 +14,14 @@ In our paper, we explore the application of knowledge distillation for compressi
 
 Our distillation architecture was evaluated on three datasets, the Blackstar HT-1 vacuum tube amplifier (HT-1), Electro-Harmonix Big Muff (Big Muff) guitar pedal, and the analog-modeled overdrive plugin DrDrive. 
 
+Below are just a few non-parametric examples comparing our distilled student models against regular students networks (non-distilled).
 
-64-units
-64-bit 
+**64 unit networks**
+DrDrive - Target - Distilled - NonDistilled
+HT-1 - Target - Distilled - NonDistilled
 
-8
-dataset - 64 units.
-dataset - 8 units 
-cond dataset - 64 units
-cond dataset - 8 untis
-
+**8 unit networks**
+Big Muff - Target - Distilled - NonDistilled
 
 # How to Run
 
