@@ -1,4 +1,4 @@
-# Lightweight Neural Audio Distortion FX With Knowledge Distillation
+# Lightweight Neural Audio Distortion FX Using Knowledge Distillation
 
 This code repository contains scripts, code and models for the article _Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques_, accepted at ... conference in ... 2025.
 
