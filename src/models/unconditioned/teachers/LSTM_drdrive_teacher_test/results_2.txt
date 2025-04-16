@@ -1,0 +1,14 @@
+
+ Min_val_loss   :  0.08745219558477402
+
+ Min_train_loss   :  0.052978143095970154
+
+ b_size   :  8
+
+ learning_rate   :  0.0003
+
+ Val_loss   :  [0.08745219558477402]
+
+ units   :  None
+
+ epochs   :  2
