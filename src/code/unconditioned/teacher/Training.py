@@ -26,7 +26,7 @@ def LSTM_KD_teacher(**kwargs):
       :param input_dim: the input size [int]
       :param model_save_dir: the directory in which models are stored [string]
       :param save_dir: the directory in which the model will be saved [string]
-      :param inference: if True it skip the training and it compute only the inference [bool]
+      :param inference: When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model. [bool]
       :param dataset: name of the datset to use [string]
       :param epochs: the number of epochs [int]
       :param teacher: if True it is inferring the training set and store in save_dir [bool]
@@ -39,7 +39,7 @@ def LSTM_KD_teacher(**kwargs):
     input_dim = kwargs.get('input_dim', 1)
     model_save_dir = kwargs.get('model_save_dir', '../../../models/unconditioned/teachers')
     save_dir = kwargs.get('save_dir', 'LSTM_DEVICE_teacher')
-    inference = kwargs.get('inference', False)
+    inference = kwargs.get('only_inference', False)
     dataset_train = kwargs.get('dataset_train', None)
     dataset_test = kwargs.get('dataset_test', None)
     data_dir = kwargs.get('data_dir', '../../../datasets')
@@ -76,6 +76,7 @@ def LSTM_KD_teacher(**kwargs):
                                     input_size=input_dim, batch_size=batch_size)
 
     # if inference is True, it jump directly to the inference section without train the model
+    # this is the training
     if not inference:
         callbacks += [ckpt_callback, ckpt_callback_latest]
         # load the weights of the last epoch, if any
@@ -167,7 +168,7 @@ def LSTM_KD_teacher(**kwargs):
     model = create_model_LSTM_DK_morelay(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
 
     #model = create_model_LSTM_DK(input_dim=1, mini_batch_size=1, b_size=1, stateful=True)
-
+    
     test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=1)
 
     # load the best weights of the model

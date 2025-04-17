@@ -13,37 +13,36 @@ import os
 import sys
 
 
-def trainDK2(**kwargs):
+def LSTM_KD_distilled_student(**kwargs):
     """
+      Trains an LSTM network to act as a distilled student for KD tasks. Can also be used to run pure inference.
+
       :param data_dir: the directory in which dataset are stored [string]
       :param save_folder: the directory in which the models are saved [string]
       :param batch_size: the size of each batch [int]
       :param learning_rate: the initial leanring rate [float]
       :param units: the number of model's units [int]
-      :param input_dim: the input size [int]
       :param model_save_dir: the directory in which models are stored [string]
-      :param save_folder: the directory in which the model will be saved [string]
-      :param inference: if True it skip the training and it compute only the inference [bool]
+      :param save_dir: the directory in which the model will be saved [string]
+      :param inference: When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model. [bool]
       :param dataset: name of the datset to use [string]
       :param epochs: the number of epochs [int]
-      :param teacher: if True it is inferring the training set and store in save_folder [bool]
       :param fs: the sampling rate [int]
-      :param conditioning_size: the numeber of parameters to be included [int]
     """
 
-    batch_size = kwargs.get('batch_size', 1)
+    batch_size = kwargs.get('batch_size', 8)
     mini_batch_size = kwargs.get('mini_batch_size', 2048)
-    learning_rate = kwargs.get('learning_rate', 1e-1)
+    learning_rate = kwargs.get('learning_rate', 3e-4)
     input_dim = kwargs.get('input_dim', 1)
-    model_save_dir = kwargs.get('model_save_dir', '../../TrainedModels')
-    save_folder = kwargs.get('save_folder', 'ED_Testing')
-    inference = kwargs.get('inference', False)
+    model_save_dir = kwargs.get('model_save_dir', '../../../models/unconditioned/students_distilled')
+    save_folder = kwargs.get('save_dir', 'LSTM_DEVICE_UNITS')
+    inference = kwargs.get('only_inference', False)
     dataset_train = kwargs.get('dataset_train', None)
     dataset_test = kwargs.get('dataset_test', None)
-    data_dir = kwargs.get('data_dir', '../../../Files/')
+    data_dir = kwargs.get('data_dir', '../../../datasets')
     epochs = kwargs.get('epochs', 60)
     fs = kwargs.get('fs', 48000)
-    units = kwargs.get("units", 2)
+    units = kwargs.get("units", 8)
 
     # set all the seed in case reproducibility is desired
     np.random.seed(42)
@@ -94,12 +93,7 @@ def trainDK2(**kwargs):
         opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
 
         # compile the model with the optimizer and selected loss function
-        if dataset_test == 'DrDrive_DK':
-            model.compile(loss='mae', optimizer=opt)
-        elif dataset_test == 'CL1B_DK':
-            model.compile(loss='mse', optimizer=opt)
-        else:
-            model.compile(loss='mae', optimizer=opt)
+        model.compile(loss='mae', optimizer=opt)
       
         loss = distillationLoss()
         a, b = 1., 1.

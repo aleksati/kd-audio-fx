@@ -20,15 +20,12 @@ def LSTM_KD_nondistilled_student(**kwargs):
       :param batch_size: the size of each batch [int]
       :param learning_rate: the initial leanring rate [float]
       :param units: the number of model's units [int]
-      :param input_dim: the input size [int]
       :param model_save_dir: the directory in which models are stored [string]
-      :param save_folder: the directory in which the model will be saved [string]
-      :param inference: if True it skip the training and it compute only the inference [bool]
+      :param save_dir: the directory in which the model will be saved [string]
+      :param inference: When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model. [bool]
       :param dataset: name of the datset to use [string]
       :param epochs: the number of epochs [int]
-      :param teacher: if True it is inferring the training set and store in save_folder [bool]
       :param fs: the sampling rate [int]
-      :param conditioning_size: the numeber of parameters to be included [int]
     """
 
     batch_size = kwargs.get('batch_size', 8)
@@ -37,7 +34,7 @@ def LSTM_KD_nondistilled_student(**kwargs):
     input_dim = kwargs.get('input_dim', 1)
     model_save_dir = kwargs.get('model_save_dir', '../../../models/unconditioned/students_non_distilled')
     save_folder = kwargs.get('save_dir', 'LSTM_DEVICE_UNITS')
-    inference = kwargs.get('inference', False)
+    inference = kwargs.get('only_inference', False)
     dataset_train = kwargs.get('dataset_train', None)
     dataset_test = kwargs.get('dataset_test', None)
     data_dir = kwargs.get('data_dir', '../../../datasets')

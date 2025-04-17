@@ -1,12 +1,12 @@
-from Training import LSTM_KD_nondistilled_student
+from Training import LSTM_KD_distilled_student
 import argparse
 
 """
-Main starter script for training an LSTM network to act as a non-distilled student for KD tasks. Can also be used to run pure inference.
+Main starter script for training an LSTM network to act as a distilled student for KD tasks. Can also be used to run pure inference.
 """
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Trains an LSTM network to act as a non-distilled student for KD tasks. Can also be used to run pure inference.')
+    parser = argparse.ArgumentParser(description='Trains an LSTM network to act as a distilled student for KD tasks. Can also be used to run pure inference.')
 
     parser.add_argument('--datasets', default=["drdrive"], nargs='+', help='The names of the datasets to use')
 
@@ -24,7 +24,7 @@ def parse_args():
 
     parser.add_argument('--data_dir', default='../../../datasets', type=str, nargs='?', help='Folder directory in which the datasets are stored.')
 
-    parser.add_argument('--model_save_dir', default='../../../models/unconditioned/students_non_distilled', type=str, nargs='?', help='Folder directory in which to store the model and all other results (loss)')
+    parser.add_argument('--model_save_dir', default='../../../models/unconditioned/students_distilled', type=str, nargs='?', help='Folder directory in which to store the model and all other results (loss)')
 
     return parser.parse_args()
 
@@ -32,15 +32,17 @@ def parse_args():
 def train_student(args):    
     datasets = args.datasets
     for dataset in datasets:
+        # ensure that the transfer dataset is created using starter.py in the "../create_transferset_from_teacher" folder.
+        dataset_train = dataset + "_transferset"
         units = args.hidden_layer_sizes
         for unit in units:
-            print("######### Preparing training for unconditioned non-distilled student #########")
+            print("######### Preparing training for unconditioned distilled student #########")
             print("\n")
-
-            LSTM_KD_nondistilled_student(data_dir=args.data_dir,
+            
+            LSTM_KD_distilled_student(data_dir=args.data_dir,
                     save_dir=f'LSTM_{dataset}_{unit}',
                     model_save_dir=args.model_save_dir,
-                    dataset_train=dataset,
+                    dataset_train=dataset_train,
                     dataset_test=dataset,
                     batch_size=args.batch_size,
                     mini_batch_size=args.mini_batch_size,

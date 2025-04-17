@@ -18,7 +18,7 @@ def parse_args():
 
     parser.add_argument('--learning_rate', default=3e-4, type=float, nargs='?', help='Initial learning rate.')
 
-    parser.add_argument('--inference', default=False, type=bool, nargs='?', help='Flag on whether to run inference on the trained model.')
+    parser.add_argument('--only_inference', default=False, type=bool, nargs='?', help='When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model.')
 
     parser.add_argument('--data_dir', default='../../../datasets', type=str, nargs='?', help='Folder directory in which the datasets are stored.')
 
@@ -43,7 +43,7 @@ def train_teacher(args):
                 mini_batch_size=args.mini_batch_size,
                 learning_rate=args.learning_rate,
                 epochs=args.epochs,
-                inference=args.inference)
+                only_inference=args.only_inference)
 
 
 def main():

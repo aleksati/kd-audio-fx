@@ -66,6 +66,8 @@ def trainDK1(**kwargs):
     last_layer_weights = model.layers[-1].get_weights()
 
     print('Saving the new dataset...')
+
+
     # create the DataGenerator object to retrieve the data in the training set
     train_gen = DataGeneratorPickles(data_dir, dataset + '_train.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=1)
     
@@ -77,6 +79,8 @@ def trainDK1(**kwargs):
         'y_true': train_gen.y.reshape(1, -1),
         'w': last_layer_weights}
 
+    # !!!!!!
+    # THIS MUST BE "drdrive_teacherGenerated_test/train.pickle"
     file_data = open(os.path.normpath(
         '/'.join([data_dir, 'DK_Teacher_' + dataset + '_train.pickle'])), 'wb')
     pickle.dump(z, file_data)
