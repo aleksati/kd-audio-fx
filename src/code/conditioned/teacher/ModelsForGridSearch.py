@@ -1,12 +1,12 @@
 import tensorflow as tf
 from Layers import FiLM
+
 """
 Initializes a data generator object
   :param data_dir: the directory in which data are stored
   :param output_size: output size
   :param batch_size: The size of each batch returned by __getitem__
 """
-
 
 def create_model_LSTM_DK_morelay(units=[8, 16, 32, 64, 32, 16, 8], mini_batch_size=2048, input_dim=1, b_size=2399, stateful=False):
 

@@ -95,13 +95,8 @@ def trainDK1(**kwargs):
         opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
 
         # compile the model with the optimizer and selected loss function
-        if dataset_test == 'DrDrive_DK':
-            model.compile(loss='mae', optimizer=opt)
-            #model.compile(loss=combinedLoss(), optimizer=opt)
-        elif dataset_test == 'CL1B_DK':
-            model.compile(loss='mse', optimizer=opt)
-        else:
-            model.compile(loss='mae', optimizer=opt)
+        model.compile(loss='mae', optimizer=opt)
+      
         # defining the array taking the training and validation losses
         loss_training = np.empty(epochs)
         loss_val = np.empty(epochs)
