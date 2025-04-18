@@ -1,6 +1,6 @@
-# Lightweight Neural Audio Distortion FX Using Knowledge Distillation
+# Lightweight Neural Audio Effects Using Knowledge Distillation
 
-This code repository contains scripts, code and models for the article _Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques_, accepted at ... conference in ... 2025.
+This code repository for the article _Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques_, accepted at ... conference in ... 2025.
 
 Knowledge distillation is a technique for compressing complex and large "teacher" networks into smaller "student" networks. It offers ways to minimize the computational expenses often associated with neural networks and to optimize models for deployment and real-time usage. In our paper, we explore the application of knowledge distillation for compressing RNN models of audio distortion effects. In particular, we propose an audio-to-audio LSTM architecture for realtime regression tasks where small audio effect networks are trained to mimic the internal representations of more extensive networks, known as feature-based knowledge distillation.
 
