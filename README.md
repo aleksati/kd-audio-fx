@@ -8,6 +8,8 @@ Knowledge distillation is a technique for compressing complex and large "teacher
  <img src="./fig/dk2.png" width="400">
 </div>
 
+This repository contains all the necessary utilities to use our knowledge distillation architecture. Find the code and pre-trained models located inside the "./src" folder.
+
 Visit our designated [GitHub page for audio examples]().
 
 <!-- Our distillation architecture was evaluated on three datasets, the Blackstar HT-1 vacuum tube amplifier (HT-1), Electro-Harmonix Big Muff (Big Muff) guitar pedal, and the analog-modeled overdrive plugin DrDrive.
@@ -21,11 +23,16 @@ HT-1 - Target - Distilled - NonDistilled
 **8 unit networks**
 Big Muff - Target - Distilled - NonDistilled -->
 
-# Usage
+### Contents
 
-This repository contains all the necessary utilities to use our knowledge distillation architecture. Find the code and pre-trained models located inside the "./src" folder.
+1. [Datasets](#datasets)
+2. [Models](#models)
+3. [How to Use](#how-to-use)
+4. [VST Download](#vst-download)
 
-## Datasets
+<br/>
+
+# Datasets
 
 Our distillation architecture was evaluated on three datasets: the Blackstar HT-1 vacuum tube amplifier (HT-1), Electro-Harmonix Big Muff (Big Muff) guitar pedal, and the analog-modeled overdrive plugin DrDrive. All datasets go in the "src./datasets" folder:
 ```
@@ -38,7 +45,7 @@ Our distillation architecture was evaluated on three datasets: the Blackstar HT-
 ```
 The DrDrive datasets (both parametric and non-parametric) created for this article can be accessed via [Zenodo](https://doi.org/10.5281/zenodo.15222630). The HT-1 and Big Muff datasets were sourced from the IEEE journal article [Pruning Deep Neural Network Models of Guitar Distortion Effects](https://ieeexplore.ieee.org/abstract/document/9954902/) by David Südholt, Alec Wright, Cumhur Erkut, and Vesa Valimaki, 2023.
 
-## Models
+# Models
 
 The " ./src/models " folder contains a selection of pre-trained teacher and student models. Although both conditioned and unconditioned versions are listed, conditioned models currently exist only for DrDrive.
 ```
@@ -58,7 +65,7 @@ Student models are either *non_distilled*, trained on the normal training data, 
 
 Finally, one experimental model is included in the "./unconditioned/student_distilled_by_64_student" folder. In this case, smaller student models (8 units) have been trained by a larger student model (64 units), instead of teachers.
 
-## How To Run 
+# How To Use 
 
 First, install Python dependencies:
 ```
