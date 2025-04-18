@@ -1,6 +1,6 @@
 import pickle
 from UtilsForTrainings import checkpoints
-from ModelsForCreateDatasets import create_model_LSTM_DK_morelay, create_model_LSTM_DK
+from ModelsForCreateDatasets import create_model_LSTM_DK
 import matplotlib.pyplot as plt
 import random
 import numpy as np
@@ -9,30 +9,23 @@ import tensorflow as tf
 import os
 
 
-def trainDK1(**kwargs):
+def LSTM_KD_infer_transfer_data(**kwargs):
     """
-      :param data_dir: the directory in which dataset are stored [string]
-      :param save_folder: the directory in which the models are saved [string]
-      :param batch_size: the size of each batch [int]
-      :param learning_rate: the initial leanring rate [float]
-      :param units: the number of model's units [int]
+      Run inference on an LSTM teacher network to generete transfer dataset for KD tasks.
+
       :param input_dim: the input size [int]
+      :param data_dir: the directory in which dataset are stored [string]
+      :param save_dir: the directory in which the models are saved/located [string]
       :param model_save_dir: the directory in which models are stored [string]
-      :param save_folder: the directory in which the model will be saved [string]
-      :param inference: if True it skip the training and it compute only the inference [bool]
-      :param dataset: name of the datset to use [string]
-      :param epochs: the number of epochs [int]
-      :param teacher: if True it is inferring the training set and store in save_folder [bool]
-      :param fs: the sampling rate [int]
-      :param conditioning_size: the numeber of parameters to be included [int]
+      :param dataset: name of the teacher datset to use [string]
     """
 
     input_dim = kwargs.get('input_dim', 1)
-    model_save_dir = kwargs.get('model_save_dir', '../../TrainedModels')
-    save_folder = kwargs.get('save_folder', 'ED_Testing')
+    model_save_dir = kwargs.get('model_save_dir', '../../../models/unconditioned/teachers')
+    save_dir = kwargs.get('save_dir', 'LSTM_DEVICE_teacher')
     dataset = kwargs.get('dataset', None)
-    data_dir = kwargs.get('data_dir', '../../../Files/')
-    mini_batch_size = 2048
+    data_dir = kwargs.get('data_dir', '../../../datasets')
+    mini_batch_size = kwargs.get('mini_batch_size', 2048)
     
     # set all the seed in case reproducibility is desired
     np.random.seed(42)
@@ -52,7 +45,7 @@ def trainDK1(**kwargs):
 
     # define callbacks: where to store the weights
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
-        model_save_dir, save_folder)
+        model_save_dir, save_dir)
 
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)
@@ -78,11 +71,9 @@ def trainDK1(**kwargs):
         'y_l6': predictions[1],
         'y_true': train_gen.y.reshape(1, -1),
         'w': last_layer_weights}
-
-    # !!!!!!
-    # THIS MUST BE "drdrive_teacherGenerated_test/train.pickle"
+  
     file_data = open(os.path.normpath(
-        '/'.join([data_dir, 'DK_Teacher_' + dataset + '_train.pickle'])), 'wb')
+        '/'.join([data_dir, dataset +'_transferset_train.pickle'])), 'wb')
     pickle.dump(z, file_data)
     file_data.close()
     print('end')

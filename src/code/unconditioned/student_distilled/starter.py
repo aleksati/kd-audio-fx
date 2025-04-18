@@ -32,7 +32,6 @@ def parse_args():
 def train_student(args):    
     datasets = args.datasets
     for dataset in datasets:
-        # ensure that the transfer dataset is created using starter.py in the "../create_transferset_from_teacher" folder.
         dataset_train = dataset + "_transferset"
         units = args.hidden_layer_sizes
         for unit in units:

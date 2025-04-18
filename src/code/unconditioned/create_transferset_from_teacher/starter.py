@@ -1,63 +1,40 @@
-from InferingDatasets_DK import trainDK1
-
-
-"""
-main script
+from InferingDatasets import LSTM_KD_infer_transfer_data
+import argparse
 
 """
-#USER = "RIC"
-#USER = "ALE"
-USER = "PC"
-USER = "RIC"
+Run inference on an LSTM teacher network to generete transfer dataset for KD tasks.
+"""
 
-DK = 'DK_'
+def parse_args():
+    parser = argparse.ArgumentParser(description='Run inference on an LSTM teacher network to generete transfer dataset for KD tasks.')
 
-# number of epochs
-EPOCHS = 300
-# number of parameters
-PARAMETER_NUMBER = 0
-# batch size
-BATCH_SIZE = 8
-# initial learning rate
-LR = 3e-4
-INFERENCE = False
+    parser.add_argument('--mini_batch_size', default=2048, type=int, nargs='?', help='Mini batch size.')
 
-print('Welcome back ', USER)
+    parser.add_argument('--data_dir', default='../../../datasets', type=str, nargs='?', help='Folder directory in which to store the datasets.')
 
-if USER == 'ALE':
-    # the directory in which datasets are stored
-    data_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\Datasets'
-    # where to store the results
-    model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\TrainedModels\\DK2'
-elif USER == 'RIC':
-    # the directory in which datasets are stored
-    data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
-    # where to store the results
-    model_save_dir = '../../../TrainedModels'  # Riccardo's folder
-elif USER == 'PC':
-    # the directory in which datasets are stored
-    data_dir = '../../Files'
-    # where to store the results ++
-    model_save_dir = '../../TrainedModels/Lay'  # Riccardo's folder
+    parser.add_argument('--datasets', default=["drdrive"], nargs='+', help='The names of the teacher datasets to use')
 
-# name of the model to be used
-model = 'LSTM_'
+    parser.add_argument('--model_save_dir', default='../../../models/unconditioned/teachers', type=str, nargs='?', help='Folder directory of the model to use.')
 
-# name of dataset to be used
-dataset = "DrDrive_DK"  # 'CL1B_DK'  #
-datasets = ["DrDrive_DK", "ht1-", "muff-"]
+    return parser.parse_args()
 
-for dataset in datasets:
-    # we are a teacher
-    name = '_teacher'
-    print("######### Preparing for creating the Datasets #########")
-    print("\n")
 
-    trainDK1(data_dir=data_dir,
-             save_folder=DK + model+dataset + name,
-             model_save_dir=model_save_dir,
-             dataset=dataset,
-             batch_size=BATCH_SIZE,
-             epochs=EPOCHS,
-             model=model,
-             parameter_numbers=PARAMETER_NUMBER)
+def gen_transfer_set(args):
+    datasets = args.datasets
+    for dataset in datasets:
+        print("######### Preparing for data/transfer set creation #########")
+        print("\n")
+
+        LSTM_KD_infer_transfer_data(data_dir=args.data_dir,
+                save_dir=f'LSTM_{dataset}_teacher',
+                model_save_dir=args.model_save_dir,
+                dataset=dataset,
+                mini_batch_size=args.mini_batch_size)
+
+
+def main():
+    args = parse_args()
+    gen_transfer_set(args)
+
+if __name__ == '__main__':
+    main()
