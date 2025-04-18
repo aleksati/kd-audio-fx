@@ -1,6 +1,6 @@
 import pickle
 from UtilsForTrainings import checkpoints
-from ModelsForCreateDatasets import create_model_LSTM_DK
+from ModelsForCreateDatasets import create_model_LSTM_DK, create_model_LSTM_DK_morelay
 import matplotlib.pyplot as plt
 import random
 import numpy as np
@@ -40,8 +40,8 @@ def LSTM_KD_infer_transfer_data(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    #model = create_model_LSTM_DK_morelay(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
-    model = create_model_LSTM_DK(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
+    model = create_model_LSTM_DK_morelay(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
+    #model = create_model_LSTM_DK(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
 
     # define callbacks: where to store the weights
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(

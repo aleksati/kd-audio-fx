@@ -1,13 +1,11 @@
 from Metrics import ESR, RMSE, STFT_loss
-# from LossFunctions import combinedLoss
-from ModelsForGridSearch import create_model_LSTM_DK_morelay
+from Models import create_LSTM_DK_model, create_cond_LSTM_DK_model
 from Utils import filterAudio
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves
-# import matplotlib.pyplot as plt
 import time
 import random
 import numpy as np
-from DatasetsClassDK1 import DataGeneratorPickles
+from DatasetsClass import DataGeneratorPickles, DataGeneratorCondPickles
 import tensorflow as tf
 import os
 import sys
@@ -20,16 +18,15 @@ def LSTM_KD_teacher(**kwargs):
       [8, 16, 32, 64, 32, 16, 8]
 
       :param data_dir: the directory in which dataset are stored [string]
-      :param save_dir: the directory in which the models are saved [string]
       :param batch_size: the size of each batch [int]
       :param learning_rate: the initial leanring rate [float]
       :param input_dim: the input size [int]
       :param model_save_dir: the directory in which models are stored [string]
       :param save_dir: the directory in which the model will be saved [string]
-      :param inference: When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model. [bool]
+      :param only_inference: When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model. [bool]
+      :param conditioning: Flag True for conditioned training, False for unconditioned [bool]
       :param dataset: name of the datset to use [string]
       :param epochs: the number of epochs [int]
-      :param teacher: if True it is inferring the training set and store in save_dir [bool]
       :param fs: the sampling rate [int]
     """
 
@@ -37,9 +34,10 @@ def LSTM_KD_teacher(**kwargs):
     mini_batch_size = kwargs.get('mini_batch_size', 2048)
     learning_rate = kwargs.get('learning_rate', 3e-4)
     input_dim = kwargs.get('input_dim', 1)
-    model_save_dir = kwargs.get('model_save_dir', '../../../models/unconditioned/teachers')
+    model_save_dir = kwargs.get('model_save_dir', '../../../models/teachers')
     save_dir = kwargs.get('save_dir', 'LSTM_DEVICE_teacher')
     inference = kwargs.get('only_inference', False)
+    conditioning = kwargs.get('conditioning', False)
     dataset_train = kwargs.get('dataset_train', None)
     dataset_test = kwargs.get('dataset_test', None)
     data_dir = kwargs.get('data_dir', '../../../datasets')
@@ -62,18 +60,20 @@ def LSTM_KD_teacher(**kwargs):
         tf.config.experimental.set_memory_growth(gpu[0], True)
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
-    # create the model
-    model = create_model_LSTM_DK_morelay(input_dim=1, mini_batch_size=mini_batch_size, b_size=batch_size)
-    #model = create_model_LSTM_DK(input_dim=1, mini_batch_size=mini_batch_size, b_size=batch_size)
+    # create the model and proces the test and training data correctly
+    if (conditioning):
+        model = create_cond_LSTM_DK_model(input_dim=1, mini_batch_size=mini_batch_size, b_size=batch_size)
+        test_gen = DataGeneratorCondPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
+        train_gen = DataGeneratorCondPickles(data_dir, dataset_train + '_train.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
+    else:    
+        model = create_LSTM_DK_model(input_dim=1, mini_batch_size=mini_batch_size, b_size=batch_size)
+        test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
+        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
     
     # define callbacks: where to store the weights
     callbacks = []
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
         model_save_dir, save_dir)
-
-    # create the DataGenerator object to retrive the data in the test set
-    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size,
-                                    input_size=input_dim, batch_size=batch_size)
 
     # if inference is True, it jump directly to the inference section without train the model
     # this is the training
@@ -87,10 +87,6 @@ def LSTM_KD_teacher(**kwargs):
         else:
             # if no weights are found,the weights are random generated
             print("Initializing random weights.")
-
-        # create the DataGenerator object to retrive the data in the training set
-        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle', mini_batch_size=mini_batch_size,
-                                         input_size=input_dim, batch_size=batch_size)
 
         # the number of total training steps
         #training_steps = train_gen.training_steps*30
@@ -164,12 +160,6 @@ def LSTM_KD_teacher(**kwargs):
         f" Average time training{'{:.3f}'.format(avg_time_epoch / 60)} min")
     sys.stdout.write("\n")
     sys.stdout.flush()
-
-    model = create_model_LSTM_DK_morelay(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
-
-    #model = create_model_LSTM_DK(input_dim=1, mini_batch_size=1, b_size=1, stateful=True)
-    
-    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=1)
 
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)

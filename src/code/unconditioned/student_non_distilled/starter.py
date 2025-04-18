@@ -24,7 +24,7 @@ def parse_args():
 
     parser.add_argument('--data_dir', default='../../../datasets', type=str, nargs='?', help='Folder directory in which the datasets are stored.')
 
-    parser.add_argument('--model_save_dir', default='../../../models/unconditioned/students_non_distilled', type=str, nargs='?', help='Folder directory in which to store the model and all other results (loss)')
+    parser.add_argument('--model_save_dir', default='../../../models/students_non_distilled', type=str, nargs='?', help='Folder directory in which to store the model and all other results (loss)')
 
     return parser.parse_args()
 

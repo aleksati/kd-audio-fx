@@ -1,16 +1,12 @@
 from TrainingGridDK1 import trainDK1
 
-
 """
 main script
 
 """
-#USER = "RIC"
-#USER = "ALE"
 USER = "PC"
 
 DK = 'DK_'
-print('DK phase')
 
 # number of epochs
 EPOCHS = 1000
@@ -25,39 +21,27 @@ INFERENCE = False
 
 print('Welcome back ', USER)
 
-if USER == 'ALE':
-    # the directory in which datasets are stored
-    data_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\Datasets'
-    # where to store the results ++
-    model_save_dir = 'C:\\Users\\aleks\\Documents\\GitHub\\KnowledgeDistillationVA\\TrainedModels\\DK2_NoConditioning'
-elif USER == 'RIC':
-    # the directory in which datasets are stored
-    data_dir = 'C:\\Users\\riccarsi\\OneDrive - Universitetet i Oslo\\Datasets\\DK' # Riccardo's folder
-    # where to store the results ++
-    model_save_dir = '../../'  # Riccardo's folder
-elif USER == 'PC':
-    # the directory in which datasets are stored
-    data_dir = '../../Files'
-    # where to store the results ++
-    model_save_dir = '../../TrainedModels'  # Riccardo's folder
+
+# the directory in which datasets are stored
+data_dir = '../../../datasets'
+# where to store the results ++
+model_save_dir = '../../../models/teachers'
 
 # name of the model to be used
 model = 'LSTM_'
 # name of dataset to be used
-datasets = ["DrDriveCond_DK"]  # 'CL1B_DK'  #
+datasets = ["drdrive_cond_dk"]
 
 units = [[8, 16, 32, 64, 32, 16, 8]]
 
 for dataset in datasets:
     # we are a teacher
-    
     dataset_train = dataset
-    name = '_teacher_conditioned'
     print("######### Preparing for Teacher training #########")
     print("\n")
 
     trainDK1(data_dir=data_dir,
-             save_folder=DK + model+dataset + name,
+             save_folder=f'LSTM_{dataset}_teacher',
              model_save_dir=model_save_dir,
              dataset_train=dataset_train,
              dataset_test=dataset,

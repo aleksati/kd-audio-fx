@@ -1,4 +1,4 @@
-from InferingDatasets import LSTM_KD_infer_transfer_data
+from InferingTransfersets import LSTM_KD_infer_transfer_data
 import argparse
 
 """
@@ -22,7 +22,7 @@ def parse_args():
 def gen_transfer_set(args):
     datasets = args.datasets
     for dataset in datasets:
-        print("######### Preparing for data/transfer set creation #########")
+        print("######### Preparing for transfer set creation #########")
         print("\n")
 
         LSTM_KD_infer_transfer_data(data_dir=args.data_dir,
