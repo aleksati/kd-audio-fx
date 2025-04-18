@@ -77,7 +77,7 @@ Next, choose whether to train a teacher, distilled student or non-distilled stud
 Order of operatations:
 1. Load datasets into the datasets folder
 2. Train teacher model
-3. Create transfer dataset from teacher model (create_transferset_from_teacher)
+3. Create transfer dataset from teacher model (create_transferset)
 4. Train non-distilled and distilled student models. 
 
 Every subfolder inside ".src/code/" contains its own starter script for running the code from a terminal. The code folder structure:
@@ -90,7 +90,7 @@ Every subfolder inside ".src/code/" contains its own starter script for running 
 │   └── unconditioned  
 │       ├── teacher
 │       │   └── starter.py
-│       ├── create_transferset_from_teacher 
+│       ├── create_transferset 
 │       ├── student_distilled 
 │       └── student_non_distilled
 ├── datasets
@@ -118,14 +118,14 @@ cd ./src/code/unconditioned/teacher
 python starter.py [options ...]
 ```
 
-Avaliable options: 
+All avaliable options (some apply only to students or teachers): 
 * --datasets (array of str) - The names of the datasets to use, for example "--datatsets drdrive ht1". (default="drdrive") 
 * --model_save_dir (str) - Folder directory in which to store the model and all other results (loss). (default ="./src/models")
 * --data_dir (str) - Folder directory in which the datasets are stored (default="./src/datasets")
 * --epochs (int) - Number of training epochs. (defaut=60)
 * --parameter_number (int) - Number of conditioning parameters (default=0)
 * --batch_size (int) - The size of each batch (default=8) 
-* --hidden_layer_sizes (array of int) = The hidden layer size (amount of units) of the LSTM network. To train multiple networks with different hidden layer sizes, simply select more than one value. for instance, "--hidden_layer_size 8 16 32" will train three seperate networks, each with different units. Only for students (default=[8])
+* --hidden_layer_sizes (array of int) = The hidden layer size (amount of units) of the LSTM network. To train multiple networks with different hidden layer sizes, simply select more than one value. for instance, "--hidden_layer_size 8 16 32" will train three seperate networks, each with different units. (default=[8])
 * --mini_batch_size (int) - The mini batch size (default=2048) 
 * --learning_rate (float) - the initial learning rate (default=3e-4)
 * --only_inference (bool) - When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model. (default=False)
