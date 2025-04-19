@@ -1,2 +1,3 @@
-/src/datasets/*
+*.pickle
 **/__pycache__
+
