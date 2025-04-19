@@ -12,11 +12,6 @@ This repository contains all the necessary utilities to use our knowledge distil
 
 Visit our designated [GitHub page for audio examples]().
 
-
-UPDATE AVALIABLE PARAMS AND DATA STRUTCUTRE
-ALL MODELS IN SAME FOLDER.
-IMPORTANT TO SEPERATE THE COND/UNCOND DATASET FILES IN ARGUMENT. CORRESPOND TO MODEL DIRECTTLY!
-
 <!-- Our distillation architecture was evaluated on three datasets, the Blackstar HT-1 vacuum tube amplifier (HT-1), Electro-Harmonix Big Muff (Big Muff) guitar pedal, and the analog-modeled overdrive plugin DrDrive.
 
 Below are just a few non-parametric examples comparing our distilled student models against regular students networks (non-distilled).
