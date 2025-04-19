@@ -118,17 +118,17 @@ The code folder structure:
 ``` 
 
 Available options (some apply only to students or teachers): 
-* --model_save_dir (str) - Folder directory in which to store the model and all other results (loss). (default ="./src/models")
-* --data_dir (str) - Folder directory in which the datasets are stored (default="./src/datasets")
-* --datasets (array of str) - The names of the datasets to use, for example "--datasets drdrive ht1". (default="drdrive") 
-* --epochs (int) - Number of training epochs. (defaut=60)
-* --conditioning (bool) - Flag True for training with conditioned data, False for unconditioned. (default=False)
-* --input_dim (int) - 'Input dimension of the training data.' (default=1)
-* --batch_size (int) - The size of each batch (default=8) 
-* --hidden_layer_sizes (array of int) = The hidden layer size (amount of units) of the LSTM network. To train multiple networks with different hidden layer sizes, simply select more than one value. for instance, "--hidden_layer_size 8 16 32" will train three separate networks, each with different units. (default=[8])
-* --mini_batch_size (int) - The mini batch size (default=2048) 
-* --learning_rate (float) - the initial learning rate (default=3e-4)
-* --only_inference (bool) - When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model. (default=False)
+* --model_save_dir - Folder directory in which to store the model and all other results (loss). [str] default ="./src/models"
+* --data_dir - Folder directory in which the datasets are stored [str] default="./src/datasets"
+* --datasets - The names of the datasets to use. For instance, "drdrive_dk" for unconditional training and "drdrive_cond_dk" for conditional training. [ [str] ] default=["drdrive_dk"] 
+* --epochs - Number of training epochs. [int] defaut=60
+* --conditioning - Flag True for training with conditioned data, False for unconditioned. [bool] default=False
+* --input_dim - Input dimension of the training data.' [int] default=1
+* --batch_size - The size of each batch [int] default=8 
+* --hidden_layer_sizes = The hidden layer size (amount of units) of the LSTM network. To train multiple networks with different hidden layer sizes, simply select more than one value. for instance, "--hidden_layer_size 8 16 32" will train three separate networks, each with different units. [ [int] ] default=[8]
+* --mini_batch_size - The mini batch size [int] default=2048) 
+* --learning_rate - the initial learning rate [float] default=3e-4
+* --only_inference - When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model. [bool] default=False
 
 Example training case: 
 ```
@@ -141,7 +141,7 @@ python starter.py --datasets drdrive_dk --epochs 500
 python starter.py --datasets drdrive_cond_dk --conditioning True --epochs 500 --input_dim 2 
 ```
 
-To only run inference on an existing pre-trained model, use the "only_inference" option. In this case, ensure that the existing model and dataset (to use for inference) both exist and have corresponding names.
+To only run inference on an existing pre-trained model, use the "only_inference". In this case, ensure you have the existing model and dataset (to use for inference) both in their respective directories with corresponding names.
 
 Example inference case:
 ```
