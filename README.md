@@ -123,7 +123,7 @@ Available options (some apply only to students or teachers):
 * --datasets - The names of the datasets to use. For instance, "drdrive_dk" for unconditional training and "drdrive_cond_dk" for conditional training. [ [str] ] default=["drdrive_dk"] 
 * --epochs - Number of training epochs. [int] defaut=60
 * --conditioning - Flag True for training with conditioned data, False for unconditioned. [bool] default=False
-* --input_dim - Input dimension of the training data.' [int] default=1
+* --input_dim - Input dimension of the training data. [int] default=1
 * --batch_size - The size of each batch [int] default=8 
 * --hidden_layer_sizes = The hidden layer size (amount of units) of the LSTM network. To train multiple networks with different hidden layer sizes, simply select more than one value. for instance, "--hidden_layer_size 8 16 32" will train three separate networks, each with different units. [ [int] ] default=[8]
 * --mini_batch_size - The mini batch size [int] default=2048) 
