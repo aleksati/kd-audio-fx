@@ -1,49 +1,52 @@
 from Metrics import ESR, RMSE, STFT_loss
-from ModelsForGridSearch import create_model_LSTM_DK_morelay
+from LossFunctions import combinedLoss, distillationLoss
+from Models import create_cond_LSTM_DK_model, create_LSTM_DK_model
 from Utils import filterAudio
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves
 import matplotlib.pyplot as plt
 import time
 import random
 import numpy as np
-from DatasetsClassDK1 import DataGeneratorPickles
+from DatasetsClass import DataGeneratorPicklesTest, DataGeneratorPicklesTrain, DataGeneratorCondPicklesTrain, DataGeneratorCondPicklesTest
 import tensorflow as tf
 import os
 import sys
 
 
-def trainDK1(**kwargs):
+def LSTM_KD_distilled_student(**kwargs):
     """
+      Trains an LSTM network to act as a distilled student for KD tasks. Can also be used to run pure inference.
+
       :param data_dir: the directory in which dataset are stored [string]
-      :param save_folder: the directory in which the models are saved [string]
+      :param save_dir: the directory in which the models are saved [string]
       :param batch_size: the size of each batch [int]
       :param learning_rate: the initial leanring rate [float]
       :param units: the number of model's units [int]
-      :param input_dim: the input size [int]
       :param model_save_dir: the directory in which models are stored [string]
-      :param save_folder: the directory in which the model will be saved [string]
-      :param inference: if True it skip the training and it compute only the inference [bool]
+      :param inference: When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model. [bool]
+      :param conditioning: Flag True for conditioned training, False for unconditioned [bool]
       :param dataset: name of the datset to use [string]
+      :param input_dim: the input size [int]
       :param epochs: the number of epochs [int]
-      :param teacher: if True it is inferring the training set and store in save_folder [bool]
       :param fs: the sampling rate [int]
     """
 
-    batch_size = kwargs.get('batch_size', 1)
+    batch_size = kwargs.get('batch_size', 8)
     mini_batch_size = kwargs.get('mini_batch_size', 2048)
-    learning_rate = kwargs.get('learning_rate', 1e-1)
+    learning_rate = kwargs.get('learning_rate', 3e-4)
     input_dim = kwargs.get('input_dim', 1)
-    model_save_dir = kwargs.get('model_save_dir', '../../TrainedModels')
-    save_folder = kwargs.get('save_folder', 'ED_Testing')
-    inference = kwargs.get('inference', False)
+    model_save_dir = kwargs.get(
+        'model_save_dir', '../../../models/students_distilled')
+    save_dir = kwargs.get('save_dir', 'LSTM_DEVICE_UNITS')
+    conditioning = kwargs.get('conditioning', False)
+    inference = kwargs.get('only_inference', False)
     dataset_train = kwargs.get('dataset_train', None)
     dataset_test = kwargs.get('dataset_test', None)
-    data_dir = kwargs.get('data_dir', '../../../Files/')
+    data_dir = kwargs.get('data_dir', '../../../datasets')
     epochs = kwargs.get('epochs', 60)
     fs = kwargs.get('fs', 48000)
-    #units = kwargs.get("units", 2)
-        
-    units = None
+    units = kwargs.get("units", 8)
+
     # set all the seed in case reproducibility is desired
     np.random.seed(42)
     tf.random.set_seed(42)
@@ -59,18 +62,30 @@ def trainDK1(**kwargs):
         tf.config.experimental.set_memory_growth(gpu[0], True)
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
-    # create the model
-    model = create_model_LSTM_DK_morelay(input_dim=1, mini_batch_size=mini_batch_size, b_size=batch_size)
-    #model = create_model_LSTM_DK(input_dim=1, mini_batch_size=mini_batch_size, b_size=batch_size)
-    
+    # create the model and proces the test and training data correctly
+    if (conditioning):
+        model = create_cond_LSTM_DK_model(
+            input_dim=input_dim, mini_batch_size=mini_batch_size, b_size=batch_size, units=units)
+
+        test_gen = DataGeneratorCondPicklesTest(data_dir, dataset_test + '_test.pickle',
+                                            mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
+
+        train_gen = DataGeneratorCondPicklesTrain(data_dir, dataset_train + '_train.pickle',
+                                             mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
+    else:
+        model = create_LSTM_DK_model(
+            input_dim=input_dim, mini_batch_size=mini_batch_size, b_size=batch_size, units=units)
+
+        test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle',
+                                        mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
+
+        train_gen = DataGeneratorPicklesTrain(data_dir, dataset_train + '_train.pickle',
+                                         mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
+
     # define callbacks: where to store the weights
     callbacks = []
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
-        model_save_dir, save_folder)
-
-    # create the DataGenerator object to retrive the data in the test set
-    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size,
-                                    input_size=input_dim, batch_size=batch_size)
+        model_save_dir, save_dir)
 
     # if inference is True, it jump directly to the inference section without train the model
     if not inference:
@@ -84,19 +99,20 @@ def trainDK1(**kwargs):
             # if no weights are found,the weights are random generated
             print("Initializing random weights.")
 
-        # create the DataGenerator object to retrive the data in the training set
-        train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle', mini_batch_size=mini_batch_size,
-                                         input_size=input_dim, batch_size=batch_size)
-
         # the number of total training steps
-        #training_steps = train_gen.training_steps*30
+        #training_steps = train_gen.training_steps * 30
         # define the Adam optimizer with initial learning rate, training steps
-        #opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(learning_rate, training_steps), clipnorm=1)
+        # opt = tf.keras.optimizers.Adam(learning_rate=MyLRScheduler(learning_rate, training_steps), clipnorm=1)
         opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
 
         # compile the model with the optimizer and selected loss function
         model.compile(loss='mae', optimizer=opt)
       
+        loss = distillationLoss()
+        a, b = 1., 1.
+        model.compile(loss=[loss, 'mae'], loss_weights=[a, b], optimizer=opt)
+        #model.optimizer.learning_rate = learning_rate
+        
         # defining the array taking the training and validation losses
         loss_training = np.empty(epochs)
         loss_val = np.empty(epochs)
@@ -104,6 +120,7 @@ def trainDK1(**kwargs):
         # counting for early stopping
         count = 0
         count2 = 0
+
         # training loop
         for i in range(0, epochs, 1):
             # start the timer for each epoch
@@ -117,11 +134,21 @@ def trainDK1(**kwargs):
             results = model.fit(train_gen, epochs=1, verbose=0, shuffle=False, validation_data=test_gen,
                                 callbacks=callbacks)
 
+            #a = a*0.99
+            #b = 1. - a
+            
+            #print('a:', a)
+            #print('\n')
+            #print('b:', b)
+            
+            #model.compile(loss=[loss, 'mae'], loss_weights=[a, b], optimizer=opt)
+
             # store the training and validation loss
             loss_training[i] = results.history['loss'][-1]
             loss_val[i] = results.history['val_loss'][-1]
             print(results.history['val_loss'][-1])
 
+            # if validation loss is smaller then the best loss, the early stopping counting is reset
             if results.history['val_loss'][-1] < best_loss:
                 best_loss = results.history['val_loss'][-1]
                 count = 0
@@ -144,13 +171,13 @@ def trainDK1(**kwargs):
 
         # write and save results
         writeResults(results, units, epochs, batch_size, learning_rate, model_save_dir,
-                     save_folder, epochs)
+                     save_dir, epochs)
 
         # plot the training and validation loss for all the training
         loss_training = np.array(loss_training)[:i]
         loss_val = np.array(loss_val)[:i]
         plotTraining(loss_training, loss_val, model_save_dir,
-                     save_folder, str(epochs))
+                     save_dir, str(epochs))
 
         print("Training done")
         print("\n")
@@ -161,11 +188,14 @@ def trainDK1(**kwargs):
     sys.stdout.write("\n")
     sys.stdout.flush()
 
-    model = create_model_LSTM_DK_morelay(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
-
-    #model = create_model_LSTM_DK(input_dim=1, mini_batch_size=1, b_size=1, stateful=True)
-
-    test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=1)
+    # if (conditioning):
+    #     test_gen = DataGeneratorCondPicklesTest(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size,
+    #                                     input_size=input_dim,
+    #                                     batch_size=1)
+    # else:
+    #     test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size,
+    #                                     input_size=input_dim,
+    #                                     batch_size=1)
 
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)
@@ -176,16 +206,20 @@ def trainDK1(**kwargs):
         # if no weights are found,there is something wrong
         print("Something is wrong.")
 
-    # reset the states before predicting
-    #model.reset_states()
+    #_gen = DataGeneratorPicklesTrain(data_dir, dataset_train + '_test.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=1)
+    #model.layers[-2].set_weights(_gen.weights)
+
+    model.reset_states()
     # predict the test set
     predictions = model.predict(test_gen, verbose=0).flatten()
 
     # plot and render the output audio file, together with the input and target
-    predictWaves(predictions, test_gen.x.reshape(-1)[:len(predictions)],  test_gen.y.reshape(-1)[:len(predictions)], model_save_dir, save_folder, fs, '0')
     predictions = np.array(filterAudio(predictions), dtype=np.float32)
-    y = np.array(filterAudio(test_gen.y.reshape(-1)[:len(predictions)]), dtype=np.float32)
-    #y = np.array((test_gen.y.reshape(-1)[:len(predictions)]), dtype=np.float32)
+    y = np.array((test_gen.y.reshape(-1)[:len(predictions)]), dtype=np.float32)
+    x = np.array((test_gen.x.reshape(-1)[:len(predictions)]), dtype=np.float32)
+
+    predictWaves(predictions, x, y, model_save_dir, save_dir, fs, '1')
+
 
     # compute the metrics: mse, mae, esr and rmse
     mse = tf.get_static_value(
@@ -198,7 +232,7 @@ def trainDK1(**kwargs):
 
     # write and store the metrics values
     results_ = {'mse': mse, 'mae': mae, 'esr': esr, 'rmse': rmse, 'stft': stft}
-    with open(os.path.normpath('/'.join([model_save_dir, save_folder, save_folder + '_results.txt'])), 'w') as f:
+    with open(os.path.normpath('/'.join([model_save_dir, save_dir, save_dir + '_results2.txt'])), 'w') as f:
         for key, value in results_.items():
             print('\n', key, '  : ', value, file=f)
     print('end')

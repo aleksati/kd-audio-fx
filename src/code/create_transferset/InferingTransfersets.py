@@ -1,15 +1,15 @@
 import pickle
 from UtilsForTrainings import checkpoints
-from ModelsForCreateDatasets import create_model_LSTM_DK, create_model_LSTM_DK_morelay
+from Models import create_LSTM_DK_model, create_cond_LSTM_DK_model
 import matplotlib.pyplot as plt
 import random
 import numpy as np
-from DatasetsClassDK1 import DataGeneratorPickles
+from DatasetsClass import DataGeneratorPickles, DataGeneratorCondPickles
 import tensorflow as tf
 import os
 
 
-def LSTM_KD_infer_transfer_data(**kwargs):
+def LSTM_KD_infer_transferset(**kwargs):
     """
       Run inference on an LSTM teacher network to generete transfer dataset for KD tasks.
 
@@ -21,7 +21,8 @@ def LSTM_KD_infer_transfer_data(**kwargs):
     """
 
     input_dim = kwargs.get('input_dim', 1)
-    model_save_dir = kwargs.get('model_save_dir', '../../../models/unconditioned/teachers')
+    model_save_dir = kwargs.get('model_save_dir', '../../../models/teachers')
+    conditioning = kwargs.get('conditioning', False)
     save_dir = kwargs.get('save_dir', 'LSTM_DEVICE_teacher')
     dataset = kwargs.get('dataset', None)
     data_dir = kwargs.get('data_dir', '../../../datasets')
@@ -40,8 +41,14 @@ def LSTM_KD_infer_transfer_data(**kwargs):
     # tf.config.experimental.set_virtual_device_configuration(gpu, [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=18000)])
 
     # create the model
-    model = create_model_LSTM_DK_morelay(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
-    #model = create_model_LSTM_DK(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
+    if (conditioning):
+        model = create_cond_LSTM_DK_model(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
+        
+        train_gen = DataGeneratorCondPickles(data_dir, dataset + '_train.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=1)
+    else:
+        model = create_LSTM_DK_model(input_dim=1, mini_batch_size=mini_batch_size, b_size=1, stateful=True)
+
+        train_gen = DataGeneratorPickles(data_dir, dataset + '_train.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=1)
 
     # define callbacks: where to store the weights
     ckpt_callback, ckpt_callback_latest, ckpt_dir, ckpt_dir_latest = checkpoints(
@@ -59,10 +66,6 @@ def LSTM_KD_infer_transfer_data(**kwargs):
     last_layer_weights = model.layers[-1].get_weights()
 
     print('Saving the new dataset...')
-
-
-    # create the DataGenerator object to retrieve the data in the training set
-    train_gen = DataGeneratorPickles(data_dir, dataset + '_train.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=1)
     
     predictions = model.predict(train_gen, verbose=0)
     z = {'x': train_gen.x.reshape(1, -1),
@@ -77,4 +80,22 @@ def LSTM_KD_infer_transfer_data(**kwargs):
     pickle.dump(z, file_data)
     file_data.close()
     print('end')
+
+    # train_gen = DataGeneratorPickles(data_dir, dataset + '_test.pickle', mini_batch_size=mini_batch_size,
+    #                                  input_size=input_dim, batch_size=1)
+    #
+    # model.reset_states()
+    # predictions = model.predict(train_gen, verbose=0)
+    # z = {'x': train_gen.x.reshape(1, -1),
+    #      'y': predictions[0].reshape(1, -1),
+    #      'z': train_gen.z,
+    #      'y_l6': predictions[1],
+    #      'y_true': train_gen.y.reshape(1, -1),
+    #      'w': last_layer_weights}
+    #
+    # file_data = open(os.path.normpath(
+    #     '/'.join([data_dir, 'DK_Teacher_' + dataset + '_test.pickle'])), 'wb')
+    # pickle.dump(z, file_data)
+    # file_data.close()
+
     return 42
