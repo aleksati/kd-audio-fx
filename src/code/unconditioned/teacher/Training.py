@@ -63,11 +63,15 @@ def LSTM_KD_teacher(**kwargs):
     # create the model and proces the test and training data correctly
     if (conditioning):
         model = create_cond_LSTM_DK_model(input_dim=1, mini_batch_size=mini_batch_size, b_size=batch_size)
+
         test_gen = DataGeneratorCondPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
+
         train_gen = DataGeneratorCondPickles(data_dir, dataset_train + '_train.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
     else:    
         model = create_LSTM_DK_model(input_dim=1, mini_batch_size=mini_batch_size, b_size=batch_size)
+
         test_gen = DataGeneratorPickles(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
+
         train_gen = DataGeneratorPickles(data_dir, dataset_train + '_train.pickle', mini_batch_size=mini_batch_size, input_size=input_dim, batch_size=batch_size)
     
     # define callbacks: where to store the weights
@@ -177,6 +181,7 @@ def LSTM_KD_teacher(**kwargs):
 
     # plot and render the output audio file, together with the input and target
     predictWaves(predictions, test_gen.x[0], test_gen.y[0], model_save_dir, save_dir, fs, '0')
+    
     predictions = np.array(filterAudio(predictions), dtype=np.float32)
     y = np.array(filterAudio(test_gen.y[0, :len(predictions)]), dtype=np.float32)
 

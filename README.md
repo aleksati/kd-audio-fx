@@ -92,11 +92,11 @@ The code folder structure:
 │   ├── requirements.txt
 │   ├── conditioned
 │   └── unconditioned  
-│       ├── teacher
+│       ├── teachers
 │       │   └── starter.py
 │       ├── create_transferset 
-│       ├── student_distilled 
-│       └── student_non_distilled
+│       ├── students_distilled 
+│       └── students_non_distilled
 ├── datasets
 └── models
 ``` 
@@ -114,10 +114,17 @@ All available options (some apply only to students or teachers):
 * --learning_rate (float) - the initial learning rate (default=3e-4)
 * --only_inference (bool) - When True, skips training and runs only inference on the pre-model. When False, runs training and inference on the trained model. (default=False)
 
-Example usage: 
+Example usage for unconditioned case: 
 ```
-cd ./src/code/unconditioned/teacher
-python starter.py --datasets bigmuff ht1 --epochs 500
+cd ./src/code/students_non_distilled
+
+python starter.py --datasets drdrive_dk --epochs 500
+``` 
+Example conditioning case:
+```
+cd ./src/code/students_non_distilled
+
+python starter.py --datasets drdrive_cond_dk --conditioning True --input_dim 2 
 ``` 
 
 # VST Download
