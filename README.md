@@ -1,5 +1,7 @@
 # Lightweight Neural Audio Effects Using Knowledge Distillation
 
+[DOI tag]()
+
 This code repository for the article _Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques_, accepted at ... conference in ... 2025.
 
 Knowledge distillation is a technique for compressing complex and large "teacher" networks into smaller "student" networks. It offers ways to minimize the computational expenses often associated with neural networks and to optimize models for deployment and real-time usage. In our paper, we explore the application of knowledge distillation for compressing RNN models of audio distortion effects. In particular, we propose an audio-to-audio LSTM architecture for realtime regression tasks where small audio effect networks are trained to mimic the internal representations of more extensive networks, known as feature-based knowledge distillation.
@@ -10,15 +12,21 @@ Knowledge distillation is a technique for compressing complex and large "teacher
 
 This repository contains all the necessary utilities to use our knowledge distillation architecture. Find the code and pre-trained models located inside the "./src" folder.
 
-Visit our designated [GitHub page for audio examples]().
+Visit our designated [page for audio examples]().
 
 <!-- Our distillation architecture was evaluated on three datasets, the Blackstar HT-1 vacuum tube amplifier (HT-1), Electro-Harmonix Big Muff (Big Muff) guitar pedal, and the analog-modeled overdrive plugin DrDrive.
 
-Below are just a few non-parametric examples comparing our distilled student models against regular students networks (non-distilled).
+Below are a few examples comparing our distilled student models against regular students networks (non-distilled) with different hidden layer sizes (units) on unconditioned datasets. 
 
 **64 unit networks**
 DrDrive - Target - Distilled - NonDistilled
 HT-1 - Target - Distilled - NonDistilled
+
+Distilled model -> non-distilled model -> target (real)
+Units -64
+32
+16
+8
 
 **8 unit networks**
 Big Muff - Target - Distilled - NonDistilled -->

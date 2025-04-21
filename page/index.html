@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+    <!-- Replace the content tag with appropriate information -->
+    <meta name="description" content="DESCRIPTION META TAG" />
+    <meta property="og:title" content="SOCIAL MEDIA TITLE TAG" />
+    <meta
+      property="og:description"
+      content="SOCIAL MEDIA DESCRIPTION TAG TAG" />
+    <meta property="og:url" content="URL OF THE WEBSITE" />
+    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+    <!-- <meta property="og:image" content="static/image/your_banner_image.png" />-->
+    <!-- <meta property="og:image:width" content="1200"/>-->
+    <!-- <meta property="og:image:height" content="630"/>-->
+
+    <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG" />
+    <meta
+      name="twitter:description"
+      content="TWITTER BANNER DESCRIPTION META TAG" />
+    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+    <meta
+      name="twitter:image"
+      content="static/images/your_twitter_banner_image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- Keywords for your paper to be indexed by-->
+    <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+      Compressing Neural Network Models of Audio Distortion Effects Using
+      Knowledge Distillation Technique
+    </title>
+    <!--  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">-->
+    <!--  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">-->
+
+    <link rel="stylesheet" href="static/css/bulma.min.css" />
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css" />
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css" />
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" />
+    <link rel="stylesheet" href="static/css/index.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+    <script defer src="static/js/fontawesome.all.min.js"></script>
+    <script src="static/js/bulma-carousel.min.js"></script>
+    <script src="static/js/bulma-slider.min.js"></script>
+    <script src="static/js/index.js"></script>
+  </head>
+  <body>
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h1 class="title is-2 publication-title">
+                Compressing Neural Network Models of Audio Distortion Effects
+                Using Knowledge Distillation Techniques
+              </h1>
+              <div class="is-size-5 publication-authors">
+                <!-- Paper authors -->
+                <span class="author-block">
+                  <a
+                    href="https://www.hf.uio.no/imv/english/people/aca/temporary/riccarsi/"
+                    target="_blank"
+                    >Riccardo Simionato</a
+                  >,</span
+                >
+                <span class="author-block">
+                  <a
+                    href="https://www.hf.uio.no/imv/english/people/adm/aleksati/"
+                    target="_blank"
+                    >Aleksander Tidemann</a
+                  ></span
+                >
+                <!-- <span class="author-block"> -->
+                <!--  <a href="THIRD AUTHOR PERSONAL LINK" target="_blank">Third Author</a> -->
+                <!-- </span> -->
+              </div>
+
+              <div class="is-size-5 publication-authors">
+                <span class="author-block">University of Oslo<br /></span>
+                <!-- <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span> -->
+              </div>
+
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <!-- Arxiv PDF link -->
+                  <span class="link-block">
+                    <a
+                      href=""
+                      target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Paper (coming soon)</span>
+                    </a>
+                  </span>
+
+                  <!-- Github link -->
+                  <span class="link-block">
+                    <a
+                      href="https://github.com/aleksati/lightweight-neural-audio-effects-using-knowledge-distillation"
+                      target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fab fa-github"></i>
+                      </span>
+                      <span>Code</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Paper abstract -->
+    <section class="section hero is-light">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>
+                Neural networks have proven to be effective for modeling analog
+                audio effects using a black-box approach. However, few can
+                guarantee lightweight solutions suitable for real-time
+                environments where the models must run concurrently on
+                consumer-grade equipment. This paper explores knowledge
+                distillation techniques for compressing recurrent neural network
+                models for audio distortion effects, aiming to produce
+                computationally efficient solutions with high accuracy that
+                maintain compact model size. In particular, we propose an
+                audio-to-audio LSTM architecture for regression tasks where
+                small networks are trained to mimic the internal representations
+                of larger networks, known as feature-based knowledge
+                distillation. The evaluation was conducted on three different
+                audio distortion effect datasets with experiments on both
+                parametric and non-parametric data. Results show improved
+                accuracy of distilled models over non-distilled equivalent
+                models trained on the original datasets and confirm that
+                distilled models can offer improved perceived sound quality via
+                listening tests.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End paper abstract -->
+    <!-- audio -->
+    <section class="section hero">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Audio Examples</h2>
+            <div class="content has-text-justified">
+              <p>
+                We evaluated our distillation architecture using three datasets of audio distortion effects: the Blackstar HT-1 vacuum tube amplifier (HT-1), the Electro-Harmonix Big Muff (Big Muff) guitar pedal, and the analog-modeled overdrive plugin DrDrive.
+              </p>
+              <p>
+                Below are example comparisons between our distilled student models, standard (non-distilled) student networks, and the target audio. Each dataset includes examples trained with varying hidden layer sizes (units).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <div class="audio-dataset-container" id="drdrive">
+              <div>
+                <h2 class="title is-4 has-text-centered">DrDrive</h2>
+              </div>
+              <div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px"><b>Target (real)</b></p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/drdrive-uncond-1-tar-64.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px"><b>Distilled (64 units)</b></p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/drdrive-uncond-1-pred-distilled-64.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px">
+                    <b>Non-distilled (64 units)</b>
+                  </p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/drdrive-uncond-1-pred-nondistilled-64.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px"><b>Distilled (8 units)</b></p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/drdrive-uncond-1-pred-distilled-8.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px">
+                    <b>Non-distilled (8 units)</b>
+                  </p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/drdrive-uncond-1-pred-nondistilled-8.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="audio-dataset-container" id="bigmuff">
+              <div>
+                <h2 class="title is-4 has-text-centered">Big Muff</h2>
+              </div>
+              <div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px"><b>Target (real)</b></p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/bigmuff-3-tar-64.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px"><b>Distilled (64 units)</b></p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/bigmuff-3-pred-distilled-64.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px">
+                    <b>Non-distilled (64 units)</b>
+                  </p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/bigmuff-3-pred-nondistilled-64.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px"><b>Distilled (8 units)</b></p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/bigmuff-3-pred-distilled-8.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px">
+                    <b>Non-distilled (8 units)</b>
+                  </p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/bigmuff-3-pred-nondistilled-8.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="audio-dataset-container" id="ht1">
+              <div>
+                <h2 class="title is-4 has-text-centered">HT-1</h2>
+              </div>
+              <div class="audio-wrapper">
+                <p style="padding-bottom: 6px"><b>Target (real)</b></p>
+                <audio controls unmuted>
+                  <source
+                    src="static/Audio/ht1-2-tar-64.wav"
+                    type="audio/wav" />
+                </audio>
+              </div>
+              <div class="audio-wrapper">
+                <p style="padding-bottom: 6px"><b>Distilled (64 units)</b></p>
+                <audio controls unmuted>
+                  <source
+                    src="static/Audio/ht1-2-pred-distilled-64.wav"
+                    type="audio/wav" />
+                </audio>
+              </div>
+              <div class="audio-wrapper">
+                <p style="padding-bottom: 6px">
+                  <b>Non-distilled (64 units)</b>
+                </p>
+                <audio controls unmuted>
+                  <source
+                    src="static/Audio/ht1-2-pred-nondistilled-64.wav"
+                    type="audio/wav" />
+                </audio>
+              </div>
+              <div class="audio-wrapper">
+                <p style="padding-bottom: 6px"><b>Distilled (8 units)</b></p>
+                <audio controls unmuted>
+                  <source
+                    src="static/Audio/ht1-2-pred-distilled-8.wav"
+                    type="audio/wav" />
+                </audio>
+              </div>
+              <div class="audio-wrapper">
+                <p style="padding-bottom: 6px">
+                  <b>Non-distilled (8 units)</b>
+                </p>
+                <audio controls unmuted>
+                  <source
+                    src="static/Audio/ht1-2-pred-nondistilled-8.wav"
+                    type="audio/wav" />
+                </audio>
+              </div>
+            </div>
+            <br />
+            <div class="audio-dataset-container" id="drdrive-cond">
+              <div>
+                <h2 class="title is-4 has-text-centered">
+                  DrDrive Conditioned
+                </h2>
+              </div>
+              <div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px"><b>Target (real)</b></p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/drdrive-cond-2-tar-64.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px"><b>Distilled (64 units)</b></p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/drdrive-cond-2-pred-distilled-64.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px">
+                    <b>Non-distilled (64 units)</b>
+                  </p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/drdrive-cond-2-pred-nondistilled-64.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px"><b>Distilled (8 units)</b></p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/drdrive-cond-2-pred-distilled-64.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="audio-wrapper">
+                  <p style="padding-bottom: 6px">
+                    <b>Non-distilled (8 units)</b>
+                  </p>
+                  <audio controls unmuted>
+                    <source
+                      src="static/Audio/drdrive-cond-2-pred-nondistilled-8.wav"
+                      type="audio/wav" />
+                  </audio>
+                </div>
+              </div>
+            </div>
+            <br />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--BibTex citation -->
+    <!-- <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <h2 class="title">BibTeX</h2>
+        <pre><code>
+</code>Coming soon</pre>
+      </div>
+    </section> -->
+    <!--End BibTex citation -->
+
+    <footer class="footer">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-8">
+            <div class="content">
+              <p>
+                This page was built using the
+                <a
+                  href="https://github.com/eliahuhorwitz/Academic-project-page-template"
+                  target="_blank"
+                  >Academic Project Page Template</a
+                >
+                which was adopted from the <a
+                  href="https://nerfies.github.io"
+                  target="_blank"
+                  >Nerfies</a
+                > project page. You are free to borrow the of this website, we
+                just ask that you link back to this page in the footer. <br />
+                This website is licensed under a
+                <a
+                  rel="license"
+                  href="http://creativecommons.org/licenses/by-sa/4.0/"
+                  target="_blank"
+                  >Creative Commons Attribution-ShareAlike 4.0 International
+                  License</a
+                >.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Statcounter tracking code -->
+
+    <!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+  </body>
+</html>
