@@ -1,4 +1,5 @@
-# Lightweight Neural Audio Effects Using Knowledge Distillation
+# Compressing Neural Audio Effects Using Knowledge Distillation
+
 
 [DOI tag]()
 
