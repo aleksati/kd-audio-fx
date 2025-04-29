@@ -3,7 +3,6 @@ import os
 import numpy as np
 from tensorflow.keras.utils import Sequence
 from scipy.signal.windows import tukey
-from Utils import filterAudio
 import matplotlib.pyplot as plt
 
 class DataGeneratorPicklesTrain(Sequence):
@@ -120,8 +119,6 @@ class DataGeneratorPicklesTest(Sequence):
 
         self.training_steps = self.max
 
-        #self.training_steps = (lim // self.batch_size)
-
         self.on_epoch_end()
 
     def prepareXYZ(self, data_dir, filename):
@@ -132,7 +129,6 @@ class DataGeneratorPicklesTest(Sequence):
         Z = pickle.load(file_data)
         x = np.array(Z['x'][:1, :], dtype=np.float32)
         y = np.array(Z['y'][:1, :], dtype=np.float32)
-        y = filterAudio(y)
 
         # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
         if x.shape[0] == 1:
@@ -231,7 +227,6 @@ class DataGeneratorCondPicklesTrain(Sequence):
         #y = y * np.array(tukey(y.shape[1], alpha=0.000005),
         #                 dtype=np.float32).reshape(1, -1)
 
-        #y = filterAudio(y)
 
         # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
         if x.shape[0] == 1:
@@ -318,7 +313,6 @@ class DataGeneratorCondPicklesTest(Sequence):
         x = np.array(Z['x'][:, :], dtype=np.float32)
         y = np.array(Z['y'][:, :], dtype=np.float32)
 
-        y = filterAudio(y)
 
         # if input is shared to all the targets, it is repeat accordingly to the number of target audio files
         if x.shape[0] == 1:
