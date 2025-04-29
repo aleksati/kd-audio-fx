@@ -1,7 +1,6 @@
 from Metrics import ESR, RMSE, STFT_loss
 from LossFunctions import combinedLoss, distillationLoss
 from Models import create_cond_LSTM_DK_model, create_LSTM_DK_model
-from Utils import filterAudio
 from UtilsForTrainings import plotTraining, writeResults, checkpoints, predictWaves
 import matplotlib.pyplot as plt
 import time
@@ -188,15 +187,6 @@ def LSTM_KD_distilled_student(**kwargs):
     sys.stdout.write("\n")
     sys.stdout.flush()
 
-    # if (conditioning):
-    #     test_gen = DataGeneratorCondPicklesTest(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size,
-    #                                     input_size=input_dim,
-    #                                     batch_size=1)
-    # else:
-    #     test_gen = DataGeneratorPicklesTest(data_dir, dataset_test + '_test.pickle', mini_batch_size=mini_batch_size,
-    #                                     input_size=input_dim,
-    #                                     batch_size=1)
-
     # load the best weights of the model
     best = tf.train.latest_checkpoint(ckpt_dir)
     if best is not None:
@@ -214,7 +204,7 @@ def LSTM_KD_distilled_student(**kwargs):
     predictions = model.predict(test_gen, verbose=0).flatten()
 
     # plot and render the output audio file, together with the input and target
-    predictions = np.array(filterAudio(predictions), dtype=np.float32)
+    predictions = np.array((predictions), dtype=np.float32)
     y = np.array((test_gen.y.reshape(-1)[:len(predictions)]), dtype=np.float32)
     x = np.array((test_gen.x.reshape(-1)[:len(predictions)]), dtype=np.float32)
 
