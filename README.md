@@ -11,13 +11,13 @@ Compression technique for neural audio effects using Knowledge Distillation
 
 </div>
 
-# Short Intro
+## Short introduction
 
 Knowledge distillation is a technique for compressing complex and large "teacher" networks into smaller "student" networks. We explore the application of knowledge distillation for compressing RNN models of audio distortion effects. In particular, we propose an audio-to-audio LSTM architecture for realtime regression tasks where small audio effect networks are trained to mimic the internal representations of more extensive networks, known as feature-based knowledge distillation.
 
 This repo contains all the necessary utilities to use our knowledge distillation architecture. Find the code and pre-trained models located inside the "./src" folder.
 
-# Datasets
+## Datasets
 
 Our distillation architecture was evaluated on three datasets: the Blackstar HT-1 vacuum tube amplifier (HT-1), Electro-Harmonix Big Muff (Big Muff) guitar pedal, and the analog-modeled overdrive plugin DrDrive. 
 
@@ -39,7 +39,7 @@ Example:
 
 Note that the naming of the datasets correspond directly to the naming of the models (./src/models) produced by the training.
 
-# Pre-trained models
+## Pre-trained models
 
 The " ./src/models " folder contains a selection of pre-trained teacher and student models. Although both conditioned and unconditioned versions are listed, conditioned models currently exist only for DrDrive.
 ```
@@ -72,7 +72,7 @@ etc..
 Finally, one experimental model is included in the "./src/models/students_distilled_by_64_student" folder. In this case, smaller student models (8 units) have been trained by a larger student model (64 units), instead of teachers.
 
 
-# Training
+## Training
 
 First, install Python dependencies:
 ```
@@ -134,6 +134,6 @@ cd ./src/code/teachers
 python starter.py --datasets drdrive_dk --only_inference True
 ```
 
-# Plugin
+## Plugin
 
 Coming soon..
