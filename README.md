@@ -4,7 +4,7 @@
 
 | [Paper]() | [Audio examples]() | [Plugin]() |
 
-Compression technique for neural audio effect models using Knowledge Distillation
+Compression technique for neural audio effects using Knowledge Distillation
 
 <img src="./fig/dk2.png" width="400">
 
@@ -39,7 +39,7 @@ Example:
 
 Note that the naming of the datasets correspond directly to the naming of the models (./src/models) produced by the training.
 
-# Models
+# Pre-trained models
 
 The " ./src/models " folder contains a selection of pre-trained teacher and student models. Although both conditioned and unconditioned versions are listed, conditioned models currently exist only for DrDrive.
 ```
@@ -72,7 +72,7 @@ etc..
 Finally, one experimental model is included in the "./src/models/students_distilled_by_64_student" folder. In this case, smaller student models (8 units) have been trained by a larger student model (64 units), instead of teachers.
 
 
-# How To Train and Run 
+# Training
 
 First, install Python dependencies:
 ```
@@ -134,10 +134,6 @@ cd ./src/code/teachers
 python starter.py --datasets drdrive_dk --only_inference True
 ```
 
-
-# VST Download
+# Plugin
 
 Coming soon..
-
-<!-- aleks try with neutone
-ricc with other. -->
