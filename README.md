@@ -1,27 +1,21 @@
-# Compressing Neural Audio Effects Using Knowledge Distillation
+<div  align="center">
 
-[DOI tag]()
+# kd-audio-fx
 
-This code repository for the article _Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques_, accepted at ... conference in ... 2025.
+| [Paper]() | [Audio examples]() | [Plugin]() |
 
-Knowledge distillation is a technique for compressing complex and large "teacher" networks into smaller "student" networks. It offers ways to minimize the computational expenses often associated with neural networks and to optimize models for deployment and real-time usage. In our paper, we explore the application of knowledge distillation for compressing RNN models of audio distortion effects. In particular, we propose an audio-to-audio LSTM architecture for realtime regression tasks where small audio effect networks are trained to mimic the internal representations of more extensive networks, known as feature-based knowledge distillation.
+Compressing neural audio distortion effects models using Knowledge Distillation
 
-<div align="left">
- <img src="./fig/dk2.png" width="400">
+<img src="./fig/dk2.png" width="400">
+
+
 </div>
 
-This repository contains all the necessary utilities to use our knowledge distillation architecture. Find the code and pre-trained models located inside the "./src" folder.
+# Short Intro
 
-To quickly demo our distilled distortion effects, visit our designated [**page for audio examples**]().
+Knowledge distillation is a technique for compressing complex and large "teacher" networks into smaller "student" networks. We explore the application of knowledge distillation for compressing RNN models of audio distortion effects. In particular, we propose an audio-to-audio LSTM architecture for realtime regression tasks where small audio effect networks are trained to mimic the internal representations of more extensive networks, known as feature-based knowledge distillation.
 
-### Contents
-
-1. [Datasets](#datasets)
-2. [Models](#models)
-3. [How to Train and Run Inference](#how-to-train-and-run-inference)
-4. [VST Download](#vst-download)
-
-<br/>
+This repo contains all the necessary utilities to use our knowledge distillation architecture. Find the code and pre-trained models located inside the "./src" folder
 
 # Datasets
 
