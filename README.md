@@ -4,7 +4,7 @@
 
 | [Paper]() | [Audio examples]() | [Plugin]() |
 
-Compressing neural audio distortion effects models using Knowledge Distillation
+Compression technique for neural audio effect models using Knowledge Distillation
 
 <img src="./fig/dk2.png" width="400">
 
