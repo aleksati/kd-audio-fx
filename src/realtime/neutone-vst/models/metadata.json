@@ -1,0 +1,63 @@
+{
+    "model_name": "dk_lstm_student",
+    "model_authors": [
+        "Your Name"
+    ],
+    "model_version": "1.0.0",
+    "model_short_description": "Distilled LSTM model for real-time audio.",
+    "model_long_description": "A two-layer LSTM model with residual connection distilled from a larger teacher model.",
+    "technical_description": "Processes real-time mono audio using an LSTM sequence-to-sequence model with a residual connection.",
+    "technical_links": {},
+    "tags": [
+        "lstm",
+        "residual",
+        "realtime"
+    ],
+    "citation": "",
+    "is_experimental": false,
+    "neutone_parameters": {
+        "p1": {
+            "name": "",
+            "description": "",
+            "type": "knob",
+            "used": "False",
+            "default_value": "0.0"
+        },
+        "p2": {
+            "name": "",
+            "description": "",
+            "type": "knob",
+            "used": "False",
+            "default_value": "0.0"
+        },
+        "p3": {
+            "name": "",
+            "description": "",
+            "type": "knob",
+            "used": "False",
+            "default_value": "0.0"
+        },
+        "p4": {
+            "name": "",
+            "description": "",
+            "type": "knob",
+            "used": "False",
+            "default_value": "0.0"
+        }
+    },
+    "wet_default_value": 1.0,
+    "dry_default_value": 0.0,
+    "input_gain_default_value": 0.5,
+    "output_gain_default_value": 0.5,
+    "is_input_mono": true,
+    "is_output_mono": true,
+    "model_type": "mono-mono",
+    "native_sample_rates": [
+        48000
+    ],
+    "native_buffer_sizes": [],
+    "look_behind_samples": 0,
+    "sdk_version": "1.4.2",
+    "pytorch_version": "2.1.2+cpu",
+    "date_created": 1747767940.2460551
+}

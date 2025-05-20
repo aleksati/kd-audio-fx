@@ -17,6 +17,7 @@ def create_LSTM_DK_model(units, mini_batch_size=2048, input_dim=1, b_size=8, sta
 
     outputs = tf.keras.layers.LSTM(
                 units, stateful=stateful, return_sequences=True, name="LSTM")(inputs)
+    
     outputs = tf.keras.layers.LSTM(
                 8, stateful=stateful, return_sequences=True, name="LSTM2")(outputs)
     outputs = tf.keras.layers.Dense(1, name='OutLayer')(outputs)
@@ -34,13 +35,13 @@ def create_cond_LSTM_DK_model(units, mini_batch_size=2048, input_dim=1, b_size=8
     # Defining inputs
     inputs = tf.keras.layers.Input(
         batch_shape=(b_size, mini_batch_size, input_dim), name='input')
+    
     cond_inputs = tf.keras.layers.Input(batch_shape=(b_size, mini_batch_size, 1), name='cond_inputs')
 
     outputs = tf.keras.layers.LSTM(
                 units, stateful=stateful, return_sequences=True, name="LSTM")(inputs)
 
     outputs = FiLM(in_size=units)(outputs, cond_inputs)
-
 
     outputs = tf.keras.layers.LSTM(
                 8, stateful=stateful, return_sequences=True, name="LSTM2")(outputs)
