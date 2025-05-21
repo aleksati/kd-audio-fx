@@ -74,7 +74,8 @@ class DK_LSTM_Wrapper(WaveformToWaveformBase):
 
     @tr.jit.export
     def get_native_sample_rates(self) -> List[int]:
-        return [48000]  # Update if you want to support more
+        #return [48000]  # Update if you want to support more
+        return []  # support all
 
     @tr.jit.export
     def get_native_buffer_sizes(self) -> List[int]:

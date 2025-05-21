@@ -4,14 +4,11 @@ import h5py
 import numpy as np
 import tensorflow as tf
 
-# create models, and import them inn here.
-# also create utils file
-# import all into a starter.
-
 # Config
 UNITS = 64
 DEVICE = "drdrive"
 MODEL_TYPE = "distilled"
+# Path to best weights
 ckpt_dir = f'../../models/students_{MODEL_TYPE}/LSTM_{DEVICE}_dk_{UNITS}/checkpoints/best/best.ckpt'
 NAME = f'{DEVICE}_student_{MODEL_TYPE}_{UNITS}'
 
@@ -62,6 +59,12 @@ class DK_LSTM_Student_Pytorch(nn.Module):
 # Load from Keras H5 and map weights
 # -------------------------------
 def transfer_weights_from_keras_to_pytorch(h5_path, model):
+
+    # Optional - Use this code first to inspect the weight structure to know how to edit the below code()
+    # import h5py
+    # with h5py.File(f'./models/{NAME}_weights.h5', "r") as f:
+    #     f.visit(lambda x: print(x))
+
     with h5py.File(h5_path, "r") as f:
         # LSTM1
         lstm1 = f["LSTM"]["LSTM"]["lstm_cell"]
@@ -74,7 +77,7 @@ def transfer_weights_from_keras_to_pytorch(h5_path, model):
         model.lstm1.bias_ih_l0.data.copy_(torch.tensor(bias))
         model.lstm1.bias_hh_l0.data.zero_()  # PyTorch uses two bias vectors
 
-        print("[✓] LSTM1 loaded")
+        print("LSTM1 loaded")
 
         # LSTM2
         lstm2 = f["LSTM2"]["LSTM2"]["lstm_cell"]
@@ -87,7 +90,7 @@ def transfer_weights_from_keras_to_pytorch(h5_path, model):
         model.lstm2.bias_ih_l0.data.copy_(torch.tensor(bias))
         model.lstm2.bias_hh_l0.data.zero_()
 
-        print("[✓] LSTM2 loaded")
+        print("LSTM2 loaded")
 
         # Dense layer
         dense = f["OutLayer"]["OutLayer"]
@@ -97,7 +100,7 @@ def transfer_weights_from_keras_to_pytorch(h5_path, model):
         model.out.weight.data.copy_(torch.tensor(dense_w.T))  # PyTorch: (out, in)
         model.out.bias.data.copy_(torch.tensor(dense_b))
 
-        print("[✓] Dense output layer loaded")
+        print("Dense output layer loaded")
 
 # -------------------------------
 # Convert Keres model to Pytorch
@@ -116,7 +119,7 @@ def convert_keras_model_to_pytorch():
 
     # Save the PyTorch weights
     torch.save(pytorch_model.state_dict(), torch_model_path)
-    print(f"\n[✅] Model successfully saved to '{torch_model_path}'")
+    print(f"\n Model successfully saved to '{torch_model_path}'")
 
 # -------------------------------
 # Validate that the Keras and PyTorch models produce the same output when given the same input
@@ -159,10 +162,9 @@ def validate():
     print(f"[Validation] Max diff: {max_diff:.6f}, Mean diff: {mean_diff:.6f}")
 
     if max_diff < 1e-4:
-        print("✅ Outputs match closely!")
+        print("Outputs match closely! Success")
     else:
-        print("❌ Outputs differ — check for precision or conversion issues.")
-
+        print("Outputs differ — check for precision or conversion issues..")
 
 # Step 1
 #create_and_save_keras_model_and_weights(DK_LSTM_Student_Keras)
@@ -170,14 +172,9 @@ def validate():
 # Step 2
 #convert_keras_model_to_pytorch()
 
-# Optional - Inspect to know how to edit load_weights_from_keras()
-# import h5py
-# with h5py.File(f'./models/{NAME}_weights.h5', "r") as f:
-#     f.visit(lambda x: print(x))
-
 # Step 3 
 # Validation between keras and pytorch
 #validate()
 
 # Step 4
-# Create and export Neutone model
+# Wrap PyTorch model in Neutone wrapper and export as Neutone model
