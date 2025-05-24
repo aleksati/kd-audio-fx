@@ -2,7 +2,7 @@
 
 # kd-audio-fx
 
-| [Paper]() | [Audio examples]() | [Plugin]() |
+| [Paper]() | [Audio examples]() | [Plugins]() |
 
 Compression technique for neural audio effects using Knowledge Distillation
 
@@ -13,9 +13,9 @@ Compression technique for neural audio effects using Knowledge Distillation
 
 ## Short introduction
 
-Knowledge distillation is a technique for compressing complex and large "teacher" networks into smaller "student" networks. We explore the application of knowledge distillation for compressing RNN models of audio distortion effects. In particular, we propose an audio-to-audio LSTM architecture for realtime regression tasks where small audio effect networks are trained to mimic the internal representations of more extensive networks, known as feature-based knowledge distillation.
+Knowledge distillation is an ML compression technique where knowledge from larger "teacher" networks are distilled into smaller "student" networks. We explore how knowledge distillation can be used to optimize virtual-analog models of audio distortion effects. In particular, we propose an audio-to-audio LSTM architecture for real-time regression tasks where student networks are trained to mimic the internal representations of teachers, known as feature-based knowledge distillation.
 
-This repo contains all the necessary utilities to use our knowledge distillation architecture. Find the code and pre-trained models located inside the "./src" folder.
+This repo contains all the necessary utilities to use our knowledge distillation architecture. Find the code, pre-trained models and VST plugins located inside the "./src" folder.
 
 ## Datasets
 
