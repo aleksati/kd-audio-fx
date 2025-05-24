@@ -7,7 +7,7 @@ import tensorflow as tf
 # Config
 UNITS = 64
 DEVICE = "drdrive"
-MODEL_TYPE = "distilled"
+MODEL_TYPE = "non_distilled"
 # Path to best weights
 ckpt_dir = f'../../models/students_{MODEL_TYPE}/LSTM_{DEVICE}_dk_{UNITS}/checkpoints/best/best.ckpt'
 NAME = f'{DEVICE}_student_{MODEL_TYPE}_{UNITS}'

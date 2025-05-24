@@ -36,7 +36,7 @@ class DK_LSTM_Student_Pytorch(nn.Module):
 # Neutone student model wrapper
 class DK_LSTM_Wrapper(WaveformToWaveformBase):
     def get_model_name(self) -> str:
-        return "drdrive_student_distilled_64"
+        return "drdr_student_non_distilled_64"
 
     def get_model_authors(self) -> List[str]:
         return ["Aleksander Tidemann, Riccardo Simionato"]
@@ -91,6 +91,7 @@ class DK_LSTM_Wrapper(WaveformToWaveformBase):
         y = self.model(x)
         return y.squeeze(-1)  # -> (batch, samples)
 
+################################################################
 # Check if model accepts different Buffer sizes.
 # model = DK_LSTM_Student_Pytorch()
 # model.load_state_dict(tr.load("./models/drdrive_student_distilled_64.pth", map_location="cpu"))
@@ -102,12 +103,12 @@ class DK_LSTM_Wrapper(WaveformToWaveformBase):
 #     mono_input = tr.randn(1, T)  # (1, T)
 #     output = wrapper.do_forward_pass(mono_input, {})
 #     print(f"Input shape: {mono_input.shape}, Output shape: {output.shape}")
-
+##############################################################
 
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--save_dir", type=str, help="Path to save neutone model", default="./models/")
-    parser.add_argument("--weights", type=str, help="Path to model weights (.pth)", default="./models/drdrive_student_distilled_64.pth")
+    parser.add_argument("--weights", type=str, help="Path to model weights (.pth)", default="./models/drdrive_student_non_distilled_64.pth")
     args = parser.parse_args()
     save_dir = pathlib.Path(args.save_dir)
 
