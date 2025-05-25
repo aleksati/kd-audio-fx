@@ -1,0 +1,5 @@
+h5py==3.11.0
+neutone_sdk==1.4.2
+numpy==2.2.6
+tensorflow_intel==2.15.0
+torch==2.1.2
