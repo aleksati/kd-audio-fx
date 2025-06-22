@@ -2,7 +2,6 @@ import torch
 import h5py
 import numpy as np
 import tensorflow as tf
-# from models import DK_LSTM_Student_Pytorch, DK_LSTM_Student_Keras, DK_LSTM_Student_Pytorch_Wrapper
 from models_stateful import DK_LSTM_Student_Pytorch, DK_LSTM_Student_Keras, DK_LSTM_Student_Pytorch_Wrapper
 
 from neutone_sdk.utils import save_neutone_model
@@ -24,7 +23,7 @@ def save_best_keras_weights(units=64, model_name="", models_dir="./models", ckpt
     '''
     
     # Create model, load the best training weights, and save to local
-    model = DK_LSTM_Student_Keras(units=units, name=model_name)
+    model = DK_LSTM_Student_Keras(units=units, name=model_name, b_size=1)
     model.load_weights(ckpt_dir).expect_partial()
     model.save(f'{models_dir}/{model_name}/{model_name}.h5')
     model.save_weights(f'{models_dir}/{model_name}/{model_name}_weights.h5')
@@ -47,7 +46,7 @@ def transfer_weights_from_keras_to_pytorch(h5_weights_path, pytorch_model):
     with h5py.File(h5_weights_path, "r") as f:
 
         # LSTM1
-        lstm1 = f["LSTM"]["LSTM"]["lstm_cell"]
+        lstm1 = f["LSTM1"]["LSTM1"]["lstm_cell"]
         kernel = lstm1["kernel:0"][()]               # (in, 4*out)
         recurrent_kernel = lstm1["recurrent_kernel:0"][()]  # (out, 4*out)
         bias = lstm1["bias:0"][()]                   # (4*out,)
@@ -140,9 +139,11 @@ def validate(model_name="", models_dir="./models", units=64):
     # PyTorch inference
     input_pt = torch.tensor(input_np)
     with torch.no_grad():
-        output_pt = pytorch_model(input_pt).numpy()
+        output_pt, _ = pytorch_model(input_pt, state=None)  # pass initial state=None
+        output_pt = output_pt.numpy()
 
-    # Keras inference
+    # Keras inference (stateful)
+    keras_model.reset_states()  # ensure clean hidden state
     input_keras = tf.convert_to_tensor(input_np)
     output_keras = keras_model(input_keras).numpy()
 

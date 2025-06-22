@@ -1,9 +1,10 @@
-from utils import validate, convert_keras_to_pytorch, save_best_keras_weights, create_neutone_model
+# from utils import validate, convert_keras_to_pytorch, save_best_keras_weights, create_neutone_model
+from utils_stateful import validate, convert_keras_to_pytorch, save_best_keras_weights, create_neutone_model
 import time
 
 # Config
 UNITS = 8
-DEVICE = "ht1"
+DEVICE = "bigmuff"
 MODEL_TYPE = "distilled"
 
 # Edit below only if necessary
