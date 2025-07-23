@@ -4,8 +4,7 @@
 
 | [Paper]() | [Audio examples]() | [Plugins](#plugins) |
 
-Compression technique for neural audio effects using Knowledge Distillation <br/>
-presented at the AES International Conference on Artificial Intelligence and Machine Learning in Audio, 2025 September 8–10, London, UK
+Compression technique for neural audio effects using Knowledge Distillation, presented at the AES International Conference on Artificial Intelligence and Machine Learning in Audio, 2025 September 8–10, London, UK
 
 <img src="./fig/dk2.png" width="400">
 
