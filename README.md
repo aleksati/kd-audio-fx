@@ -4,7 +4,7 @@
 
 | [Paper]() | [Audio examples]() | [Plugins](#plugins) |
 
-Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques, presented at the AES International Conference on Artificial Intelligence and Machine Learning in Audio, 2025 September 8–10, London, UK
+Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Distillation Techniques, accepted at the AES International Conference on Artificial Intelligence and Machine Learning in Audio, September 2025, London, UK
 
 <img src="./fig/dk2.png" width="400">
 
