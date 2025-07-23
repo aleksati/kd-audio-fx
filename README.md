@@ -13,7 +13,7 @@ Compressing Neural Network Models of Audio Distortion Effects Using Knowledge Di
 
 ## Short introduction
 
-Knowledge distillation is an ML compression technique where knowledge from larger "teacher" networks is distilled into smaller "student" networks. We explore how knowledge distillation can be used to optimize virtual-analog models of audio distortion effects. In particular, we propose an audio-to-audio LSTM architecture for real-time regression tasks where student networks are trained to mimic the internal representations of teachers, known as feature-based knowledge distillation.
+Knowledge distillation is an ML compression technique where knowledge from larger "teacher" networks are distilled into smaller "student" networks. We explore how knowledge distillation can be used to optimize virtual-analog models of audio distortion effects. In particular, we consider an audio-to-audio LSTM architecture for real-time regression tasks where student networks are trained to mimic the internal representations (features) of teachers, known as feature-based knowledge distillation.
 
 This repo contains all the necessary utilities to use our knowledge distillation architecture. Find the code, pre-trained models and VST plugins located inside the "./src" folder.
 
