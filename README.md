@@ -2,7 +2,7 @@
 
 # kd-audio-fx
 
-| [Paper]() | [Audio examples]() | [Plugins](#plugins) |
+| [Paper (coming soon)]() | [Audio examples]() | [Plugins](#plugins) |
 
 Compression technique for neural audio effects using Knowledge Distillation. Read more details in the accompanying conference paper, accepted at the *AES International Conference on Artificial Intelligence and Machine Learning in Audio, September 2025, London, UK.*
 
