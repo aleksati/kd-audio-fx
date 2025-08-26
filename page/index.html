@@ -30,7 +30,7 @@
 
     <title>
       Compressing Neural Network Models of Audio Distortion Effects Using
-      Knowledge Distillation Technique
+      Knowledge Distillation Techniques
     </title>
     <!--  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">-->
     <!--  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
@@ -106,7 +106,7 @@
                   <!-- Github link -->
                   <span class="link-block">
                     <a
-                      href="https://github.com/aleksati/lightweight-neural-audio-effects-using-knowledge-distillation"
+                      href="https://github.com/aleksati/kd-audio-fx"
                       target="_blank"
                       class="external-link button is-normal is-rounded is-dark">
                       <span class="icon">
@@ -131,25 +131,7 @@
             <h2 class="title is-3">Abstract</h2>
             <div class="content has-text-justified">
               <p>
-                Neural networks have proven to be effective for modeling analog
-                audio effects using a black-box approach. However, few can
-                guarantee lightweight solutions suitable for real-time
-                environments where the models must run concurrently on
-                consumer-grade equipment. This paper explores knowledge
-                distillation techniques for compressing recurrent neural network
-                models for audio distortion effects, aiming to produce
-                computationally efficient solutions with high accuracy that
-                maintain compact model size. In particular, we propose an
-                audio-to-audio LSTM architecture for regression tasks where
-                small networks are trained to mimic the internal representations
-                of larger networks, known as feature-based knowledge
-                distillation. The evaluation was conducted on three different
-                audio distortion effect datasets with experiments on both
-                parametric and non-parametric data. Results show improved
-                accuracy of distilled models over non-distilled equivalent
-                models trained on the original datasets and confirm that
-                distilled models can offer improved perceived sound quality via
-                listening tests.
+                Neural networks have proven to be effective for modeling analog audio effects using a black-box approach. However, few can guarantee lightweight solutions suitable for real-time environments where the models must run concurrently on consumer-grade equipment. This paper explores knowledge distillation techniques for compressing recurrent neural network models for audio distortion effects, aiming to produce computationally efficient solutions with high accuracy that maintain compact model size. In particular, we consider an audio-to-audio LSTM architecture for regression tasks where small networks are trained to mimic the internal representations of larger networks, known as feature-based knowledge distillation. The evaluation was conducted on three different audio distortion effect datasets with experiments on both parametric and non-parametric data. The results show that distilled models are more accurate than non-distilled models with equal parameter size, especially for models that exhibit higher error rates. Furthermore, we observe that smaller complexity gaps between student and teacher models yield greater improvements in non-parametric cases.
               </p>
             </div>
           </div>
