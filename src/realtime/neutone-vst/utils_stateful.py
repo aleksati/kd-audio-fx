@@ -2,7 +2,7 @@ import torch
 import h5py
 import numpy as np
 import tensorflow as tf
-from models_stateful import DK_LSTM_Student_Pytorch, DK_LSTM_Student_Keras, DK_LSTM_Student_Pytorch_Wrapper
+from models_stateful import DK_LSTM_Student_Pytorch, DK_LSTM_Student_Keras, DK_LSTM_Student_Pytorch_Wrapper, create_model_ED
 
 from neutone_sdk.utils import save_neutone_model
 import torch as tr
@@ -175,12 +175,17 @@ def create_neutone_model(models_dir="./models", units=64, model_name=""):
     # parser.add_argument("--weights", type=str, help="Path to model weights (.pth)", default="./models/drdrive_student_non_distilled_64.pth")
     # args = parser.parse_args()
 
-    model = DK_LSTM_Student_Pytorch(units=units)
-    model.load_state_dict(tr.load(f'{models_dir}/{model_name}/{model_name}.pth', map_location="cpu"))
+    #model = DK_LSTM_Student_Pytorch(units=units)
+
+    model = create_model_ED(D=1, T=64, units=8)
+
+    #model.load_state_dict(tr.load(f'{models_dir}/riccardo-test/{model_name}.pt', map_location="cpu"))
+    model = torch.jit.load(f'{models_dir}/riccardo-test/{model_name}.pt')
+
     model.eval()
 
     # create full path
-    save_dir = pathlib.Path(f'{models_dir}/{model_name}')
+    save_dir = pathlib.Path(f'{models_dir}/riccardo-test')
 
     wrapper = DK_LSTM_Student_Pytorch_Wrapper(model)
     save_neutone_model(wrapper, save_dir, dump_samples=True, submission=True)

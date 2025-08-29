@@ -51,6 +51,126 @@ class DK_LSTM_Student_Pytorch(nn.Module):
 
         return x, (h1, c1, h2, c2)
 
+# NEW FROM RICCARDO
+
+# NEW FROM RICCARDO
+import torch.nn.functional as F
+
+class EDModel(nn.Module):
+    """
+    Encoder-Decoder model with optional conditioning
+
+    Args:
+        D: number of conditioning parameters
+        T: input sequence length
+        units: number of LSTM units
+    """
+
+    def __init__(self, D, T, units):
+        super(EDModel, self).__init__()
+
+        self.D = D
+        self.T = T
+        self.units = units
+
+        # Encoder LSTM
+        self.encoder_lstm = nn.LSTM(
+            input_size=1,
+            hidden_size=units,
+            batch_first=True
+        )
+
+        # Decoder LSTM
+        self.decoder_lstm = nn.LSTM(
+            input_size=1,
+            hidden_size=units,
+            batch_first=True
+        )
+
+        self.film_layer = nn.Linear(D, units * 2)
+        self.glu = nn.Linear(units, units * 2)
+
+        # Output layer
+        self.output_layer = nn.Linear(units, 1)
+        # Store batch_size for state initialization
+        # Initialize hidden states as buffers (not parameters)
+    #     self.register_buffer('hidden1', torch.zeros((1, 1, units)))
+    #     self.register_buffer('hidden2', torch.zeros((1, 1, units)))
+    #
+    # def reset_states(self):
+    #     """Reset hidden states (equivalent to resetting stateful LSTM states)"""
+    #     self.hidden1 = torch.zeros((1, 1, units))
+    #     self.hidden2 = torch.zeros((1, 1, units))
+
+    def forward(self, encoder_inputs, decoder_inputs, cond_inputs, h, c):
+        """
+        Forward pass
+
+        Args:
+            encoder_inputs: (batch_size, T-1, 1) - encoder input sequence
+            decoder_inputs: (batch_size, 1, 1) - decoder input
+            cond_inputs: (batch_size, D) - conditioning inputs (optional)
+
+        Returns:
+            output: (batch_size, 1) - model output
+        """
+        # Encoder
+        encoder_outputs, (new_h, new_c) = self.encoder_lstm(encoder_inputs, (h, c))
+        # Update hidden states for next call (detached to avoid gradient accumulation)
+        # self.hidden1 = hidden1.detach()
+        # self.hidden2 = hidden2.detach()
+
+        # Decoder with encoder hidden states as initial state
+        decoder_outputs, _ = self.decoder_lstm(decoder_inputs, (new_h, new_c))
+
+        # Remove sequence dimension from decoder output
+        decoder_outputs = decoder_outputs.squeeze(1)  # (batch_size, units)
+
+        # FiLM (Feature-wise Linear Modulation)
+        film = self.film_layer(cond_inputs)  # (batch_size, units * 2)
+        g, b = torch.split(film, self.units, dim=-1)
+
+        # Apply modulation
+        decoder_outputs = decoder_outputs * g + b
+
+        # Apply GLU
+        decoder_outputs = self.glu(decoder_outputs)
+        # Split input in half along the last dimension
+        value, gate = torch.split(decoder_outputs, 8, dim=-1)
+        decoder_outputs = value * torch.nn.Softsign()(gate)
+
+        # Final output layer
+        output = self.output_layer(decoder_outputs)
+
+        return output, (new_h, new_c)
+
+
+def create_model_ED(D, T, units):
+    """
+    Create ED model (PyTorch version)
+
+    Args:
+        D: number of conditioning parameters
+        T: input sequence length
+        units: number of LSTM units
+
+    Returns:
+        model: EDModel instance
+    """
+
+    model = EDModel(D, T, units)
+
+    # Print model summary
+    print(model)
+
+    # Count parameters
+    total_params = sum(p.numel() for p in model.parameters())
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+    print(f"\nTotal parameters: {total_params:,}")
+    print(f"Trainable parameters: {trainable_params:,}")
+
+    return model
 
 # -------------------------------
 # H5 Keras student model
