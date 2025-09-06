@@ -2,12 +2,11 @@
 
 # kd-audio-fx
 
-| [Paper (coming soon)]() | [Audio examples](https://aleksati.github.io/kd-audio-fx/) | [Plugins](#plugins) |
+| [Paper](https://aes2.org/publications/elibrary-page/?id=23001) | [Audio examples](https://aleksati.github.io/kd-audio-fx/) | [Plugins](#plugins) |
 
-Compression technique for neural audio effects using Knowledge Distillation. Read more details in the accompanying conference paper, accepted at the [AES International Conference on Artificial Intelligence and Machine Learning in Audio](https://aes2.org/events-calendar/2025-aes-international-conference-on-artificial-intelligence-and-machine-learning-for-audio/), September 2025, London, UK.
+Compression technique for neural audio effects using Knowledge Distillation. Read more details in the accompanying conference paper, presented at the [1st Audio Engineering Society Conference on AI and Machine Learning for Audio (AES AIMLA 2025)](https://aes2.org/events-calendar/2025-aes-international-conference-on-artificial-intelligence-and-machine-learning-for-audio/), London, UK.
 
 <img src="./fig/dk2.png" width="400">
-
 
 </div>
 
